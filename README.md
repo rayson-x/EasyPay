@@ -51,7 +51,7 @@ try{
 require "vendor/autoload.php";
 
 // 在验证是一次成功的请求之后才会回调使用者提供的函数
-(new \EasyPay\HandleNotify('wehcat'))->handle(function(){
+(new \EasyPay\HandleNotify('wechat'))->handle(function(){
     // 在此处执行业务逻辑
     // 如果出现错误想中断，直接抛出异常，EasyPay捕获此异常并返回错误信息
 });
@@ -135,7 +135,7 @@ interface PayApiInterface
 * PayParamException 当必要参数缺少时抛出，父类是`InvalidArgumentException`
 
 
-### 获取配置信息
+### 3.获取配置信息
 ```php
 require "vendor/autoload.php";
 
@@ -163,7 +163,8 @@ EasyPay\Config::wechat('appid','mch_id');
 EasyPay\Config::alipay();
 ```
 
-### 3.Todo
+### 4.Todo
 * 实现一个简单的HTTP请求库
 * 加入其它支付方式
 * 提高代码质量
+* 通过枚举的方式选择支付方式
