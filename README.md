@@ -25,11 +25,12 @@ try{
         // 订单信息,具体字段可以参考支付的官网
         ->ready([
             'attach' => 'wechat pay test',
-            'body'  =>  'Flash2X-Flash2X会员续费',
+            'body'  =>  '订单详细',
             'out_trade_no' => substr(md5(uniqid()),0,18).date("YmdHis"),
             'total_fee' => 1,
             'spbill_create_ip' => $_SERVER['REMOTE_ADDR'],
             'trade_type' => 'NATIVE',
+            'product_id' => '12235413214070356458058'
         ])
         // 使用的支付方式
         ->sendTo('wechat')

@@ -27,7 +27,7 @@ class AsyncNotify implements AsyncNotifyInterface
         $body = null;
         // 先从POST变量中提取数据
         if(in_array($_SERVER['CONTENT_TYPE'],['application/x-www-form-urlencoded','multipart/form-data'])){
-            $body = $_POST;
+            $body = new PayData($_POST);
         }
 
         // 从输入流中读取数据
@@ -35,6 +35,8 @@ class AsyncNotify implements AsyncNotifyInterface
             $body = file_get_contents("php://input");
             $body = PayData::createDataFromXML($body);
         }
+
+        $body->checkResult();
 
         return $body;
     }
