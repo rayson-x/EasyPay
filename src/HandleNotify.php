@@ -34,7 +34,7 @@ class HandleNotify
         ob_start();
         try{
             $this->notify->success(
-                call_user_func($callback,$this->notify->getNotify())
+                call_user_func($callback,$this->notify->getNotify()) ?: "OK"
             );
         }catch(\Exception $e){
             $this->notify->fail($e);

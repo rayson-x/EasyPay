@@ -2,7 +2,9 @@
 namespace EasyPay\PayApi\Wechat;
 
 use Exception;
+use EasyPay\Exception\PayException;
 use EasyPay\Interfaces\AsyncNotifyInterface;
+use EasyPay\Exception\SignVerifyFailException;
 
 /**
  * 处理异步通知
@@ -57,9 +59,17 @@ class AsyncNotify implements AsyncNotifyInterface
      */
     public function fail(Exception $exception)
     {
+        if($exception instanceof SignVerifyFailException){
+            $message = '签名验证失败';
+        }elseif($exception instanceof PayException){
+            $message = "结果返回失败";
+        }else{
+            $message = $exception->getMessage();
+        }
+
         $this->message = [
             'return_code' => 'FAIL' ,
-            'return_msg' => $exception->getMessage()
+            'return_msg' => $message
         ];
     }
 
