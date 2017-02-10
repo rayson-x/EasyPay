@@ -3,7 +3,8 @@
   "type": "library",
   "license": "MIT",
   "require": {
-    "php": ">=5.5.0"
+    "php": ">=5.5.0",
+    "ant-framework/http":"dev-master"
   },
   "autoload": {
     "psr-4": {

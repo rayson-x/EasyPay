@@ -1,6 +1,8 @@
 <?php
 namespace EasyPay\PayApi\Wechat;
 
+use Ant\Http\Request;
+use Ant\Http\Response;
 use EasyPay\Config;
 use EasyPay\Exception\PayParamException;
 use EasyPay\Interfaces\PayApiInterface;
@@ -25,6 +27,8 @@ class PayApi implements PayApiInterface
     const REFUND_QUERY_URL = 'https://api.mch.weixin.qq.com/pay/refundquery';
     // 下载对账单地址
     const DOWN_LOAD_BILL_URL = 'https://api.mch.weixin.qq.com/pay/downloadbill';
+    // 微信转账地址
+    const TRANSFERS_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
 
     /**
      * @var PayData
@@ -38,7 +42,7 @@ class PayApi implements PayApiInterface
      */
     public function __construct($option)
     {
-        if(!$option instanceof PayData){
+        if(!$option instanceof PayData) {
             $option = new PayData($option);
         }
 
@@ -136,6 +140,13 @@ class PayApi implements PayApiInterface
         return $this->request('POST',static::DOWN_LOAD_BILL_URL,$body);
     }
 
+    public function transfers()
+    {
+        $this->checkTransfersOption();
+
+        return $this->request('POST',static::TRANSFERS_URL,(string)$this->payData);
+    }
+
     /**
      * @param $body
      * @param $url
@@ -143,18 +154,59 @@ class PayApi implements PayApiInterface
      */
     protected function request($method,$url,$body)
     {
-        //TODO;:实现HTTP请求
-        $context = stream_context_create([
-            'http'=>[
-                'method' => $method,
-                'header' => "Content-Type: text/xml\r\n",
-                'content' => $body,
-            ]
-        ]);
+        $request = new Request($method,$url);
+        $request->keepImmutability(false);
+        $request->withHeader('Content-Type','text/xml')->getBody()->write($body);
 
-        $res = file_get_contents($url,false,$context);
+        $ch = $this->curlInit($request);
+        if(false === $result = curl_exec($ch)) {
+            throw new \RuntimeException(curl_error($ch),curl_errno($ch));
+        }
+        $response = Response::createFromResponseStr($result);
 
-        return PayData::createDataFromXML($res)->checkResult();
+        return PayData::createDataFromXML((string)$response->getBody())->checkResult();
+    }
+
+    /**
+     * @return resource
+     */
+    protected function curlInit(Request $request)
+    {
+        // 发起一个请求
+        $ch = curl_init((string)$request->getUri());
+        // 获取完整的Http流
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        if($request->getUri()->getScheme() === 'https') {
+            // 关闭严格校验
+            curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+            curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
+            // 添加SSL证书
+            curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
+            curl_setopt($ch,CURLOPT_SSLCERT, Config::wechat('sslcert_path'));
+            curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
+            curl_setopt($ch,CURLOPT_SSLKEY, Config::wechat('sslkey_path'));
+        }
+
+        // 设置Http动词
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request->getOriginalMethod());
+        $header = [];
+        foreach($request->getHeaders() as $headerName => $headerValue) {
+            if (is_array($headerValue)) {
+                $headerValue = implode(',', $headerValue);
+            }
+
+            $headerName = implode('-',array_map('ucfirst',explode('-',$headerName)));
+            $header[] = sprintf('%s: %s',$headerName,$headerValue);
+        }
+
+        // 设置Http header内容
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        // 设置Http body内容
+        curl_setopt($ch, CURLOPT_POSTFIELDS, (string)$request->getBody());
+
+        return $ch;
     }
 
     /**
@@ -164,10 +216,10 @@ class PayApi implements PayApiInterface
      */
     protected function checkOption(array $params)
     {
-        foreach($params as $param){
-            if(!$this->payData->$param){
+        foreach($params as $param) {
+            if(!$this->payData->$param) {
                 // 尝试从配置信息中获取参数
-                if(!Config::wechat($param)){
+                if(!Config::wechat($param)) {
                     throw new PayParamException("[$param]不存在,请检查参数");
                 }
 
@@ -274,6 +326,40 @@ class PayApi implements PayApiInterface
     protected function checkDownloadBillOption()
     {
         $this->checkOption(['appid','mch_id','bill_date','bill_type']);
+    }
+
+    /**
+     * 微信转账到个人用户
+     * 公众号ID        mch_appid
+     * 商户号          mch_id
+     * 商户订单号      partner_trade_no
+     * 用户ID          openid
+     * 是否校验实名    check_name
+     * 金额/分         amount
+     * 付款信息详细    desc
+     * IP地址          spbill_create_ip
+     */
+    protected function checkTransfersOption()
+    {
+        if(!isset($this->payData->mch_appid)) {
+            if(isset($this->payData->appid)) {
+                $this->payData->mch_appid = $this->payData->appid;
+                unset($this->payData->appid);
+            }else{
+                $this->payData->mch_appid = Config::wechat('appid');
+            }
+        }
+
+        if(!isset($this->payData->mchid)) {
+            if(isset($this->payData->mch_id)) {
+                $this->payData->mchid = $this->payData->mch_id;
+                unset($this->payData->appid);
+            }else{
+                $this->payData->mchid = Config::wechat('mch_id');
+            }
+        }
+
+        $this->checkOption(['mch_appid','mchid','partner_trade_no','openid','check_name','amount','desc','spbill_create_ip']);
     }
 
     /**

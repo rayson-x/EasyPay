@@ -12,30 +12,20 @@ use EasyPay\Interfaces\AsyncNotifyInterface;
  */
 class AsyncNotify implements AsyncNotifyInterface
 {
-    protected $message = [];
-
     /**
+     * 获取通知内容
+     *
      * @return PayData
      * @throws Exception
      */
     public function getNotify()
     {
-        if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        if(empty($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
             throw new Exception('无法处理的请求');
         }
-
-        $body = null;
-        // 先从POST变量中提取数据
-        if(in_array($_SERVER['CONTENT_TYPE'],['application/x-www-form-urlencoded','multipart/form-data'])){
-            $body = new PayData($_POST);
-        }
-
         // 从输入流中读取数据
-        if(!$body){
-            $body = file_get_contents("php://input");
-            $body = PayData::createDataFromXML($body);
-        }
-
+        $input = file_get_contents("php://input");
+        $body = PayData::createDataFromXML($input);
         $body->checkResult();
 
         return $body;
@@ -43,33 +33,38 @@ class AsyncNotify implements AsyncNotifyInterface
 
     /**
      * @param string $result
+     * @return string
      */
     public function success($result = 'OK')
     {
-        $this->message = [
+        return $this->replyNotify([
             'return_code' => 'SUCCESS' ,
             'return_msg' => $result
-        ];
+        ]);
     }
 
     /**
      * @param Exception $exception
+     * @return string
      */
     public function fail(Exception $exception)
     {
-        $this->message = [
+        return $this->replyNotify([
             'return_code' => 'FAIL' ,
             'return_msg' => $exception->getMessage()
-        ];
+        ]);
     }
 
     /**
-     * 响应第三方
+     * 获取异步通知的响应内容
+     *
+     * @param $message
+     * @return string
      */
-    public function replyNotify()
+    public function replyNotify($message)
     {
-        $res = new PayData($this->message);
+        $res = new PayData($message);
 
-        echo $res->toXml();
+        return $res->toXml();
     }
 }

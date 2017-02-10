@@ -1,7 +1,13 @@
 <?php
 namespace EasyPay;
 
-
+/**
+ * Class Config
+ * @package EasyPay
+ *
+ * @method static wechat(...$key)
+ * @method static alipay(...$key)
+ */
 class Config
 {
     // 配置信息

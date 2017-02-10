@@ -2,7 +2,7 @@
 namespace EasyPay;
 
 
-class HandleNotify
+class AsyncNotify
 {
     /**
      * @var \EasyPay\Interfaces\AsyncNotifyInterface
@@ -31,16 +31,12 @@ class HandleNotify
      */
     public function handle(callable $callback)
     {
-        ob_start();
         try{
-            $this->notify->success(
-                call_user_func($callback,$this->notify->getNotify())
+            return $this->notify->success(
+                call_user_func($callback, $this->notify->getNotify()) ?: 'OK'
             );
-        }catch(\Exception $e){
-            $this->notify->fail($e);
+        }catch(\Exception $e) {
+            return $this->notify->fail($e);
         }
-
-        ob_end_clean();
-        $this->notify->replyNotify();
     }
 }

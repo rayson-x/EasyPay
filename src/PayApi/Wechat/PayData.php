@@ -27,30 +27,14 @@ class PayData extends Collection
         $dom = new DOMDocument();
         $xml = $dom->createElement('xml');
 
-        foreach($this->items as $key => $value){
+        foreach($this->items as $key => $value) {
             $item = $dom->createElement($key);
             $item->appendChild($dom->createCDATASection($value));
-
             $xml->appendChild($item);
         }
 
         $dom->appendChild($xml);
         return $dom->saveXML();
-    }
-
-    /**
-     * 生成签名(每次都重新生成,确保是最新参数生成的签名)
-     *
-     * @return string
-     * @see https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_3
-     */
-    public function makeSign()
-    {
-        $url = $this->toUrlParam();
-        $string = md5($url);
-        $this->sign = strtoupper($string);
-
-        return $this->sign;
     }
 
     /**
@@ -73,6 +57,21 @@ class PayData extends Collection
     }
 
     /**
+     * 生成签名(每次都重新生成,确保是最新参数生成的签名)
+     *
+     * @return string
+     * @see https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_3
+     */
+    public function makeSign()
+    {
+        $url = $this->toUrlParam();
+        $string = md5($url);
+        $this->sign = strtoupper($string);
+
+        return $this->sign;
+    }
+
+    /**
      * 生成URL参数
      *
      * @return string
@@ -81,18 +80,17 @@ class PayData extends Collection
     {
         ksort($this->items);
         $items = $this->filterItems($this->items);
-        if(! $key = Config::wechat('key')){
+        if(! $key = Config::wechat('key')) {
             throw new PayParamException('商户支付密钥不存在,请检查参数');
         }
         $items['key'] = $key;
 
-        $buff = "";
-        foreach ($items as $k => $v)
-        {
-            $buff .= $k . "=" . $v . "&";
+        $query = "";
+        foreach ($items as $k => $v) {
+            $query .= $k . "=" . $v . "&";
         }
 
-        return trim($buff,'&');
+        return rtrim($query,'&');
     }
 
     /**
@@ -104,15 +102,14 @@ class PayData extends Collection
     protected function filterItems($items)
     {
         $data = [];
-        foreach($items as $key => $value){
-            if(!($key === 'sign' || empty($value))){
+        foreach($items as $key => $value) {
+            if(!($key === 'sign' || empty($value))) {
                 $data[$key] = $value;
             }
         }
 
         return $data;
     }
-
 
     /**
      * 产生随机字符串
@@ -122,7 +119,7 @@ class PayData extends Collection
      */
     protected function createNonceStr($length = 32)
     {
-        if(!$this->nonce_str){
+        if(!$this->nonce_str) {
             $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
             $this->nonce_str = "";
             for ( $i = 0; $i < $length; $i++ )  {
@@ -139,12 +136,12 @@ class PayData extends Collection
     public function checkResult()
     {
         //通信是否成功
-        if(!$this->isSuccess($this->return_code)){
+        if(!$this->isSuccess($this->return_code)) {
             throw new PayException($this,$this->return_msg);
         }
 
         //交易是否发起
-        if(!$this->isSuccess($this->result_code)){
+        if(!$this->isSuccess($this->result_code)) {
             //抛出错误码与错误信息
             throw new PayFailException(
                 $this,$this->err_code_des,$this->err_code
@@ -152,11 +149,9 @@ class PayData extends Collection
         }
 
         //签名是否一致
-        if(!$this->isExist('sign') || !($this->makeSign() == $this['sign'])){
+        if(!$this->isExist('sign') || $this->sign != $this->makeSign()) {
             throw new SignVerifyFailException($this);
         }
-
-        return $this;
     }
 
     /**

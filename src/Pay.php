@@ -1,19 +1,31 @@
 <?php
 namespace EasyPay;
 
-class EasyPay
+class Pay
 {
     protected $data;
 
     protected $api = [
         'wechat' => \EasyPay\PayApi\Wechat\PayApi::class,
+        'alipay' => \EasyPay\PayApi\Alipay\PayApi::class,
     ];
 
     /**
      * @param array $data
      * @return $this
      */
-    public function ready(array $data)
+    public static function ready(array $data)
+    {
+        return (new static)->setConfig($data);
+    }
+
+    /**
+     * ÉèÖÃÅäÖÃÎÄ¼þ
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function setConfig(array $data)
     {
         $this->data = $data;
 
@@ -28,7 +40,7 @@ class EasyPay
     {
         $instance = $this->getInstance($destination);
 
-        if(!$instance instanceof \EasyPay\Interfaces\PayApiInterface){
+        if(!$instance instanceof \EasyPay\Interfaces\PayApiInterface) {
             throw new \RuntimeException;
         }
 

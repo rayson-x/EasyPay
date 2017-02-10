@@ -29,7 +29,9 @@ interface AsyncNotifyInterface
     public function fail(\Exception $exception);
 
     /**
-     * 响应通知方服务器
+     * 获取异步通知的响应内容
+     *
+     * @param $message
      */
-    public function replyNotify();
+    public function replyNotify($message);
 }
