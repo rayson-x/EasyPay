@@ -5,7 +5,7 @@ namespace EasyPay\Interfaces;
  * Interface AsyncNotifyInterface
  * @package EasyPay\Interfaces
  */
-interface AsyncNotifyInterface
+interface AsyncProcessorInterface
 {
     /**
      * 获取异步通知信息
@@ -19,7 +19,7 @@ interface AsyncNotifyInterface
      *
      * @param $result
      */
-    public function success($result);
+    public function success($result = null);
 
     /**
      * 异步信息处理时出现异常

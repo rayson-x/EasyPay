@@ -7,7 +7,7 @@
 ```php
 require "vendor/autoload.php";
 
-try{
+try {
     // 配置默认信息
     EasyPay\Config::loadConfig([
 	    // 微信支付的参数
@@ -19,66 +19,73 @@ try{
     ]);
 
     // 发送订单到第三方服务器，$result为第三方返回的数据
-    // EasyPay用于交互的数据都为实现了ArrayAccess与ArrayIterator接口的对象
+    // $result是一个实现了ArrayAccess与ArrayIterator接口的对象
 	// 所以$result可以作为对象使用,也可以作为数组使用,不过不支持array系列函数的使用
-    $result = (new EasyPay\EasyPay)
-        // 订单信息,具体字段可以参考支付的官网
-        ->ready([
-            'attach' => 'wechat pay test',
-            'body'  =>  '订单详细',
-            'out_trade_no' => substr(md5(uniqid()),0,18).date("YmdHis"),
-            'total_fee' => 1,
-            'spbill_create_ip' => $_SERVER['REMOTE_ADDR'],
-            'trade_type' => 'NATIVE',
-            'product_id' => '12235413214070356458058'
-        ])
-        // 使用的支付方式
-        ->sendTo('wechat')
-        // 请求的接口(详细接口见附录的默认API)
-        ->initOrder();
+    $pay = new Pay(array(/* config */'), 'wechat');
+    $result = $pay->initOrder();
 
 	// 此处实现业务逻辑
 
-}catch(\EasyPay\Exception\PayException $e){
+} catch(\EasyPay\Exception\PayException $e) {
     // 支付过程中出现错误会以异常的形式抛出
     // 使用者在此处对失败的订单进行处理
 }
 ```
 
 ## 处理异步返回的信息
-#### 1.`EasyPay`提供了十分方便的接口，可以让使用者不需要关心如何获取异步返回的数据，也不需要管响应第三方，只要安心处理业务逻辑就行了
+#### 1.`EasyPay`提供了十分方便的接口,可以让使用者不需要关心如何获取异步返回的数据,也不需要考虑如何构成第三方所需要的响应数据结构，只要安心处理业务逻辑就行了
 
 ```php
 require "vendor/autoload.php";
 
 // 在验证是一次成功的请求之后才会回调使用者提供的函数
-(new \EasyPay\HandleNotify('wechat'))->handle(function(){
+$body = \EasyPay\AsyncNotify::handle('wechat', function ($data) {
     // 在此处执行业务逻辑
     // 如果出现错误想中断，直接抛出异常，EasyPay捕获此异常并返回错误信息
 });
+
+// 响应支付方
+echo $body;
+```
+
+#### 2.如果开发者想获取异步数据,进行自己处理,可以调用`\EasyPay\AsyncNotify::getProcessor('wechat')`方法,来获取异步结果处理器
+```php
+require "vendor/autoload.php";
+
+$processor = \EasyPay\AsyncNotify::getProcessor('wechat');
+
+try {
+    // 获取异步回调的结果,如果异步回调验证失败,会抛出异常
+    $data = $processor->getNotify();
+
+    // 此处为业务逻辑,略过
+
+    // 处理成功,响应成功
+    echo $processor->success();
+} catch (\Exception $e){
+    // 处理失败,响应失败结果
+    echo $processor->fail($e);
+}
 ```
 
 ## 附录
 
-### 1.`EasyPay`内置了6个默认API，使用的时候只要改变链式操作的最后一步，就可以改变请求的接口
+### 1.`EasyPay`实现了6个默认的方法,可以随意切换访问的api
 ```php
-//////////////////// 发起订单 ////////////////////
-$result = (new EasyPay\EasyPay)
-        ->ready($order)
-        ->sendTo(EasyPay\EasyPay::WX)
-        ->initOrder();
+require "vendor/autoload.php";
 
-//////////////////// 查询订单 ////////////////////
-$result = (new EasyPay\EasyPay)
-        ->ready($order)
-        ->sendTo(EasyPay\EasyPay::WX)
-        ->orderQuery();
+//////////////////// 访问发起订单的API ////////////////////
+$pay = new \EasyPay\Pay(array(/* config */'), 'wechat');
+$result = $pay->initOrder();
 
-//////////////////// 关闭订单 ////////////////////
-$result = (new EasyPay\EasyPay)
-        ->ready($order)
-        ->sendTo(EasyPay\EasyPay::WX)
-        ->closeOrder();
+//////////////////// 访问查询订单的API ////////////////////
+$pay = new \EasyPay\Pay(array(/* config */'), 'wechat');
+$result = $pay->orderQuery();
+
+//////////////////// 访问关闭订单的API ////////////////////
+$pay = new \EasyPay\Pay(array(/* config */'), 'wechat');
+$result = $pay->closeOrder();
+
 ```
 #### 具体可用接口
 ```php
@@ -168,4 +175,3 @@ EasyPay\Config::alipay();
 * 实现一个简单的HTTP请求库
 * 加入其它支付方式
 * 提高代码质量
-* 通过枚举的方式选择支付方式

@@ -27,7 +27,7 @@ class PayApi implements PayApiInterface
      */
     public function __construct($option)
     {
-        if(!$option instanceof PayData){
+        if (!$option instanceof PayData) {
             $option = new PayData($option);
         }
 
@@ -71,10 +71,10 @@ class PayApi implements PayApiInterface
      */
     protected function checkOption(array $params)
     {
-        foreach($params as $param){
-            if(!$this->payData->$param){
+        foreach ($params as $param) {
+            if (!$this->payData->$param) {
                 // 尝试从配置信息中获取参数
-                if(!Config::alipay($param)) {
+                if (!Config::alipay($param)) {
                     throw new PayParamException("[$param]不存在,请检查参数");
                 }
 
@@ -82,5 +82,4 @@ class PayApi implements PayApiInterface
             }
         }
     }
-
 }

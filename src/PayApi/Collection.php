@@ -28,7 +28,7 @@ abstract class Collection implements ArrayAccess,JsonSerializable,IteratorAggreg
         $result = simplexml_load_string($input,\EasyPay\XmlElement::class,LIBXML_NOCDATA);
         libxml_disable_entity_loader($backup);
 
-        if($result === false){
+        if ($result === false) {
             throw new \UnexpectedValueException('XML Error');
         }
 
@@ -107,6 +107,16 @@ abstract class Collection implements ArrayAccess,JsonSerializable,IteratorAggreg
         foreach($items as $key => $value){
             $this->items[$key] = $value;
         }
+    }
+
+    /**
+     * 转换为数组格式
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->items;
     }
 
     /**

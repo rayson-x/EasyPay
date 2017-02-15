@@ -5,22 +5,23 @@ namespace EasyPay;
 class AsyncNotify
 {
     /**
-     * @var \EasyPay\Interfaces\AsyncNotifyInterface
-     */
-    protected $notify;
-
-    /**
      * @var array
      */
-    protected $modes = [
-        'wechat' => \EasyPay\PayApi\Wechat\AsyncNotify::class,
+    protected static $modes = [
+        'wechat' => \EasyPay\PayApi\Wechat\AsyncProcessor::class,
     ];
 
-    public function __construct($mode)
+    /**
+     * 获取异步结果处理器
+     *
+     * @param $mode
+     * @return \EasyPay\Interfaces\AsyncProcessorInterface
+     */
+    public static function getProcessor($mode)
     {
-        $class = isset($this->modes[$mode]) ? $this->modes[$mode] : $mode;
+        $class = isset(static::$modes[$mode]) ? static::$modes[$mode] : $mode;
 
-        $this->notify = new $class;
+        return new $class;
     }
 
     /**
@@ -29,14 +30,16 @@ class AsyncNotify
      * @param callable $callback
      * @return self
      */
-    public function handle(callable $callback)
+    public static function handle($mode, callable $callback)
     {
+        $notify = static::getProcessor($mode);
+
         try{
-            return $this->notify->success(
-                call_user_func($callback, $this->notify->getNotify()) ?: 'OK'
+            return $notify->success(
+                call_user_func($callback, $notify->getNotify()) ?: 'OK'
             );
         }catch(\Exception $e) {
-            return $this->notify->fail($e);
+            return $notify->fail($e);
         }
     }
 }

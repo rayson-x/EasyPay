@@ -42,7 +42,7 @@ class PayApi implements PayApiInterface
      */
     public function __construct($option)
     {
-        if(!$option instanceof PayData) {
+        if (!$option instanceof PayData) {
             $option = new PayData($option);
         }
 
@@ -62,7 +62,7 @@ class PayApi implements PayApiInterface
         $body = (string)$this->payData;
 
         /* 发送数据并返回响应数据 */
-        return $this->request('POST',static::ORDER_URL,$body);
+        return $this->request('POST', static::ORDER_URL, $body);
     }
 
     /**
@@ -76,7 +76,7 @@ class PayApi implements PayApiInterface
 
         $body = (string)$this->payData;
 
-        return $this->request('POST',static::ORDER_QUERY_URL,$body);
+        return $this->request('POST', static::ORDER_QUERY_URL, $body);
     }
 
     /**
@@ -90,7 +90,7 @@ class PayApi implements PayApiInterface
 
         $body = (string)$this->payData;
 
-        return $this->request('POST',static::CLOSE_ORDER_URL,$body);
+        return $this->request('POST', static::CLOSE_ORDER_URL, $body);
     }
 
     /**
@@ -103,13 +103,13 @@ class PayApi implements PayApiInterface
         $this->checkRefundOption();
 
         //操作员ID为空时,默认为商户ID
-        if(!$this->payData->op_user_id){
+        if (!$this->payData->op_user_id) {
             $this->payData->op_user_id = $this->payData->mch_id;
         }
 
         $body = (string)$this->payData;
 
-        return $this->request('POST',static::REFUND_URL,$body);
+        return $this->request('POST', static::REFUND_URL, $body);
     }
 
     /**
@@ -123,7 +123,7 @@ class PayApi implements PayApiInterface
 
         $body = (string)$this->payData;
 
-        return $this->request('POST',static::REFUND_QUERY_URL,$body);
+        return $this->request('POST', static::REFUND_QUERY_URL, $body);
     }
 
     /**
@@ -137,14 +137,19 @@ class PayApi implements PayApiInterface
 
         $body = (string)$this->payData;
 
-        return $this->request('POST',static::DOWN_LOAD_BILL_URL,$body);
+        return $this->request('POST', static::DOWN_LOAD_BILL_URL, $body);
     }
 
+    /**
+     * 微信企业转账
+     *
+     * @return array|object.
+     */
     public function transfers()
     {
         $this->checkTransfersOption();
 
-        return $this->request('POST',static::TRANSFERS_URL,(string)$this->payData);
+        return $this->request('POST', static::TRANSFERS_URL, (string)$this->payData);
     }
 
     /**
@@ -152,19 +157,24 @@ class PayApi implements PayApiInterface
      * @param $url
      * @return array|object
      */
-    protected function request($method,$url,$body)
+    protected function request($method, $url, $body)
     {
-        $request = new Request($method,$url);
+        $request = new Request($method, $url);
         $request->keepImmutability(false);
         $request->withHeader('Content-Type','text/xml')->getBody()->write($body);
 
         $ch = $this->curlInit($request);
-        if(false === $result = curl_exec($ch)) {
+        if (false === $result = curl_exec($ch)) {
             throw new \RuntimeException(curl_error($ch),curl_errno($ch));
         }
-        $response = Response::createFromResponseStr($result);
 
-        return PayData::createDataFromXML((string)$response->getBody())->checkResult();
+        $response = PayData::createDataFromXML(
+            (string)Response::createFromResponseStr($result)->getBody()
+        );
+
+        $response->checkResult();
+
+        return $response;
     }
 
     /**
@@ -216,10 +226,10 @@ class PayApi implements PayApiInterface
      */
     protected function checkOption(array $params)
     {
-        foreach($params as $param) {
-            if(!$this->payData->$param) {
+        foreach ($params as $param) {
+            if (!$this->payData->$param) {
                 // 尝试从配置信息中获取参数
-                if(!Config::wechat($param)) {
+                if (!Config::wechat($param)) {
                     throw new PayParamException("[$param]不存在,请检查参数");
                 }
 
@@ -244,10 +254,11 @@ class PayApi implements PayApiInterface
         $this->checkOption(
             [ 'appid', 'mch_id', 'body', 'out_trade_no','total_fee', 'spbill_create_ip', 'notify_url','trade_type']
         );
-        if($this->isJsApi() && !$this->payData->openid){
+
+        if ($this->isJsApi() && !$this->payData->openid) {
             throw new PayParamException('如果"trade_type"是"JSAPI","openid"为必需参数');
         }
-        if($this->isNative() && !$this->payData->product_id){
+        if ($this->isNative() && !$this->payData->product_id) {
             throw new PayParamException('如果"trade_type"是"NATIVE","product_id"为必需参数');
         }
     }
@@ -262,7 +273,7 @@ class PayApi implements PayApiInterface
     {
         $this->checkOption(['appid','mch_id']);
 
-        if(!($this->payData->out_trade_no || $this->payData->transaction_id)){
+        if (!($this->payData->out_trade_no || $this->payData->transaction_id)) {
             throw new PayParamException('缺少订单号,请检查参数');
         }
     }
@@ -293,7 +304,7 @@ class PayApi implements PayApiInterface
             [ 'appid', 'mch_id','out_refund_no','total_fee','refund_fee']
         );
 
-        if(!($this->payData->out_trade_no || $this->payData->transaction_id)){
+        if (!($this->payData->out_trade_no || $this->payData->transaction_id)) {
             throw new PayParamException("缺少订单号,请检查参数");
         }
     }
@@ -307,7 +318,8 @@ class PayApi implements PayApiInterface
      */
     protected function checkRefundQueryOption()
     {
-        if(!$this->payData->transaction_id &&
+        if(
+            !$this->payData->transaction_id &&
             !$this->payData->out_trade_no &&
             !$this->payData->out_refund_no &&
             !$this->payData->refund_id)
@@ -341,20 +353,20 @@ class PayApi implements PayApiInterface
      */
     protected function checkTransfersOption()
     {
-        if(!isset($this->payData->mch_appid)) {
-            if(isset($this->payData->appid)) {
+        if (!isset($this->payData->mch_appid)) {
+            if (isset($this->payData->appid)) {
                 $this->payData->mch_appid = $this->payData->appid;
                 unset($this->payData->appid);
-            }else{
+            } else {
                 $this->payData->mch_appid = Config::wechat('appid');
             }
         }
 
-        if(!isset($this->payData->mchid)) {
-            if(isset($this->payData->mch_id)) {
+        if (!isset($this->payData->mchid)) {
+            if (isset($this->payData->mch_id)) {
                 $this->payData->mchid = $this->payData->mch_id;
                 unset($this->payData->appid);
-            }else{
+            } else {
                 $this->payData->mchid = Config::wechat('mch_id');
             }
         }

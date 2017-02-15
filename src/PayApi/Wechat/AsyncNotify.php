@@ -2,7 +2,7 @@
 namespace EasyPay\PayApi\Wechat;
 
 use Exception;
-use EasyPay\Interfaces\AsyncNotifyInterface;
+use EasyPay\Interfaces\AsyncProcessorInterface;
 
 /**
  * 处理异步通知
@@ -10,7 +10,7 @@ use EasyPay\Interfaces\AsyncNotifyInterface;
  * Class AsyncNotifyHandle
  * @package EasyPay\PayApi\Wechat
  */
-class AsyncNotify implements AsyncNotifyInterface
+class AsyncProcessor implements AsyncProcessorInterface
 {
     /**
      * 获取通知内容
@@ -20,7 +20,7 @@ class AsyncNotify implements AsyncNotifyInterface
      */
     public function getNotify()
     {
-        if(empty($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+        if (empty($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
             throw new Exception('无法处理的请求');
         }
         // 从输入流中读取数据

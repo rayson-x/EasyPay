@@ -1,60 +1,102 @@
 <?php
 namespace EasyPay;
 
+use BadMethodCallException;
+use InvalidArgumentException;
+use EasyPay\Interfaces\PayApiInterface;
+
+/**
+ * Class Pay
+ * @package EasyPay
+ *
+ * @method initOrder()
+ * @method orderQuery()
+ * @method closeOrder()
+ * @method refund()
+ * @method refundQuery()
+ * @method downloadBill()
+ */
 class Pay
 {
-    protected $data;
+    const WECHAT = 'wechat';
 
-    protected $api = [
+    const ALIPAY = 'alipay';
+    /**
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * @var \EasyPay\Interfaces\PayApiInterface
+     */
+    protected $instance;
+
+    /**
+     * 支持的支付方式列表
+     *
+     * @var array
+     */
+    protected $apiList = [
         'wechat' => \EasyPay\PayApi\Wechat\PayApi::class,
         'alipay' => \EasyPay\PayApi\Alipay\PayApi::class,
     ];
 
     /**
-     * @param array $data
-     * @return $this
+     * @param array $config
+     * @param $name
      */
-    public static function ready(array $data)
+    public function __construct(array $config, $name)
     {
-        return (new static)->setConfig($data);
+        $this->config = $config;
+
+        if (empty($className = $this->apiList[$name])) {
+            throw new InvalidArgumentException('支付方式不支持');
+        }
+
+        $this->instance = (new $className($this->config));
     }
 
     /**
-     * ���������ļ�
+     * @param $method
+     * @param $args
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+        if (!method_exists($this->instance, $method)) {
+            throw new BadMethodCallException('方法不存在');
+        }
+
+        return $this->instance->$method(...$args);
+    }
+
+    /**
+     * 设置配置信息
      *
-     * @param array $data
+     * @param $name
+     * @param $value
      * @return $this
      */
-    public function setConfig(array $data)
+    public function setConfig($name, $value)
     {
-        $this->data = $data;
+        $this->config[$name] = $value;
 
         return $this;
     }
 
     /**
-     * @param $destination
      * @return \EasyPay\Interfaces\PayApiInterface
      */
-    public function sendTo($destination)
+    public function getInstance()
     {
-        $instance = $this->getInstance($destination);
-
-        if(!$instance instanceof \EasyPay\Interfaces\PayApiInterface) {
-            throw new \RuntimeException;
-        }
-
-        return $instance;
+        return $this->instance;
     }
 
     /**
-     * @param $name
-     * @return \EasyPay\Interfaces\PayApiInterface
+     * @param Interfaces\PayApiInterface $instance
      */
-    public function getInstance($name)
+    public function setInstance(PayApiInterface $instance)
     {
-        $class = isset($this->api[$name]) ? $this->api[$name] : $name;
-
-        return (new $class($this->data));
+        $this->instance = $instance;
     }
 }
