@@ -1,5 +1,5 @@
 <?php
-namespace EasyPay\PayApi\Alipay;
+namespace EasyPay\PayApi\AliWapPay;
 
 use EasyPay\Config;
 use EasyPay\Interfaces\PayApiInterface;

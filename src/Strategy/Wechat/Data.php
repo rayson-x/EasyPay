@@ -1,5 +1,5 @@
 <?php
-namespace EasyPay\PayApi\Wechat;
+namespace EasyPay\Strategy\Wechat;
 
 use DOMDocument;
 use EasyPay\Config;
@@ -10,12 +10,10 @@ use EasyPay\Exception\PayParamException;
 use EasyPay\Exception\SignVerifyFailException;
 
 /**
- * 支付信息构造器,只负责生成数据流
- *
- * Class PayDataBuilder
- * @package PayApi\Wechat
+ * Class Data
+ * @package EasyPay\Strategy\Wechat
  */
-class PayData extends DataManager
+class Data extends DataManager
 {
     /**
      * 生成CDATA格式的XML
@@ -27,7 +25,7 @@ class PayData extends DataManager
         $dom = new DOMDocument();
         $xml = $dom->createElement('xml');
 
-        foreach($this->items as $key => $value) {
+        foreach ($this->items as $key => $value) {
             $item = $dom->createElement($key);
             $item->appendChild($dom->createCDATASection($value));
             $xml->appendChild($item);
@@ -64,11 +62,7 @@ class PayData extends DataManager
      */
     public function makeSign()
     {
-        $url = $this->toUrlParam();
-        $string = md5($url);
-        $this->sign = strtoupper($string);
-
-        return $this->sign;
+        return strtoupper(md5($this->toUrlParam()));
     }
 
     /**
@@ -83,18 +77,17 @@ class PayData extends DataManager
         if(! $key = Config::wechat('key')) {
             throw new PayParamException('商户支付密钥不存在,请检查参数');
         }
-        $items['key'] = $key;
 
         $query = "";
         foreach ($items as $k => $v) {
             $query .= $k . "=" . $v . "&";
         }
 
-        return rtrim($query,'&');
+        return "{$query}key={$key}";
     }
 
     /**
-     * 筛选参数
+     * 过滤参数
      *
      * @param $items
      * @return array
@@ -102,8 +95,8 @@ class PayData extends DataManager
     protected function filterItems($items)
     {
         $data = [];
-        foreach($items as $key => $value) {
-            if(!($key === 'sign' || empty($value))) {
+        foreach ($items as $key => $value) {
+            if (!($key === 'sign' || empty($value))) {
                 $data[$key] = $value;
             }
         }
@@ -119,10 +112,10 @@ class PayData extends DataManager
      */
     protected function createNonceStr($length = 32)
     {
-        if(!$this->nonce_str) {
+        if (!$this->nonce_str) {
             $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
             $this->nonce_str = "";
-            for ( $i = 0; $i < $length; $i++ )  {
+            for ( $i = 0; $i < $length; $i++ ) {
                 $this->nonce_str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
             }
         }
@@ -136,12 +129,12 @@ class PayData extends DataManager
     public function checkResult()
     {
         //通信是否成功
-        if(!$this->isSuccess($this->return_code)) {
-            throw new PayException($this,$this->return_msg);
+        if (!$this->isSuccess($this->return_code)) {
+            throw new PayException($this, $this->return_msg);
         }
 
         //交易是否发起
-        if(!$this->isSuccess($this->result_code)) {
+        if (!$this->isSuccess($this->result_code)) {
             //抛出错误码与错误信息
             throw new PayFailException(
                 $this,$this->err_code_des,$this->err_code
@@ -166,6 +159,42 @@ class PayData extends DataManager
     }
 
     /**
+     * 检查必要参数是否存在
+     *
+     * @param array $params
+     */
+    public function checkParamsExits(array $params)
+    {
+        foreach ($params as $param) {
+            if (!$this[$param]) {
+                // 尝试从配置信息中获取参数
+                if (!$value = Config::wechat($param)) {
+                    throw new PayParamException("[$param]不存在,请检查参数");
+                }
+
+                $this[$param] = $value;
+            }
+        }
+    }
+
+    /**
+     * 选中指定参数,没选中参数将被剔除
+     *
+     * @param array $params
+     */
+    public function selectedParams(array $params)
+    {
+        $temp = [];
+        foreach ($params as $name) {
+            if ($this->offsetExists($name)) {
+                $temp[$name] = $this[$name];
+            }
+        }
+
+        $this->items = $temp;
+    }
+
+    /**
      * 输出XML信息
      *
      * @return string
@@ -173,7 +202,7 @@ class PayData extends DataManager
     public function __toString()
     {
         $this->createNonceStr();
-        $this->makeSign();
+        $this->sign = $this->makeSign();
         return $this->toXml();
     }
 }

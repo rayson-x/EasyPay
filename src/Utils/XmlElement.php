@@ -1,5 +1,5 @@
 <?php
-namespace EasyPay;
+namespace EasyPay\Utils;
 
 /**
  * 提供数组式的使用方法

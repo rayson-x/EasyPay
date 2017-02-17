@@ -8,7 +8,7 @@ class AsyncNotify
      * @var array
      */
     protected static $modes = [
-        'wechat' => \EasyPay\PayApi\Wechat\AsyncProcessor::class,
+        'wechat' => \EasyPay\Strategy\Notify\AsyncProcessor::class,
     ];
 
     /**
@@ -34,11 +34,11 @@ class AsyncNotify
     {
         $notify = static::getProcessor($mode);
 
-        try{
+        try {
             return $notify->success(
                 call_user_func($callback, $notify->getNotify()) ?: 'OK'
             );
-        }catch(\Exception $e) {
+        } catch(\Exception $e) {
             return $notify->fail($e);
         }
     }

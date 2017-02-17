@@ -1,5 +1,5 @@
 <?php
-namespace EasyPay\PayApi;
+namespace EasyPay\Utils;
 
 use ArrayAccess;
 use ArrayIterator;
@@ -7,7 +7,11 @@ use JsonSerializable;
 use IteratorAggregate;
 use UnexpectedValueException;
 
-abstract class Collection implements ArrayAccess,JsonSerializable,IteratorAggregate
+/**
+ * Class DataManager
+ * @package EasyPay\Utils
+ */
+class DataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
 {
     /**
      * 生成的数据
@@ -25,7 +29,7 @@ abstract class Collection implements ArrayAccess,JsonSerializable,IteratorAggreg
     public static function createDataFromXML($input)
     {
         $backup = libxml_disable_entity_loader(true);
-        $result = simplexml_load_string($input,\EasyPay\XmlElement::class,LIBXML_NOCDATA);
+        $result = simplexml_load_string($input, \EasyPay\Utils\XmlElement::class, LIBXML_NOCDATA);
         libxml_disable_entity_loader($backup);
 
         if ($result === false) {
@@ -88,9 +92,9 @@ abstract class Collection implements ArrayAccess,JsonSerializable,IteratorAggreg
      */
     public function toXml()
     {
-        $dom = new \EasyPay\XmlElement('<xml/>');
+        $dom = new \EasyPay\Utils\XmlElement('<xml/>');
 
-        foreach($this->items as $key => $value){
+        foreach ($this->items as $key => $value) {
             $dom->addChild($key,$value);
         }
 
@@ -104,7 +108,7 @@ abstract class Collection implements ArrayAccess,JsonSerializable,IteratorAggreg
      */
     public function replace($items)
     {
-        foreach($items as $key => $value){
+        foreach ($items as $key => $value) {
             $this->items[$key] = $value;
         }
     }
@@ -141,7 +145,7 @@ abstract class Collection implements ArrayAccess,JsonSerializable,IteratorAggreg
      */
     public function offsetGet($offset)
     {
-        return $this->$offset;
+        return isset($this->items[$offset]) ? $this->items[$offset] : null;
     }
 
     /**
@@ -150,7 +154,7 @@ abstract class Collection implements ArrayAccess,JsonSerializable,IteratorAggreg
      */
     public function offsetSet($offset,$value)
     {
-        $this->$offset = $value;
+        $this->items[$offset] = $value;
     }
 
     /**
@@ -158,7 +162,7 @@ abstract class Collection implements ArrayAccess,JsonSerializable,IteratorAggreg
      */
     public function offsetUnset($offset)
     {
-        unset($this->$offset);
+        unset($this->items[$offset]);
     }
 
     /**
@@ -171,40 +175,40 @@ abstract class Collection implements ArrayAccess,JsonSerializable,IteratorAggreg
     }
 
     /**
-     * @param $offset
+     * @param $name
      * @param $value
      */
-    public function __set($offset,$value)
+    public function __set($name,$value)
     {
-        $this->items[$offset] = $value;
+        $this[$name] = $value;
     }
 
     /**
-     * @param $offset
+     * @param $name
      * @return null
      */
-    public function __get($offset)
+    public function __get($name)
     {
-        return isset($this->items[$offset]) ? $this->items[$offset] : null;
+        return $this[$name];
     }
 
     /**
      * 检查参数是否为空
      * PHP7后isset有改动,如果用了重载的方式加载对象属性,可能会出现错误
      *
-     * @param $offset
+     * @param $name
      * @return bool
      */
-    public function __isset($offset)
+    public function __isset($name)
     {
-        return isset($this->items[$offset]);
+        return $this->offsetExists($name);
     }
 
     /**
-     * @param $offset
+     * @param $name
      */
-    public function __unset($offset)
+    public function __unset($name)
     {
-        unset($this->items[$offset]);
+        $this->offsetUnset($name);
     }
 }

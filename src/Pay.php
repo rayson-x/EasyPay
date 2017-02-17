@@ -18,9 +18,12 @@ use EasyPay\Interfaces\PayApiInterface;
  */
 class Pay
 {
+    // 微信支付
     const WECHAT = 'wechat';
 
-    const ALIPAY = 'alipay';
+    // 阿里H5支付
+    const ALI_WAP_PAY = 'ali-wap-pay';
+
     /**
      * @var array
      */
@@ -37,8 +40,8 @@ class Pay
      * @var array
      */
     protected $apiList = [
-        'wechat' => \EasyPay\PayApi\Wechat\PayApi::class,
-        'alipay' => \EasyPay\PayApi\Alipay\PayApi::class,
+        'wechat'            => \EasyPay\PayApi\Wechat\PayApi::class,
+        'ali-wap-pay'       => \EasyPay\PayApi\AliWapPay\PayApi::class,
     ];
 
     /**

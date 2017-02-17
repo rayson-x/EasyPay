@@ -21,7 +21,7 @@ try {
     // 发送订单到第三方服务器，$result为第三方返回的数据
     // $result是一个实现了ArrayAccess与ArrayIterator接口的对象
 	// 所以$result可以作为对象使用,也可以作为数组使用,不过不支持array系列函数的使用
-    $pay = new Pay(array(/* config */'), 'wechat');
+    $pay = new Pay(array(/* config */), 'wechat');
     $result = $pay->initOrder();
 
 	// 此处实现业务逻辑
@@ -62,7 +62,7 @@ try {
 
     // 处理成功,响应成功
     echo $processor->success();
-} catch (\Exception $e){
+} catch (\Exception $e) {
     // 处理失败,响应失败结果
     echo $processor->fail($e);
 }
@@ -75,15 +75,15 @@ try {
 require "vendor/autoload.php";
 
 //////////////////// 访问发起订单的API ////////////////////
-$pay = new \EasyPay\Pay(array(/* config */'), 'wechat');
+$pay = new \EasyPay\Pay(array(/* config */), 'wechat');
 $result = $pay->initOrder();
 
 //////////////////// 访问查询订单的API ////////////////////
-$pay = new \EasyPay\Pay(array(/* config */'), 'wechat');
+$pay = new \EasyPay\Pay(array(/* config */), 'wechat');
 $result = $pay->orderQuery();
 
 //////////////////// 访问关闭订单的API ////////////////////
-$pay = new \EasyPay\Pay(array(/* config */'), 'wechat');
+$pay = new \EasyPay\Pay(array(/* config */), 'wechat');
 $result = $pay->closeOrder();
 
 ```
@@ -92,7 +92,7 @@ $result = $pay->closeOrder();
 interface PayApiInterface
 {
     /**
-     * 发起支付订单,返回第三方提供的支付数据
+     * 初始化订单,返回第三方提供的支付数据
      *
      * @return array|object
      */

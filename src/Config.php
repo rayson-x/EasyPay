@@ -18,8 +18,8 @@ class Config
             'key'           => '',                                              // 商户支付密钥
             'mch_id'        => '',                                              // 商户号
             'notify_url'    => '',                                              // 异步通知地址
-            'sslcert_path'  => '',                                              // ssl证书路径
-            'sslkey_path'   => '',                                              // ssl密钥路径
+            'ssl_cert_path' => '',                                              // ssl证书路径
+            'ssl_key_path'  => '',                                              // ssl密钥路径
         ],
         // 支付宝配置信息
         'alipay' => [
@@ -36,7 +36,7 @@ class Config
     {
         foreach($config as $key => $option){
             static::$config[$key] = isset(static::$config[$key])
-                ? array_merge(static::$config[$key],$option)
+                ? array_merge(static::$config[$key], $option)
                 : $option;
         }
     }
@@ -62,19 +62,19 @@ class Config
      * @param $args
      * @return array|null|string
      */
-    public static function __callStatic($method,$args)
+    public static function __callStatic($method, $args)
     {
         $result = [];
 
-        switch(count($args)){
+        switch (count($args)) {
             case 0:
                 $result = static::$config[$method];
                 break;
             case 1:
-                $result = static::getConfig($method,array_shift($args));
+                $result = static::getConfig($method, array_shift($args));
                 break;
             default:
-                foreach($args as $arg){
+                foreach ($args as $arg) {
                     $result[$arg] = static::getConfig($method,$arg);
                 }
                 break;

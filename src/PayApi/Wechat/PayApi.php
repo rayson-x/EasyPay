@@ -40,13 +40,21 @@ class PayApi implements PayApiInterface
      *
      * @param array $option
      */
-    public function __construct($option)
+    public function __construct(array $option)
     {
         if (!$option instanceof PayData) {
             $option = new PayData($option);
         }
 
         $this->payData = $option;
+    }
+
+    /**
+     * @return PayData
+     */
+    public function getOptions()
+    {
+        return $this->payData;
     }
 
     /**
@@ -258,6 +266,7 @@ class PayApi implements PayApiInterface
         if ($this->isJsApi() && !$this->payData->openid) {
             throw new PayParamException('如果"trade_type"是"JSAPI","openid"为必需参数');
         }
+
         if ($this->isNative() && !$this->payData->product_id) {
             throw new PayParamException('如果"trade_type"是"NATIVE","product_id"为必需参数');
         }
