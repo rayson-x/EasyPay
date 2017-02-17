@@ -5,12 +5,11 @@
   "require": {
     "php": ">=5.6.0",
     "ant-framework/http":"dev-master",
-    "riverslei/payment": "~2.0"
+    "sssxxxzzz/lib": "dev-master"
   },
   "autoload": {
     "psr-4": {
-      "EasyPay\\": "src",
-      "FastHttp\\": "vendor/lib/FastHttp"
+      "EasyPay\\": "src"
     }
   }
 }

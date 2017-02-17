@@ -2,13 +2,17 @@
 namespace EasyPay\Interfaces;
 
 /**
+ * Todo 浜ゆ槗鏁版嵁鏋勯�犵瓥鐣ラ泦
+ *
+ * 浜ゆ槗鐩稿叧绛栫暐鎺ュ彛
+ *
  * Interface StrategyInterface
  * @package EasyPay\Interfaces
  */
 interface StrategyInterface
 {
     /**
-     * 执行具体业务逻辑
+     * 鎵ц鍏蜂綋涓氬姟閫昏緫
      *
      * @return mixed
      */

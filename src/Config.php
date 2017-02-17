@@ -56,6 +56,26 @@ class Config
     }
 
     /**
+     * @param $method
+     * @param $key
+     * @param $value
+     */
+    public static function setConfig($method, $key, $value)
+    {
+        static::$config[$method][$key] = $value;
+    }
+
+    /**
+     * @param $method
+     * @param $key
+     * @return bool
+     */
+    public static function exists($method, $key)
+    {
+        return isset(static::$config[$method][$key]);
+    }
+
+    /**
      * 通过重载的方式获取配置信息
      *
      * @param $method

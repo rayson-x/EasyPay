@@ -6,24 +6,26 @@ use EasyPay\Interfaces\StrategyInterface;
 use FastHttp\Client;
 
 /**
+ * Todo å°†Http ClientæŠ½è±¡ä¸ºæ¥å£,å®ç°ä»¥æµ,å¼‚æ­¥çš„æ–¹å¼è¿›è¡Œè¯·æ±‚
+ *
  * Class BaseWechatStrategy
  * @package EasyPay\Strategy\Wechat
  */
 abstract class BaseWechatStrategy implements StrategyInterface
 {
-    // ·¢Æğ¶©µ¥URL
+    // å‘èµ·è®¢å•URL
     const INIT_ORDER_URL = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
-    // ²éÑ¯¶©µ¥URL
+    // æŸ¥è¯¢è®¢å•URL
     const QUERY_ORDER_URL = 'https://api.mch.weixin.qq.com/pay/orderquery';
-    // ¹Ø±Õ¶©µ¥URL
+    // å…³é—­è®¢å•URL
     const CLOSE_ORDER_URL = 'https://api.mch.weixin.qq.com/pay/closeorder';
-    // ÍË¿îURL
+    // é€€æ¬¾URL
     const REFUND_URL = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
-    // ²éÑ¯ÍË¿îURL
+    // æŸ¥è¯¢é€€æ¬¾URL
     const REFUND_QUERY_URL = 'https://api.mch.weixin.qq.com/pay/refundquery';
-    // ÏÂÔØ¶ÔÕËµ¥µØÖ·
+    // ä¸‹è½½å¯¹è´¦å•åœ°å€
     const DOWN_LOAD_BILL_URL = 'https://api.mch.weixin.qq.com/pay/downloadbill';
-    // Î¢ĞÅ×ªÕËµØÖ·
+    // å¾®ä¿¡è½¬è´¦åœ°å€
     const TRANSFERS_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
 
     /**
@@ -35,20 +37,20 @@ abstract class BaseWechatStrategy implements StrategyInterface
     }
 
     /**
-     * ·¢ÆğÒ»´ÎHttpÇëÇó
+     * å‘èµ·ä¸€æ¬¡Httpè¯·æ±‚
      *
      * @param $method
      * @param $url
      * @param $body
      * @return Data
      */
-    public function sendHttpRequest($method, $url, $body)
+    protected function sendHttpRequest($method, $url, $body)
     {
-        // ³õÊ¼»¯Http¿Í»§¶Ë
+        // åˆå§‹åŒ–Httpå®¢æˆ·ç«¯
         $client = new Client($method, $url);
 
         if (Config::wechat('ssl_key_path') && Config::wechat('ssl_cert_path')) {
-            // Ìí¼ÓSSLÖ¤Êé
+            // æ·»åŠ SSLè¯ä¹¦
             $client->setCurlOption([
                 'CURLOPT_SSLKEY'        =>  Config::wechat('ssl_key_path'),
                 'CURLOPT_SSLCERT'       =>  Config::wechat('ssl_cert_path'),
@@ -58,9 +60,9 @@ abstract class BaseWechatStrategy implements StrategyInterface
         }
 
         $response = $client->send((string)$body);
-        // ½âÎöÏìÓ¦XmlÄÚÈİ
+        // è§£æå“åº”Xmlå†…å®¹
         $result = Data::createDataFromXML((string)$response->getBody());
-        // ¼ì²éÊÇ·ñÕıÈ·
+        // æ£€æŸ¥æ˜¯å¦æ­£ç¡®
         $result->checkResult();
 
         return $result;

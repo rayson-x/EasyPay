@@ -143,7 +143,7 @@ class Data extends DataManager
 
         //签名是否一致
         if (!$this->isExist('sign') || $this->sign != $this->makeSign()) {
-            throw new SignVerifyFailException($this);
+            throw new SignVerifyFailException($this, '返回结果错误,签名校验失败');
         }
     }
 

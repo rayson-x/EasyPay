@@ -6,7 +6,7 @@ use EasyPay\Strategy\Wechat\Data;
 use EasyPay\Interfaces\AsyncProcessorInterface;
 
 /**
- * Òì²½Í¨Öª´¦ÀíÆ÷
+ * å¼‚æ­¥é€šçŸ¥å¤„ç†å™¨
  *
  * Class AsyncProcessor
  * @package EasyPay\Strategy\Notify
@@ -14,7 +14,7 @@ use EasyPay\Interfaces\AsyncProcessorInterface;
 class AsyncProcessor implements  AsyncProcessorInterface
 {
     /**
-     * »ñÈ¡Í¨ÖªÄÚÈİ
+     * è·å–é€šçŸ¥å†…å®¹
      *
      * @return Data
      * @throws Exception
@@ -22,9 +22,9 @@ class AsyncProcessor implements  AsyncProcessorInterface
     public function getNotify()
     {
         if (empty($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
-            throw new Exception('ÎŞ·¨´¦ÀíµÄÇëÇó');
+            throw new Exception('æ— æ³•å¤„ç†çš„è¯·æ±‚');
         }
-        // ´ÓÊäÈëÁ÷ÖĞ¶ÁÈ¡Êı¾İ
+        // ä»è¾“å…¥æµä¸­è¯»å–æ•°æ®
         $input = file_get_contents("php://input");
         $body = Data::createDataFromXML($input);
         $body->checkResult();
@@ -57,7 +57,7 @@ class AsyncProcessor implements  AsyncProcessorInterface
     }
 
     /**
-     * »ñÈ¡Òì²½Í¨ÖªµÄÏìÓ¦ÄÚÈİ
+     * è·å–å¼‚æ­¥é€šçŸ¥çš„å“åº”å†…å®¹
      *
      * @param $message
      * @return string

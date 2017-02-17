@@ -20,7 +20,7 @@ class PayFailException extends PayException
      * @param int|string $code
      * @param \Exception|null $previous
      */
-    public function __construct($result,$message = '',$code = 0,\Exception $previous = null)
+    public function __construct($result, $message = '', $code = 0, \Exception $previous = null)
     {
         $this->err_code = $code;
 
