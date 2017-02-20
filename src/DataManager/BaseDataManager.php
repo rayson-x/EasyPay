@@ -1,5 +1,5 @@
 <?php
-namespace EasyPay\Utils;
+namespace EasyPay\DataManager;
 
 use ArrayAccess;
 use ArrayIterator;
@@ -11,7 +11,7 @@ use UnexpectedValueException;
  * Class DataManager
  * @package EasyPay\Utils
  */
-class DataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
+class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
 {
     /**
      * 生成的数据
@@ -70,6 +70,28 @@ class DataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
     }
 
     /**
+     * 替换原有数据
+     *
+     * @param \Iterator|array $items
+     */
+    public function replace($items)
+    {
+        foreach ($items as $key => $value) {
+            $this->items[$key] = $value;
+        }
+    }
+
+    /**
+     * 转换为数组格式
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->items;
+    }
+
+    /**
      * 生成JSON数据
      *
      * @return string
@@ -99,28 +121,6 @@ class DataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
         }
 
         return $dom->asXML();
-    }
-
-    /**
-     * 替换原有数据
-     *
-     * @param \Iterator|array $items
-     */
-    public function replace($items)
-    {
-        foreach ($items as $key => $value) {
-            $this->items[$key] = $value;
-        }
-    }
-
-    /**
-     * 转换为数组格式
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->items;
     }
 
     /**

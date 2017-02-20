@@ -8,7 +8,7 @@ class AsyncNotify
      * @var array
      */
     protected static $modes = [
-        'wechat' => \EasyPay\Strategy\Notify\AsyncProcessor::class,
+        'wechat' => \EasyPay\Notify\Wechat\AsyncProcessor::class,
     ];
 
     /**

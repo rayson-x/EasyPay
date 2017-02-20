@@ -1,19 +1,19 @@
 <?php
-namespace EasyPay\Strategy\Wechat;
+namespace EasyPay\DataManager\Wechat;
 
 use DOMDocument;
 use EasyPay\Config;
-use EasyPay\Utils\DataManager;
 use EasyPay\Exception\PayException;
 use EasyPay\Exception\PayFailException;
 use EasyPay\Exception\PayParamException;
+use EasyPay\DataManager\BaseDataManager;
 use EasyPay\Exception\SignVerifyFailException;
 
 /**
  * Class Data
  * @package EasyPay\Strategy\Wechat
  */
-class Data extends DataManager
+class Data extends BaseDataManager
 {
     /**
      * 生成CDATA格式的XML
@@ -55,6 +55,15 @@ class Data extends DataManager
     }
 
     /**
+     * 设置签名
+     */
+    public function setSign()
+    {
+        $this->createNonceStr();
+        $this->sign = $this->makeSign();
+    }
+
+    /**
      * 生成签名(每次都重新生成,确保是最新参数生成的签名)
      *
      * @return string
@@ -62,7 +71,18 @@ class Data extends DataManager
      */
     public function makeSign()
     {
-        return strtoupper(md5($this->toUrlParam()));
+        // 默认使用MD5加密
+        $signType = $this->isExist('sign_type') ? $this->sign_type : "MD5";
+
+        switch ($signType) {
+            case 'MD5':
+                $result = md5($this->toUrlParam());
+                break;
+            default:
+                throw new PayException("签名类型错误");
+        }
+
+        return strtoupper($result);
     }
 
     /**
@@ -72,18 +92,17 @@ class Data extends DataManager
      */
     protected function toUrlParam()
     {
+        // 优先使用实例时传入的配置信息
+        // 其次在使用公共配置信息
         ksort($this->items);
         $items = $this->filterItems($this->items);
-        if(! $key = Config::wechat('key')) {
+        if (!$key = Config::wechat('key')) {
             throw new PayParamException('商户支付密钥不存在,请检查参数');
         }
 
-        $query = "";
-        foreach ($items as $k => $v) {
-            $query .= $k . "=" . $v . "&";
-        }
-
-        return "{$query}key={$key}";
+        // 构造完成后,使用urldecode进行解码
+        $items['key'] = $key;
+        return urldecode(http_build_query($items));
     }
 
     /**
@@ -96,8 +115,9 @@ class Data extends DataManager
     {
         $data = [];
         foreach ($items as $key => $value) {
-            if (!($key === 'sign' || empty($value))) {
-                $data[$key] = $value;
+            // 参数不为空且不为签名
+            if (!empty($value) && $key !== 'sign') {
+                $data[$key] = trim($value);
             }
         }
 
@@ -110,7 +130,7 @@ class Data extends DataManager
      * @param int $length
      * @return string
      */
-    protected function createNonceStr($length = 32)
+    public function createNonceStr($length = 32)
     {
         if (!$this->nonce_str) {
             $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -166,13 +186,13 @@ class Data extends DataManager
     public function checkParamsExits(array $params)
     {
         foreach ($params as $param) {
-            if (!$this[$param]) {
+            if (!$this->isExist($param)) {
                 // 尝试从配置信息中获取参数
                 if (!$value = Config::wechat($param)) {
                     throw new PayParamException("[$param]不存在,请检查参数");
                 }
 
-                $this[$param] = $value;
+                $this->offsetSet($param, $value);
             }
         }
     }
@@ -201,8 +221,7 @@ class Data extends DataManager
      */
     public function __toString()
     {
-        $this->createNonceStr();
-        $this->sign = $this->makeSign();
+        $this->setSign();
         return $this->toXml();
     }
 }

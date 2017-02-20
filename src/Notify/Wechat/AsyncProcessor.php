@@ -1,8 +1,8 @@
 <?php
-namespace EasyPay\Strategy\Notify;
+namespace EasyPay\Notify\Wechat;
 
 use Exception;
-use EasyPay\Strategy\Wechat\Data;
+use EasyPay\DataManager\Wechat\Data;
 use EasyPay\Interfaces\AsyncProcessorInterface;
 
 /**
