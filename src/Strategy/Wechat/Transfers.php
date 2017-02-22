@@ -4,6 +4,12 @@ namespace EasyPay\Strategy\Wechat;
 use EasyPay\Config;
 use EasyPay\Strategy\Wechat\BaseWechatStrategy;
 
+/**
+ * 微信企业付款
+ *
+ * Class Transfers
+ * @package EasyPay\Strategy\Wechat
+ */
 class Transfers extends BaseWechatStrategy
 {
     /**

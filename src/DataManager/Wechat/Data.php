@@ -36,17 +36,6 @@ class Data extends BaseDataManager
     }
 
     /**
-     * 检查参数是否存在
-     *
-     * @param $key
-     * @return bool
-     */
-    public function isExist($key)
-    {
-        return $this->offsetExists($key);
-    }
-
-    /**
      * 释放生成器结果
      */
     public function free()
@@ -72,7 +61,7 @@ class Data extends BaseDataManager
     public function makeSign()
     {
         // 默认使用MD5加密
-        $signType = $this->isExist('sign_type') ? $this->sign_type : "MD5";
+        $signType = $this->offsetExists('sign_type') ? $this->sign_type : "MD5";
 
         switch ($signType) {
             case 'MD5':
@@ -96,7 +85,7 @@ class Data extends BaseDataManager
         // 其次在使用公共配置信息
         ksort($this->items);
         $items = $this->filterItems($this->items);
-        if (!$key = Config::wechat('key')) {
+        if (!$key = $this->getOption('key')) {
             throw new PayParamException('商户支付密钥不存在,请检查参数');
         }
 
@@ -162,9 +151,14 @@ class Data extends BaseDataManager
         }
 
         //签名是否一致
-        if (!$this->isExist('sign') || $this->sign != $this->makeSign()) {
+        if (!$this->offsetExists('sign') || $this->sign != $this->makeSign()) {
             throw new SignVerifyFailException($this, '返回结果错误,签名校验失败');
         }
+    }
+
+    protected function getOption($name)
+    {
+        return Config::wechat($name);
     }
 
     /**
@@ -176,42 +170,6 @@ class Data extends BaseDataManager
     public function isSuccess($code)
     {
         return $code == 'SUCCESS';
-    }
-
-    /**
-     * 检查必要参数是否存在
-     *
-     * @param array $params
-     */
-    public function checkParamsExits(array $params)
-    {
-        foreach ($params as $param) {
-            if (!$this->isExist($param)) {
-                // 尝试从配置信息中获取参数
-                if (!$value = Config::wechat($param)) {
-                    throw new PayParamException("[$param]不存在,请检查参数");
-                }
-
-                $this->offsetSet($param, $value);
-            }
-        }
-    }
-
-    /**
-     * 选中指定参数,没选中参数将被剔除
-     *
-     * @param array $params
-     */
-    public function selectedParams(array $params)
-    {
-        $temp = [];
-        foreach ($params as $name) {
-            if ($this->offsetExists($name)) {
-                $temp[$name] = $this[$name];
-            }
-        }
-
-        $this->items = $temp;
     }
 
     /**

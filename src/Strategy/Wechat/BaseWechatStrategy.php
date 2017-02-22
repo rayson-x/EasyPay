@@ -35,6 +35,11 @@ abstract class BaseWechatStrategy extends BaseStrategy
         $this->payData = new Data($option);
     }
 
+    /**
+     * 请求接口,并验证返回数据
+     *
+     * @return mixed
+     */
     public function execute()
     {
         // 发起Http请求

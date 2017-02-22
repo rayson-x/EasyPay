@@ -6,12 +6,13 @@ use ArrayIterator;
 use JsonSerializable;
 use IteratorAggregate;
 use UnexpectedValueException;
+use EasyPay\Exception\PayParamException;
 
 /**
  * Class DataManager
  * @package EasyPay\Utils
  */
-class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
+abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
 {
     /**
      * 生成的数据
@@ -122,6 +123,50 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
 
         return $dom->asXML();
     }
+
+    /**
+     * 检查必要参数是否存在
+     *
+     * @param array $params
+     */
+    public function checkParamsExits(array $params)
+    {
+        foreach ($params as $param) {
+            if (!$this->offsetExists($param)) {
+                // 尝试从配置信息中获取参数
+                if (!$value = $this->getOption($param)) {
+                    throw new PayParamException("[$param]不存在,请检查参数");
+                }
+
+                $this->offsetSet($param, $value);
+            }
+        }
+    }
+
+    /**
+     * 选中指定参数,没选中参数将被剔除
+     *
+     * @param array $params
+     */
+    public function selectedParams(array $params)
+    {
+        $temp = [];
+        foreach ($params as $name) {
+            if ($this->offsetExists($name)) {
+                $temp[$name] = $this[$name];
+            }
+        }
+
+        $this->items = $temp;
+    }
+
+    /**
+     * 获取配置信息
+     *
+     * @param $name
+     * @return mixed
+     */
+    abstract protected function getOption($name);
 
     /**
      * @return array

@@ -6,7 +6,7 @@ namespace EasyPay;
  * @package EasyPay
  *
  * @method static wechat(...$key)
- * @method static alipay(...$key)
+ * @method static ali(...$key)
  */
 class Config
 {
@@ -22,7 +22,7 @@ class Config
             'ssl_key_path'  => '',                                              // ssl密钥路径
         ],
         // 支付宝配置信息
-        'alipay' => [
+        'ali' => [
 
         ],
     ];

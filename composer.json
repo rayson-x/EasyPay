@@ -6,7 +6,8 @@
     "php": ">=5.6.0",
     "ant-framework/http":"dev-master",
     "ant-framework/support": "^0.1.0",
-    "riverslei/payment": "2.7.1"
+    "riverslei/payment": "2.7.1",
+    "ant-framework/middleware": "dev-master"
   },
   "autoload": {
     "psr-4": {
