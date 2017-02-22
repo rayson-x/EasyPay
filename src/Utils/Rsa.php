@@ -8,7 +8,7 @@ namespace EasyPay\Utils;
  * Class RsaEncrypt
  * @package EasyPay\Utils
  */
-class Rsa
+class RSA
 {
     protected $publicKey;
 
@@ -45,6 +45,7 @@ class Rsa
      * 设置公钥证书
      *
      * @param $publicKey
+     * @return $this
      */
     public function setPublicKey($publicKey)
     {
@@ -57,12 +58,15 @@ class Rsa
         }
 
         $this->publicKey = $publicKey;
+
+        return $this;
     }
 
     /**
      * 设置私钥证书
      *
      * @param $privateKey
+     * @return $this
      */
     public function setPrivateKey($privateKey)
     {
@@ -75,36 +79,47 @@ class Rsa
         }
 
         $this->privateKey = $privateKey;
+
+        return $this;
     }
 
     /**
      * 设置加密后进行回调的函数
      *
-     * @param mixed $callback
+     * @param null $callback
+     * @return $this
      */
     public function setEncryptCallback($callback = null)
     {
         $this->encryptCallback = $callback;
+
+        return $this;
     }
 
     /**
      * 设置解密前进行回调的函数
      *
-     * @param mixed $callback
+     * @param null $callback
+     * @return $this
      */
     public function setDecryptCallback($callback = null)
     {
         $this->decryptCallback = $callback;
+
+        return $this;
     }
 
     /**
      * 设置密码
      *
      * @param $password
+     * @return $this
      */
     public function setPassword($password)
     {
         $this->password = $password;
+
+        return $this;
     }
 
     /**

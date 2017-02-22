@@ -1,6 +1,7 @@
 <?php
 namespace EasyPay\DataManager;
 
+use Ant\Support\Arr;
 use ArrayAccess;
 use ArrayIterator;
 use JsonSerializable;
@@ -158,6 +159,41 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
         }
 
         $this->items = $temp;
+    }
+
+    /**
+     * 过滤参数
+     *
+     * @param $array
+     */
+    protected function removalEmpty(&$array)
+    {
+        if (Arr::accessible($array)) {
+            foreach ($array as $key => $value) {
+                if (empty($value)) {
+                    Arr::forget($array, $key);
+                }
+            }
+        }
+    }
+
+    /**
+     * 产生随机字符串
+     *
+     * @param int $length
+     * @return string
+     */
+    public function createNonceStr($length = 32)
+    {
+        if (!$this->nonce_str) {
+            $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+            $this->nonce_str = "";
+            for ( $i = 0; $i < $length; $i++ ) {
+                $this->nonce_str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
+            }
+        }
+
+        return $this->nonce_str;
     }
 
     /**

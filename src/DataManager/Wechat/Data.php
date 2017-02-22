@@ -1,6 +1,7 @@
 <?php
 namespace EasyPay\DataManager\Wechat;
 
+use Ant\Support\Arr;
 use DOMDocument;
 use EasyPay\Config;
 use EasyPay\Exception\PayException;
@@ -65,7 +66,7 @@ class Data extends BaseDataManager
 
         switch ($signType) {
             case 'MD5':
-                $result = md5($this->toUrlParam());
+                $result = md5($this->buildData());
                 break;
             default:
                 throw new PayException("签名类型错误");
@@ -79,57 +80,22 @@ class Data extends BaseDataManager
      *
      * @return string
      */
-    protected function toUrlParam()
+    protected function buildData()
     {
-        // 优先使用实例时传入的配置信息
-        // 其次在使用公共配置信息
-        ksort($this->items);
-        $items = $this->filterItems($this->items);
-        if (!$key = $this->getOption('key')) {
+        $data = $this->items;
+        // 删除签名与key
+        Arr::forget($data, ['sign','key']);
+        // 删除空数据
+        $this->removalEmpty($data);
+        // 将Key以Ascii表进行排序
+        ksort($data);
+
+        if (!$data['key'] = $this->getOption('key')) {
             throw new PayParamException('商户支付密钥不存在,请检查参数');
         }
 
         // 构造完成后,使用urldecode进行解码
-        $items['key'] = $key;
-        return urldecode(http_build_query($items));
-    }
-
-    /**
-     * 过滤参数
-     *
-     * @param $items
-     * @return array
-     */
-    protected function filterItems($items)
-    {
-        $data = [];
-        foreach ($items as $key => $value) {
-            // 参数不为空且不为签名
-            if (!empty($value) && $key !== 'sign') {
-                $data[$key] = trim($value);
-            }
-        }
-
-        return $data;
-    }
-
-    /**
-     * 产生随机字符串
-     *
-     * @param int $length
-     * @return string
-     */
-    public function createNonceStr($length = 32)
-    {
-        if (!$this->nonce_str) {
-            $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-            $this->nonce_str = "";
-            for ( $i = 0; $i < $length; $i++ ) {
-                $this->nonce_str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
-            }
-        }
-
-        return $this->nonce_str;
+        return urldecode(http_build_query($data));
     }
 
     /**
