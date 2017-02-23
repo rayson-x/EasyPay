@@ -23,6 +23,8 @@ class Config
         ],
         // 支付宝配置信息
         'ali' => [
+            // 沙箱测试
+            'is_sand_box'   =>  true
         ],
     ];
 
@@ -33,7 +35,7 @@ class Config
      */
     public static function loadConfig(array $config)
     {
-        foreach($config as $key => $option){
+        foreach ($config as $key => $option) {
             static::$config[$key] = isset(static::$config[$key])
                 ? array_merge(static::$config[$key], $option)
                 : $option;
@@ -47,7 +49,7 @@ class Config
      * @param $key
      * @return null
      */
-    public static function getConfig($method,$key)
+    public static function getConfig($method, $key)
     {
         return isset(static::$config[$method][$key])
             ? static::$config[$method][$key]
@@ -90,11 +92,11 @@ class Config
                 $result = static::$config[$method];
                 break;
             case 1:
-                $result = static::getConfig($method, array_shift($args));
+                $result = static::getConfig($method, ...$args);
                 break;
             default:
                 foreach ($args as $arg) {
-                    $result[$arg] = static::getConfig($method,$arg);
+                    $result[$arg] = static::getConfig($method, $arg);
                 }
                 break;
         }

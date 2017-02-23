@@ -47,13 +47,4 @@ class QueryOrder extends BaseWechatStrategy
 
         return $this->payData;
     }
-
-    /**
-     * @param $result
-     * @return mixed
-     */
-    protected function handleResult($result)
-    {
-        return $result;
-    }
 }

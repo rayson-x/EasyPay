@@ -1,9 +1,9 @@
 <?php
 namespace EasyPay\DataManager;
 
-use Ant\Support\Arr;
 use ArrayAccess;
 use ArrayIterator;
+use Ant\Support\Arr;
 use JsonSerializable;
 use IteratorAggregate;
 use UnexpectedValueException;
@@ -13,14 +13,14 @@ use EasyPay\Exception\PayParamException;
  * Class DataManager
  * @package EasyPay\Utils
  */
-abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
+class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
 {
     /**
      * 生成的数据
      *
      * @var array
      */
-    protected $items = [];
+    protected $data = [];
 
     /**
      * 通过XML获取数据集
@@ -64,22 +64,22 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
     /**
      * PayDataBuilder Construct
      *
-     * @param \Iterator|array $items
+     * @param \Iterator|array $data
      */
-    public function __construct($items)
+    public function __construct($data)
     {
-        $this->replace($items);
+        $this->replace($data);
     }
 
     /**
      * 替换原有数据
      *
-     * @param \Iterator|array $items
+     * @param \Iterator|array $data
      */
-    public function replace($items)
+    public function replace($data)
     {
-        foreach ($items as $key => $value) {
-            $this->items[$key] = $value;
+        foreach ($data as $key => $value) {
+            $this[$key] = $value;
         }
     }
 
@@ -90,7 +90,7 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
      */
     public function toArray()
     {
-        return $this->items;
+        return $this->data;
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
     {
         $dom = new \EasyPay\Utils\XmlElement('<xml/>');
 
-        foreach ($this->items as $key => $value) {
+        foreach ($this as $key => $value) {
             $dom->addChild($key,$value);
         }
 
@@ -126,20 +126,15 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
     }
 
     /**
-     * 检查必要参数是否存在
+     * 检查必要参数是否存在,且不为空
      *
      * @param array $params
      */
     public function checkParamsExits(array $params)
     {
         foreach ($params as $param) {
-            if (!$this->offsetExists($param)) {
-                // 尝试从配置信息中获取参数
-                if (!$value = $this->getOption($param)) {
-                    throw new PayParamException("[$param]不存在,请检查参数");
-                }
-
-                $this->offsetSet($param, $value);
+            if (empty($this->$param)) {
+                throw new PayParamException("[$param]不存在,请检查参数");
             }
         }
     }
@@ -151,14 +146,14 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
      */
     public function selectedParams(array $params)
     {
-        $temp = [];
+        $data = [];
         foreach ($params as $name) {
             if ($this->offsetExists($name)) {
-                $temp[$name] = $this[$name];
+                $data[$name] = $this[$name];
             }
         }
 
-        $this->items = $temp;
+        $this->data = $data;
     }
 
     /**
@@ -185,31 +180,22 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
      */
     public function createNonceStr($length = 32)
     {
-        if (!$this->nonce_str) {
-            $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-            $this->nonce_str = "";
-            for ( $i = 0; $i < $length; $i++ ) {
-                $this->nonce_str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
-            }
+        static $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+        $str = "";
+        for ( $i = 0; $i < $length; $i++ ) {
+            $str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
         }
 
-        return $this->nonce_str;
+        return $str;
     }
-
-    /**
-     * 获取配置信息
-     *
-     * @param $name
-     * @return mixed
-     */
-    abstract protected function getOption($name);
 
     /**
      * @return array
      */
     public function jsonSerialize()
     {
-        return $this->items;
+        return $this->toArray();
     }
 
     /**
@@ -217,7 +203,7 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->items);
+        return new ArrayIterator($this->toArray());
     }
 
     /**
@@ -226,7 +212,7 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
      */
     public function offsetGet($offset)
     {
-        return isset($this->items[$offset]) ? $this->items[$offset] : null;
+        return $this->offsetExists($offset) ? $this->data[$offset] : null;
     }
 
     /**
@@ -235,7 +221,7 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
      */
     public function offsetSet($offset,$value)
     {
-        $this->items[$offset] = $value;
+        $this->data[$offset] = $value;
     }
 
     /**
@@ -243,7 +229,7 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
      */
     public function offsetUnset($offset)
     {
-        unset($this->items[$offset]);
+        unset($this->data[$offset]);
     }
 
     /**
@@ -252,7 +238,7 @@ abstract class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorA
      */
     public function offsetExists($offset)
     {
-        return array_key_exists($offset,$this->items);
+        return array_key_exists($offset,$this->data);
     }
 
     /**

@@ -11,19 +11,6 @@ class DownloadBill extends BaseWechatStrategy
 {
     // Todo 以流的形式进去读取
 
-    public function execute()
-    {
-        // 发起Http请求
-        $response = $this->sendHttpRequest(
-            $this->getRequestMethod(),
-            $this->getRequestTarget(),
-            $this->buildData()
-        );
-
-        // 处理账单信息
-        return $this->handleResult($response->getBody()->getContents());
-    }
-
     /**
      * @return string
      */
@@ -60,7 +47,7 @@ class DownloadBill extends BaseWechatStrategy
      * @param $result
      * @return mixed
      */
-    protected function handleResult($result)
+    protected function handleData($result)
     {
         // todo 保存为文件
         return $result;

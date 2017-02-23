@@ -60,6 +60,8 @@ class QrPay extends BaseWechatStrategy
         $this->payData->checkParamsExits($this->requireParamsList);
         // 选中合法参数,将除下列以外的参数全部剔除
         $this->payData->selectedParams($this->apiParamsList);
+        // 微信计费单位为分
+        $this->payData->total_fee *= 100;
 
         return $this->payData;
     }
@@ -68,8 +70,8 @@ class QrPay extends BaseWechatStrategy
      * @param $result
      * @return mixed
      */
-    protected function handleResult($result)
+    protected function handleData($result)
     {
-        return $result['code_url'];
+        return parent::handleData($result)['code_url'];
     }
 }

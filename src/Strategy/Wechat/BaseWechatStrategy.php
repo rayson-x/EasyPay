@@ -3,14 +3,16 @@ namespace EasyPay\Strategy\Wechat;
 
 use EasyPay\Config;
 use FastHttp\Client;
-use EasyPay\Strategy\BaseStrategy;
+use EasyPay\Exception\PayException;
 use EasyPay\DataManager\Wechat\Data;
+use EasyPay\Exception\PayFailException;
+use EasyPay\Interfaces\StrategyInterface;
 
 /**
  * Class BaseWechatStrategy
  * @package EasyPay\Strategy\Wechat
  */
-abstract class BaseWechatStrategy extends BaseStrategy
+abstract class BaseWechatStrategy implements StrategyInterface
 {
     // 发起订单URL
     const INIT_ORDER_URL = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
@@ -32,6 +34,7 @@ abstract class BaseWechatStrategy extends BaseStrategy
      */
     public function __construct(array $option)
     {
+        $option = array_merge(Config::wechat(), $option);
         $this->payData = new Data($option);
     }
 
@@ -49,12 +52,31 @@ abstract class BaseWechatStrategy extends BaseStrategy
             $this->buildData()
         );
 
-        // 解析响应Xml内容
-        $result = Data::createDataFromXML($response->getBody()->getContents());
-        // 检查是否正确
-        $result->checkResult();
+        return $this->handleData($response->getBody()->getContents());
+    }
 
-        return $this->handleResult($result);
+    protected function handleData($result)
+    {
+        // 解析响应Xml内容
+        $data = Data::createDataFromXML($result);
+
+        // 通信是否成功
+        if (!$data->isSuccess($data['return_code'])) {
+            throw new PayException($this, $data['return_msg']);
+        }
+
+        // 交易是否发起
+        if (!$data->isSuccess($data['result_code'])) {
+            //抛出错误码与错误信息
+            throw new PayFailException(
+                $data, $data['err_code_des'], $data['err_code']
+            );
+        }
+
+        // 校验签名
+        $data->verifySign();
+
+        return $data;
     }
 
     /**
@@ -83,4 +105,25 @@ abstract class BaseWechatStrategy extends BaseStrategy
 
         return $client->send((string)$body);
     }
+
+    /**
+     * 生成数据
+     *
+     * @return mixed
+     */
+    abstract protected function buildData();
+
+    /**
+     * 获取请求的Http动词
+     *
+     * @return mixed
+     */
+    abstract protected function getRequestMethod();
+
+    /**
+     * 获取请求的目标
+     *
+     * @return string
+     */
+    abstract protected function getRequestTarget();
 }

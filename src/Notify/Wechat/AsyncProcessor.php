@@ -26,10 +26,10 @@ class AsyncProcessor implements  AsyncProcessorInterface
         }
         // 从输入流中读取数据
         $input = file_get_contents("php://input");
-        $body = Data::createDataFromXML($input);
-        $body->checkResult();
+        $data = Data::createDataFromXML($input);
+        $data->verifySign();
 
-        return $body;
+        return $data;
     }
 
     /**

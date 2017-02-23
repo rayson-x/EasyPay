@@ -1,9 +1,9 @@
 <?php
 namespace EasyPay\DataManager\Wechat;
 
-use Ant\Support\Arr;
 use DOMDocument;
 use EasyPay\Config;
+use Ant\Support\Arr;
 use EasyPay\Exception\PayException;
 use EasyPay\Exception\PayFailException;
 use EasyPay\Exception\PayParamException;
@@ -26,7 +26,7 @@ class Data extends BaseDataManager
         $dom = new DOMDocument();
         $xml = $dom->createElement('xml');
 
-        foreach ($this->items as $key => $value) {
+        foreach ($this as $key => $value) {
             $item = $dom->createElement($key);
             $item->appendChild($dom->createCDATASection($value));
             $xml->appendChild($item);
@@ -37,20 +37,15 @@ class Data extends BaseDataManager
     }
 
     /**
-     * 释放生成器结果
-     */
-    public function free()
-    {
-        $this->items = [];
-    }
-
-    /**
      * 设置签名
      */
     public function setSign()
     {
-        $this->createNonceStr();
-        $this->sign = $this->makeSign();
+        if (!$this->offsetExists('nonce_str')) {
+            $this['nonce_str'] = $this->createNonceStr();
+        }
+
+        $this['sign'] = $this->makeSign();
     }
 
     /**
@@ -66,7 +61,7 @@ class Data extends BaseDataManager
 
         switch ($signType) {
             case 'MD5':
-                $result = md5($this->buildData());
+                $result = md5($this->buildQuery());
                 break;
             default:
                 throw new PayException("签名类型错误");
@@ -80,9 +75,9 @@ class Data extends BaseDataManager
      *
      * @return string
      */
-    protected function buildData()
+    protected function buildQuery()
     {
-        $data = $this->items;
+        $data = $this->toArray();
         // 删除签名与key
         Arr::forget($data, ['sign','key']);
         // 删除空数据
@@ -90,7 +85,7 @@ class Data extends BaseDataManager
         // 将Key以Ascii表进行排序
         ksort($data);
 
-        if (!$data['key'] = $this->getOption('key')) {
+        if (!$data['key'] = Config::wechat('key')) {
             throw new PayParamException('商户支付密钥不存在,请检查参数');
         }
 
@@ -99,32 +94,13 @@ class Data extends BaseDataManager
     }
 
     /**
-     * 检查返回结果是否正确
+     * 验证签名是否一致
      */
-    public function checkResult()
+    public function verifySign()
     {
-        //通信是否成功
-        if (!$this->isSuccess($this->return_code)) {
-            throw new PayException($this, $this->return_msg);
-        }
-
-        //交易是否发起
-        if (!$this->isSuccess($this->result_code)) {
-            //抛出错误码与错误信息
-            throw new PayFailException(
-                $this,$this->err_code_des,$this->err_code
-            );
-        }
-
-        //签名是否一致
         if (!$this->offsetExists('sign') || $this->sign != $this->makeSign()) {
-            throw new SignVerifyFailException($this, '返回结果错误,签名校验失败');
+            throw new SignVerifyFailException($this, '签名校验失败');
         }
-    }
-
-    protected function getOption($name)
-    {
-        return Config::wechat($name);
     }
 
     /**
