@@ -25,6 +25,9 @@ class Trade
      */
     protected $strategy;
 
+    /**
+     * @var array
+     */
     protected $options;
 
     public function __construct($strategy, array $options = [])
