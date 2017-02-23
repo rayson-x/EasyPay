@@ -24,7 +24,9 @@ class Config
         // 支付宝配置信息
         'ali' => [
             // 沙箱测试
-            'is_sand_box'   =>  true
+            'is_sand_box'       =>  true,
+            // SSL私钥证书
+            'ssl_private_key'   =>  '',
         ],
     ];
 
