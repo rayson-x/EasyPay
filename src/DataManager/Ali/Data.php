@@ -51,7 +51,11 @@ class Data extends BaseDataManager
         return base64_encode($sign);
     }
 
-    // 构造公共参数
+    /**
+     * 构造公共参数
+     *
+     * @return string
+     */
     protected function buildData()
     {
         $this->timestamp = date('Y-m-d H:i:s');
