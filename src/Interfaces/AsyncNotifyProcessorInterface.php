@@ -2,34 +2,27 @@
 namespace EasyPay\Interfaces;
 
 /**
- * Interface AsyncNotifyInterface
+ * Interface AsyncNotifyProcessorInterface
  * @package EasyPay\Interfaces
  */
-interface AsyncProcessorInterface
+interface AsyncNotifyProcessorInterface extends NotifyProcessorInterface
 {
     /**
-     * è·å–å¼‚æ­¥é€šçŸ¥ä¿¡æ¯
-     *
-     * @return array|object
-     */
-    public function getNotify();
-
-    /**
-     * å¼‚æ­¥ä¿¡æ¯å¤„ç†æˆåŠŸ
+     * Òì²½ĞÅÏ¢´¦Àí³É¹¦
      *
      * @param $result
      */
     public function success($result = null);
 
     /**
-     * å¼‚æ­¥ä¿¡æ¯å¤„ç†æ—¶å‡ºç°å¼‚å¸¸
+     * Òì²½ĞÅÏ¢´¦ÀíÊ±³öÏÖÒì³£
      *
      * @param \Exception $exception
      */
     public function fail(\Exception $exception);
 
     /**
-     * è·å–å¼‚æ­¥é€šçŸ¥çš„å“åº”å†…å®¹
+     * »ñÈ¡Òì²½Í¨ÖªµÄÏìÓ¦ÄÚÈİ
      *
      * @param $message
      */

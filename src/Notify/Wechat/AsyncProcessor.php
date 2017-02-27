@@ -3,7 +3,7 @@ namespace EasyPay\Notify\Wechat;
 
 use Exception;
 use EasyPay\DataManager\Wechat\Data;
-use EasyPay\Interfaces\AsyncProcessorInterface;
+use EasyPay\Interfaces\AsyncNotifyProcessorInterface;
 
 /**
  * 异步通知处理器
@@ -11,7 +11,7 @@ use EasyPay\Interfaces\AsyncProcessorInterface;
  * Class AsyncProcessor
  * @package EasyPay\Strategy\Notify
  */
-class AsyncProcessor implements  AsyncProcessorInterface
+class AsyncProcessor implements  AsyncNotifyProcessorInterface
 {
     /**
      * 获取通知内容

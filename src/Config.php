@@ -27,6 +27,16 @@ class Config
             'is_sand_box'       =>  true,
             // SSL私钥证书
             'ssl_private_key'   =>  '',
+            // 格式
+            'format'            =>  'JSON',
+            // 字符编码
+            'charset'           =>  'UTF-8',
+            // 签名类型
+            'sign_type'         =>  'RSA',
+            // 支付宝api版本
+            'version'           =>  '1.0',
+            // 销售产品码
+            'product_code'      =>  'QUICK_WAP_PAY'
         ],
     ];
 

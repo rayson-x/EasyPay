@@ -49,7 +49,7 @@ class RSA
      */
     public function setPublicKey($publicKey)
     {
-        if (is_file($publicKey)) {
+        if (is_file($publicKey) && file_exists($publicKey)) {
             $publicKey = @file_get_contents($publicKey);
         }
 
@@ -70,7 +70,7 @@ class RSA
      */
     public function setPrivateKey($privateKey)
     {
-        if (is_file($privateKey)) {
+        if (is_file($privateKey) && file_exists($privateKey)) {
             $privateKey = @file_get_contents($privateKey);
         }
 
@@ -163,7 +163,7 @@ class RSA
      */
     public function validate($data, $sign, $signType = OPENSSL_ALGO_SHA1)
     {
-        // 私钥负责签名,不允许为空
+        // 使用公钥进行签名验证
         if (empty($this->publicKey)) {
             throw new \RuntimeException("缺少验证签名所需要的公钥证书");
         }

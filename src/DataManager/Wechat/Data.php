@@ -5,7 +5,6 @@ use DOMDocument;
 use EasyPay\Config;
 use Ant\Support\Arr;
 use EasyPay\Exception\PayException;
-use EasyPay\Exception\PayFailException;
 use EasyPay\Exception\PayParamException;
 use EasyPay\DataManager\BaseDataManager;
 use EasyPay\Exception\SignVerifyFailException;
