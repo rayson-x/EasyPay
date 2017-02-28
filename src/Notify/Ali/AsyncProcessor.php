@@ -13,7 +13,7 @@ class AsyncProcessor implements AsyncNotifyProcessorInterface
             throw new \Exception('无法处理的请求');
         }
 
-        $data = new Data($_GET);
+        $data = new Data($_POST);
         $data->verifySign();
 
         return $data;
@@ -23,29 +23,21 @@ class AsyncProcessor implements AsyncNotifyProcessorInterface
      * 异步信息处理成功
      *
      * @param $result
+     * @return string
      */
     public function success($result = null)
     {
-
+        return "success";
     }
 
     /**
      * 异步信息处理时出现异常
      *
      * @param \Exception $exception
+     * @return string
      */
     public function fail(\Exception $exception)
     {
-
-    }
-
-    /**
-     * 获取异步通知的响应内容
-     *
-     * @param $message
-     */
-    public function replyNotify($message)
-    {
-
+        return 'fail';
     }
 }

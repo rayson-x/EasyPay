@@ -9,8 +9,6 @@ use EasyPay\Exception\SignVerifyFailException;
 
 class Data extends BaseDataManager
 {
-    protected $data;
-
     /**
      * 构造签名
      *
@@ -20,7 +18,7 @@ class Data extends BaseDataManager
     {
         // ali 加密必须要证书
         if (!$sslPath = Config::ali('ssl_private_key')) {
-            throw new \RuntimeException("加密签名需要私钥证书证书,请检查配置");
+            throw new \RuntimeException("加密签名需要私钥证书,请检查配置");
         }
 
         // 获取加密方式
@@ -64,23 +62,24 @@ class Data extends BaseDataManager
      */
     public function verifySign()
     {
-        // ali 加密必须要证书
+        // ali 验证签名
         if (!$sslPath = Config::ali('ali_public_key')) {
-            throw new \RuntimeException("加密签名需要私钥证书证书,请检查配置");
+            throw new \RuntimeException("验证签名需要公钥证书,请检查配置");
         }
 
-        // 获取签名
-        $sign = $this->sign;
+        $data = $this->toArray();
         // 获取加密方式
         $signType = $this->getSignType();
         // 将待验签以外字段清除
-        Arr::forget($this->data, ['sign', 'sign_type']);
-        // 验证签名是否正确
-        $result = (new \EasyPay\Utils\Rsa())
-            ->setPublicKey($sslPath)
-            ->validate($this->buildData(), base64_decode($sign), $signType);
+        Arr::forget($data, ['sign', 'sign_type']);
+        // 将Key以Ascii表进行排序
+        ksort($data);
+        // 生成查询参数
+        $dataStr = urldecode(http_build_query($data));
+        // 获取RSA加密解密对象
+        $rsa = (new \EasyPay\Utils\Rsa())->setPublicKey($sslPath);
 
-        if (!$result) {
+        if (!$rsa->validate($dataStr, base64_decode($this->sign), $signType)) {
             throw new SignVerifyFailException($this, '支付宝签名校验失败');
         }
     }

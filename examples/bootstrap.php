@@ -4,14 +4,11 @@ include "../vendor/autoload.php";
 \EasyPay\Config::loadConfig([
     'wechat'    =>  [
         // 应用id
-//        'appid'         =>  'xxxxxxxxxxxxxxxxxx',
-        'appid'         =>  'wx4ed56f6568a5b870',
+        'appid'         =>  'xxxxxxxxxxxxxxxxxx',
         // 应用密钥
-//        'key'           =>  'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-        'key'           =>  'h0l4j5tYu22MoPdt6N7A8v8C9eRTT48u',
+        'key'           =>  'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         // 商户ID
-//        'mch_id'        =>  'xxxxxxxxxx',
-        'mch_id'        =>  '1399107302',
+        'mch_id'        =>  'xxxxxxxxxx',
         // 回调地址
         'notify_url'    => 'http://example.com',
     ],

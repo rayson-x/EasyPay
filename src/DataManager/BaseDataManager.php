@@ -1,6 +1,8 @@
 <?php
 namespace EasyPay\DataManager;
 
+use Ant\Support\Arr;
+use Ant\Support\Str;
 use ArrayAccess;
 use ArrayIterator;
 use JsonSerializable;

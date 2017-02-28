@@ -20,11 +20,4 @@ interface AsyncNotifyProcessorInterface extends NotifyProcessorInterface
      * @param \Exception $exception
      */
     public function fail(\Exception $exception);
-
-    /**
-     * 获取异步通知的响应内容
-     *
-     * @param $message
-     */
-    public function replyNotify($message);
 }

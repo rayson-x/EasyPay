@@ -39,10 +39,10 @@ class AsyncProcessor implements  AsyncNotifyProcessorInterface
      */
     public function success($result = 'OK')
     {
-        return $this->replyNotify([
+        return (new Data([
             'return_code' => 'SUCCESS' ,
             'return_msg' => $result
-        ]);
+        ]))->toXml();
     }
 
     /**
@@ -51,22 +51,9 @@ class AsyncProcessor implements  AsyncNotifyProcessorInterface
      */
     public function fail(Exception $exception)
     {
-        return $this->replyNotify([
+        return (new Data([
             'return_code' => 'FAIL' ,
             'return_msg' => $exception->getMessage()
-        ]);
-    }
-
-    /**
-     * 获取异步通知的响应内容
-     *
-     * @param $message
-     * @return string
-     */
-    public function replyNotify($message)
-    {
-        $res = new Data($message);
-
-        return $res->toXml();
+        ]))->toXml();
     }
 }

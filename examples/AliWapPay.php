@@ -22,7 +22,7 @@ try {
         // 支付完成后,重定向地址
         'return_url'        =>  'http://example.com',
         // 支付完成后,异步通知地址
-        'notify_url'        =>  'http://example.com',
+        'notify_url'        =>  'http://23.106.145.193/',
     ]);
 
     // 支付宝支付方式为生成收银台url,然后跳转,由用户进行支付
