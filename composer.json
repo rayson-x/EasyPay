@@ -6,7 +6,7 @@
     "php": ">=5.6.0",
     "ant-framework/http": "dev-master",
     "ant-framework/support": "dev-master",
-    "sssxxxzzz/lib": "dev-master"
+    "sssxxzzz/lib": "dev-master"
   },
   "autoload": {
     "psr-4": {

@@ -24,6 +24,7 @@ class AsyncProcessor implements  AsyncNotifyProcessorInterface
         if (empty($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
             throw new Exception('无法处理的请求');
         }
+
         // 从输入流中读取数据
         $input = file_get_contents("php://input");
         $data = Data::createDataFromXML($input);

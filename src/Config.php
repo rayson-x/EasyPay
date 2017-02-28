@@ -10,28 +10,44 @@ namespace EasyPay;
  */
 class Config
 {
-    // 配置信息
+    /**
+     * 配置信息
+     *
+     * @var array
+     */
     protected static $config = [
         // 微信配置信息
         'wechat' => [
-            'appid'         => '',                                              // 绑定支付的APPID
-            'key'           => '',                                              // 商户支付密钥
-            'mch_id'        => '',                                              // 商户号
-            'notify_url'    => '',                                              // 异步通知地址
-            'ssl_cert_path' => '',                                              // ssl证书路径
-            'ssl_key_path'  => '',                                              // ssl密钥路径
+            // 应用id
+            'appid'         => '',
+            // 商户支付密钥
+            'key'           => '',
+            // 商户号
+            'mch_id'        => '',
+            // 签名加密方式
+            'sign_type'     => 'MD5',
+            // 异步通知地址
+            'notify_url'    => '',
+            // ssl证书路径
+            'ssl_cert_path' => '',
+            // ssl密钥路径
+            'ssl_key_path'  => '',
         ],
         // 支付宝配置信息
         'ali' => [
-            // 沙箱测试
+            // 应用id
+            'app_id'            =>  '2016072900120125',
+            // 沙箱测试开关
             'is_sand_box'       =>  true,
-            // SSL私钥证书
+            // 生成的RSA证书私钥,用于生成签名
             'ssl_private_key'   =>  '',
+            // 阿里提供的公钥,用于验证签名
+            'ali_public_key'    =>  '',
             // 格式
             'format'            =>  'JSON',
             // 字符编码
             'charset'           =>  'UTF-8',
-            // 签名类型
+            // 签名加密方式
             'sign_type'         =>  'RSA',
             // 支付宝api版本
             'version'           =>  '1.0',

@@ -1,0 +1,9 @@
+.idea
+composer.lock
+*.log
+vendor
+test.php
+index.php
+qrcode
+ssl
+notify.php

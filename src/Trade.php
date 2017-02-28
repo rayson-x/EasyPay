@@ -12,6 +12,12 @@ use EasyPay\Interfaces\StrategyInterface;
  */
 class Trade
 {
+    const WX_QR_PAY = 'wechat.qr.pay';
+
+    const WX_PUB_PAY = 'wechat.pub.pay';
+
+    const ALI_WAP_PAY = 'ali.wap.pay';
+
     protected $strategyList = [
         'wechat.qr.pay'         =>  \EasyPay\Strategy\Wechat\QrPay::class,
         'wechat.pub.pay'        =>  \EasyPay\Strategy\Wechat\PubPay::class,
@@ -27,10 +33,14 @@ class Trade
      */
     protected $strategy;
 
+    /**
+     * @param $strategy
+     * @param array $options
+     */
     public function __construct($strategy, array $options = [])
     {
         if (!array_key_exists($strategy, $this->strategyList)) {
-            throw new \RuntimeException();
+            throw new \RuntimeException('操作不存在');
         }
 
         list($payment) = explode('.', $strategy);
@@ -40,6 +50,10 @@ class Trade
         $this->strategy = $this->strategyList[$strategy];
     }
 
+    /**
+     * @param array $payData
+     * @return mixed
+     */
     public function execute(array $payData = [])
     {
         if (is_string($this->strategy)) {

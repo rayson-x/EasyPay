@@ -73,16 +73,15 @@ class Data extends BaseDataManager
         $sign = $this['sign'];
         // 获取加密方式
         $signType = $this->getSignType();
-        // 清除签名类型
-        Arr::forget($this->data, ['sign_type']);
-
+        // 将待验签以外字段清除
+        Arr::forget($this->data, ['sign', 'sign_type']);
         // 验证签名是否正确
         $result = (new \EasyPay\Utils\Rsa())
             ->setPublicKey($sslPath)
             ->validate($this->buildData(), base64_decode($sign), $signType);
 
         if (!$result) {
-            throw new SignVerifyFailException($this, '签名校验失败');
+            throw new SignVerifyFailException($this, '支付宝签名校验失败');
         }
     }
 
