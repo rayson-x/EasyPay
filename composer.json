@@ -6,7 +6,8 @@
     "php": ">=5.6.0",
     "ant-framework/http": "dev-master",
     "ant-framework/support": "dev-master",
-    "sssxxzzz/lib": "dev-master"
+    "sssxxzzz/lib": "dev-master",
+    "endroid/qrcode": "^1.9"
   },
   "autoload": {
     "psr-4": {

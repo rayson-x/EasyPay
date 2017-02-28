@@ -51,7 +51,7 @@ class Data extends BaseDataManager
 
         $data = $this->toArray();
         Arr::forget($data, ['sign']);
-        $this->removalEmpty($data);
+        Arr::removalEmpty($data);
 
         // 将Key以Ascii表进行排序
         ksort($data);
@@ -70,7 +70,7 @@ class Data extends BaseDataManager
         }
 
         // 获取签名
-        $sign = $this['sign'];
+        $sign = $this->sign;
         // 获取加密方式
         $signType = $this->getSignType();
         // 将待验签以外字段清除

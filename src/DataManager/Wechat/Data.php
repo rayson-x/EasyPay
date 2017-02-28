@@ -80,7 +80,7 @@ class Data extends BaseDataManager
         // 删除签名与key
         Arr::forget($data, ['sign','key']);
         // 删除空数据
-        $this->removalEmpty($data);
+        Arr::removalEmpty($data);
         // 将Key以Ascii表进行排序
         ksort($data);
 

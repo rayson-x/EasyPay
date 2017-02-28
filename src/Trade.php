@@ -7,8 +7,6 @@ use EasyPay\Interfaces\StrategyInterface;
 /**
  * Class Trade
  * @package EasyPay
- *
- * ali.wap.pay
  */
 class Trade
 {
@@ -19,13 +17,13 @@ class Trade
     const ALI_WAP_PAY = 'ali.wap.pay';
 
     protected $strategyList = [
+        'ali.wap.pay'           =>  \EasyPay\Strategy\Ali\WapPay::class,
         'wechat.qr.pay'         =>  \EasyPay\Strategy\Wechat\QrPay::class,
         'wechat.pub.pay'        =>  \EasyPay\Strategy\Wechat\PubPay::class,
+        'wechat.refund'         =>  \EasyPay\Strategy\Wechat\Refund::class,
         'wechat.query.order'    =>  \EasyPay\Strategy\Wechat\QueryOrder::class,
         'wechat.close.order'    =>  \EasyPay\Strategy\Wechat\CloseOrder::class,
-        'wechat.refund'         =>  \EasyPay\Strategy\Wechat\Refund::class,
         'wechat.refund.query'   =>  \EasyPay\Strategy\Wechat\RefundQuery::class,
-        'ali.wap.pay'           =>  \EasyPay\Strategy\Ali\WapPay::class,
     ];
 
     /**

@@ -3,7 +3,6 @@ namespace EasyPay\DataManager;
 
 use ArrayAccess;
 use ArrayIterator;
-use Ant\Support\Arr;
 use JsonSerializable;
 use IteratorAggregate;
 use UnexpectedValueException;
@@ -154,22 +153,6 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
         }
 
         $this->data = $data;
-    }
-
-    /**
-     * 过滤参数
-     *
-     * @param $array
-     */
-    protected function removalEmpty(&$array)
-    {
-        if (Arr::accessible($array)) {
-            foreach ($array as $key => $value) {
-                if (empty($value)) {
-                    Arr::forget($array, $key);
-                }
-            }
-        }
     }
 
     /**
