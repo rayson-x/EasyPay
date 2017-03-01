@@ -60,14 +60,14 @@ class Data extends BaseDataManager
     {
         // 取出支付宝返回数据与签名
         list($message, $sign) = array_values($this->toArray());
-        // 验证签名是否正确
-        $this->verifySign(json_encode($message), $sign);
         // 验证请求是否成功
         if ($message['code'] != '10000') {
             throw new PayException($this, $message['sub_msg']);
         }
+        // 验证签名是否正确
+        $this->verifySign(json_encode($message), $sign);
 
-        $this->replace($message);
+        $this->data = Arr::collapse($this->data);
     }
 
     /**

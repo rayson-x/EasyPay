@@ -19,7 +19,7 @@ class AsyncProcessor implements AsyncNotifyProcessorInterface
         }
 
         $data = new Data($_POST);
-        $data->verifySign();
+        $data->verifyRequestSign();
 
         return $data;
     }

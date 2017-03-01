@@ -2,42 +2,43 @@
 namespace EasyPay\Strategy\Ali;
 
 use Ant\Support\Arr;
-use EasyPay\DataManager\Ali\Data;
 
+/**
+ * Class QrPay
+ * @package EasyPay\Strategy\Ali
+ */
 class QrPay extends BaseAliStrategy
 {
-    public function buildData()
+    /**
+     * {@inheritDoc}
+     */
+    protected function getMethod()
     {
-        // 检查必填参数是否存在
-        $this->payData->checkParamsExits(['app_id','subject','out_trade_no','total_amount']);
-        // 设置请求的方法
-        $this->payData['method'] = BaseAliStrategy::QR_PAY;
-        // 生成请求参数
-        $this->payData['biz_content'] = $this->buildBinContent();
-        // 将非法参数剔除
-        $this->payData->selectedParams([
-            'app_id','method','format','charset','sign_type','sign',
-            'timestamp','version','notify_url','app_auth_token','biz_content'
-        ]);
-        // 生成签名
-        $this->payData['sign'] = $this->payData->makeSign();
-
-        return $this->payData->toArray();
+        return BaseAliStrategy::QR_PAY;
     }
 
     /**
-     * @param $data
-     * @return string
+     * {@inheritDoc}
      */
-    protected function handleData($data)
+    protected function getRequireParamsList()
     {
-        $response = $this->sendHttpRequest('POST', $this->getServerUrl()."?".http_build_query($data));
-        $data = Data::createDataFromJson((string)$response->getBody());
-        $data->verifyResponseSign();
-
-        return $data['qr_code'];
+        return ['app_id','subject','out_trade_no','total_amount'];
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function getApiParamsList()
+    {
+        return [
+            'app_id','method','format','charset','sign_type','sign',
+            'timestamp','version','notify_url','app_auth_token','biz_content'
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function buildBinContent()
     {
         $data = [
@@ -72,5 +73,13 @@ class QrPay extends BaseAliStrategy
         Arr::removalEmpty($data);
 
         return $data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function handleData($data)
+    {
+        return parent::handleData($data)['qr_code'];
     }
 }

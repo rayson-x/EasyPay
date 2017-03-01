@@ -1,9 +1,12 @@
 <?php
 include "bootstrap.php";
 
+use EasyPay\Trade;
+use EasyPay\Payment;
+
 try {
     // 使用微信公众号支付
-    $trade = new \EasyPay\Trade('wechat.pub.pay');
+    $trade = new Trade(Payment::WX_PUB_PAY);
 
     // EasyPay生成公众号支付,JS-SDK所用的Json数据
     $json = $trade->execute([

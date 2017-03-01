@@ -8,34 +8,34 @@ use EasyPay\Config;
 class WapPay extends BaseAliStrategy
 {
     /**
-     * 生成Api参数
-     *
-     * @return array
+     * {@inheritDoc}
      */
-    protected function buildData()
+    protected function getMethod()
     {
-        // 检查必填参数是否存在
-        $this->payData->checkParamsExits(['app_id','subject','out_trade_no','total_amount','product_code']);
-        // 设置请求的方法
-        $this->payData['method'] = BaseAliStrategy::WAP_PAY;
-        // 生成请求参数
-        $this->payData['biz_content'] = $this->buildBinContent();
-        // 将非法参数剔除
-        $this->payData->selectedParams([
-            'app_id','method','format','return_url','charset','sign_type',
-            'sign','timestamp','version','notify_url','biz_content'
-        ]);
-        // 生成签名
-        $this->payData['sign'] = $this->payData->makeSign();
-
-        return $this->payData->toArray();
+        return BaseAliStrategy::WAP_PAY;
     }
 
     /**
-     * 处理数据,支付宝Wap支付为跳转页面,所以此处返回生成好的支付链接
-     *
-     * @param $data
-     * @return string
+     * {@inheritDoc}
+     */
+    protected function getRequireParamsList()
+    {
+        return ['app_id','subject','out_trade_no','total_amount','product_code'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getApiParamsList()
+    {
+        return [
+            'app_id','method','format','return_url','charset','sign_type',
+            'sign','timestamp','version','notify_url','biz_content'
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
      */
     protected function handleData($data)
     {
@@ -43,9 +43,7 @@ class WapPay extends BaseAliStrategy
     }
 
     /**
-     * 生成请求参数
-     *
-     * @return array
+     * {@inheritDoc}
      */
     protected function buildBinContent()
     {

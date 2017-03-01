@@ -1,9 +1,12 @@
 <?php
 include "bootstrap.php";
 
+use EasyPay\Trade;
+use EasyPay\Payment;
+
 try {
     // 使用支付宝网页支付
-    $trade = new \EasyPay\Trade('ali.wap.pay');
+    $trade = new Trade(Payment::ALI_WAP_PAY);
     // EasyPay生成的支付跳转url
     $url = $trade->execute([
         // 订单标题
@@ -18,8 +21,6 @@ try {
         'goods_type'        =>  '1',
         // 订单超时时间(m-分钟，h-小时，d-天，1c-当天)
         'timeout_express'   =>  '15m',
-        // 支付完成后,重定向地址
-        'return_url'        =>  'http://127.0.0.1/notify.php',
         // 支付完成后,异步通知地址
         'notify_url'        =>  'http://23.106.145.193/',
     ]);

@@ -35,6 +35,9 @@ abstract class BaseAliStrategy implements StrategyInterface
     // 下载订单
     const DOWN_LOAD_BILL = 'alipay.data.dataservice.bill.downloadurl.query';
 
+    /**
+     * @var Data
+     */
     protected $payData;
 
     public function __construct($options)
@@ -43,6 +46,9 @@ abstract class BaseAliStrategy implements StrategyInterface
         $this->payData = new Data($options);
     }
 
+    /**
+     * @return array|object
+     */
     public function execute()
     {
         $data = $this->buildData();
@@ -50,11 +56,55 @@ abstract class BaseAliStrategy implements StrategyInterface
         return $this->handleData($data);
     }
 
+    /**
+     * 构造请求数据
+     *
+     * @return array
+     */
+    protected function buildData()
+    {
+        // 检查必填参数是否存在
+        $this->payData->checkParamsExits($this->getRequireParamsList());
+        // 设置请求的方法
+        $this->payData['method'] = $this->getMethod();
+        // 生成请求参数
+        $this->payData['biz_content'] = $this->buildBinContent();
+        // 选中可用参数
+        $this->payData->selectedParams($this->getApiParamsList());
+        // 生成签名
+        $this->payData['sign'] = $this->payData->makeSign();
+
+        return $this->payData->toArray();
+    }
+
+    /**
+     * 处理构造完成的请求数据
+     *
+     * @param $data
+     * @return array|object
+     */
     protected function handleData($data)
     {
+        // 构造请求API
+        $url = $this->getServerUrl() . "?" . http_build_query($data);
+        // 请求支付宝服务器
+        $response = $this->sendHttpRequest('POST', $url);
+        // 解析响应内容
+        $data = Data::createDataFromJson((string)$response->getBody());
+        // 验证签名
+        $data->verifyResponseSign();
+
         return $data;
     }
 
+    /**
+     * 发送http请求
+     *
+     * @param $method
+     * @param $url
+     * @param null $body
+     * @return \Ant\Http\Response
+     */
     protected function sendHttpRequest($method, $url, $body = null)
     {
         // 初始化Http客户端
@@ -63,6 +113,11 @@ abstract class BaseAliStrategy implements StrategyInterface
         return $client->send((string)$body);
     }
 
+    /**
+     * 获取支付宝api地址
+     *
+     * @return string
+     */
     protected function getServerUrl()
     {
         // 支持沙箱测试
@@ -71,5 +126,31 @@ abstract class BaseAliStrategy implements StrategyInterface
             : "https://openapi.alipay.com/gateway.do";
     }
 
-    abstract protected function buildData();
+    /**
+     * 获取请求的方法
+     *
+     * @return string
+     */
+    abstract protected function getMethod();
+
+    /**
+     * 获取必填参数
+     *
+     * @return array
+     */
+    abstract protected function getRequireParamsList();
+
+    /**
+     * 获取所有参数
+     *
+     * @return array
+     */
+    abstract protected function getApiParamsList();
+
+    /**
+     * 生成请求数据
+     *
+     * @return array
+     */
+    abstract protected function buildBinContent();
 }

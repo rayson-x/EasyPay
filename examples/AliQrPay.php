@@ -1,8 +1,11 @@
 <?php
 include "bootstrap.php";
 
+use EasyPay\Trade;
+use EasyPay\Payment;
+
 try {
-    $trade = new \EasyPay\Trade('ali.qr.pay');
+    $trade = new Trade(Payment::ALI_QR_PAY);
 
     $url = $trade->execute([
         // 订单标题

@@ -1,9 +1,12 @@
 <?php
 include "bootstrap.php";
 
+use EasyPay\Trade;
+use EasyPay\Payment;
+
 try {
     // 使用微信扫码支付
-    $trade = new \EasyPay\Trade('wechat.qr.pay');
+    $trade = new Trade(Payment::WX_QR_PAY);
 
     // EasyPay生成的支付跳转url
     $url = $trade->execute([

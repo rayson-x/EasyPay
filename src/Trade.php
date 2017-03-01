@@ -10,14 +10,13 @@ use EasyPay\Interfaces\StrategyInterface;
  */
 class Trade
 {
-    const WX_QR_PAY = 'wechat.qr.pay';
-
-    const WX_PUB_PAY = 'wechat.pub.pay';
-
-    const ALI_WAP_PAY = 'ali.wap.pay';
-
+    /**
+     * 策略集
+     *
+     * @var array
+     */
     protected $strategyList = [
-        'ali.qr.pay'           =>  \EasyPay\Strategy\Ali\QrPay::class,
+        'ali.qr.pay'            =>  \EasyPay\Strategy\Ali\QrPay::class,
         'ali.wap.pay'           =>  \EasyPay\Strategy\Ali\WapPay::class,
         'wechat.qr.pay'         =>  \EasyPay\Strategy\Wechat\QrPay::class,
         'wechat.pub.pay'        =>  \EasyPay\Strategy\Wechat\PubPay::class,
@@ -37,6 +36,17 @@ class Trade
      * @param array $options
      */
     public function __construct($strategy, array $options = [])
+    {
+        $this->setStrategy($strategy, $options);
+    }
+
+    /**
+     * 设置应用策略
+     *
+     * @param $strategy
+     * @param array $options
+     */
+    public function setStrategy($strategy, array $options = [])
     {
         if (!array_key_exists($strategy, $this->strategyList)) {
             throw new \RuntimeException('操作不存在');
