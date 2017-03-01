@@ -1,8 +1,6 @@
 <?php
 namespace EasyPay\DataManager;
 
-use Ant\Support\Arr;
-use Ant\Support\Str;
 use ArrayAccess;
 use ArrayIterator;
 use JsonSerializable;
@@ -46,14 +44,13 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
      * 通过JSON数据获取数据集
      *
      * @param $input
-     * @param $assoc
      * @param $depth
      * @param $options
      * @return static
      */
-    public static function createDataFromJson($input, $assoc, $depth, $options)
+    public static function createDataFromJson($input, $depth = 512, $options = 0)
     {
-        $result = json_decode($input, $assoc, $depth, $options);
+        $result = json_decode($input, true, $depth, $options);
 
         if ($result === null && json_last_error() !== JSON_ERROR_NONE) {
             throw new \UnexpectedValueException(json_last_error_msg(), json_last_error());

@@ -19,8 +19,6 @@ try {
         'total_fee'         => '1',
         // 客户端IP
         'spbill_create_ip'  => $_SERVER['SERVER_ADDR'],
-        // 产品号
-        'product_id'        =>  '123'
     ]);
 } catch (\Exception $e) {
     // 打印错误县信息

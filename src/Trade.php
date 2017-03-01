@@ -17,6 +17,7 @@ class Trade
     const ALI_WAP_PAY = 'ali.wap.pay';
 
     protected $strategyList = [
+        'ali.qr.pay'           =>  \EasyPay\Strategy\Ali\QrPay::class,
         'ali.wap.pay'           =>  \EasyPay\Strategy\Ali\WapPay::class,
         'wechat.qr.pay'         =>  \EasyPay\Strategy\Wechat\QrPay::class,
         'wechat.pub.pay'        =>  \EasyPay\Strategy\Wechat\PubPay::class,

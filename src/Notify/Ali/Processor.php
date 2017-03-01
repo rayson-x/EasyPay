@@ -13,7 +13,7 @@ class Processor implements NotifyProcessorInterface
         }
 
         $data = new Data($_GET);
-        $data->verifySign();
+        $data->verifyRequestSign();
 
         return $data;
     }

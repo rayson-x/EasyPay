@@ -2,9 +2,8 @@
 include "bootstrap.php";
 
 try {
-    // 使用支付宝网页支付
-    $trade = new \EasyPay\Trade('ali.wap.pay');
-    // EasyPay生成的支付跳转url
+    $trade = new \EasyPay\Trade('ali.qr.pay');
+
     $url = $trade->execute([
         // 订单标题
         'subject'           =>  "ali pay test",
@@ -18,14 +17,12 @@ try {
         'goods_type'        =>  '1',
         // 订单超时时间(m-分钟，h-小时，d-天，1c-当天)
         'timeout_express'   =>  '15m',
-        // 支付完成后,重定向地址
-        'return_url'        =>  'http://127.0.0.1/notify.php',
-        // 支付完成后,异步通知地址
-        'notify_url'        =>  'http://23.106.145.193/',
     ]);
 
-    // 支付宝支付方式为生成收银台url,然后跳转,由用户进行支付
-    header("Location: {$url}");
+    // 生成二维码
+    $qrCode = (new Endroid\QrCode\QrCode($url))->setSize(300);
+    header('Content-Type: image/png');
+    echo $qrCode->get('png');
 } catch (\Exception $e) {
     // 打印错误县信息
     echo "错误信息为 : {$e->getMessage()}","<br>";

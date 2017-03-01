@@ -1,16 +1,21 @@
 <?php
 namespace EasyPay\Notify\Ali;
 
-
 use EasyPay\DataManager\Ali\Data;
 use EasyPay\Interfaces\AsyncNotifyProcessorInterface;
 
 class AsyncProcessor implements AsyncNotifyProcessorInterface
 {
+    /**
+     * èŽ·å–é€šçŸ¥å†…å®¹
+     *
+     * @return Data
+     * @throws \Exception
+     */
     public function getNotify()
     {
         if (empty($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
-            throw new \Exception('ÎÞ·¨´¦ÀíµÄÇëÇó');
+            throw new \Exception('æ— æ³•å¤„ç†çš„è¯·æ±‚');
         }
 
         $data = new Data($_POST);
@@ -20,7 +25,7 @@ class AsyncProcessor implements AsyncNotifyProcessorInterface
     }
 
     /**
-     * Òì²½ÐÅÏ¢´¦Àí³É¹¦
+     * å¼‚æ­¥ä¿¡æ¯å¤„ç†æˆåŠŸ
      *
      * @param $result
      * @return string
@@ -31,7 +36,7 @@ class AsyncProcessor implements AsyncNotifyProcessorInterface
     }
 
     /**
-     * Òì²½ÐÅÏ¢´¦ÀíÊ±³öÏÖÒì³£
+     * å¼‚æ­¥ä¿¡æ¯å¤„ç†æ—¶å‡ºçŽ°å¼‚å¸¸
      *
      * @param \Exception $exception
      * @return string

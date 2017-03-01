@@ -2,7 +2,7 @@
 namespace EasyPay\Strategy\Wechat;
 
 use EasyPay\Config;
-use FastHttp\Client;
+use EasyPay\Utils\HttpClient;
 use EasyPay\Exception\PayException;
 use EasyPay\DataManager\Wechat\Data;
 use EasyPay\Exception\PayFailException;
@@ -55,6 +55,12 @@ abstract class BaseWechatStrategy implements StrategyInterface
         return $this->handleData($response->getBody()->getContents());
     }
 
+    /**
+     * 处理返回数据
+     *
+     * @param $result
+     * @return static
+     */
     protected function handleData($result)
     {
         // 解析响应Xml内容
@@ -90,7 +96,7 @@ abstract class BaseWechatStrategy implements StrategyInterface
     protected function sendHttpRequest($method, $url, $body)
     {
         // 初始化Http客户端
-        $client = new Client($method, $url);
+        $client = new HttpClient($method, $url);
 
         // 如果设置了SSL证书与秘钥,自动启用SSL
         if (Config::wechat('ssl_key_path') && Config::wechat('ssl_cert_path')) {

@@ -39,12 +39,7 @@ class WapPay extends BaseAliStrategy
      */
     protected function handleData($data)
     {
-        // 支持沙箱测试
-        $url = Config::ali('is_sand_box')
-            ? "https://openapi.alipaydev.com/gateway.do?"
-            : "https://openapi.alipay.com/gateway.do";
-
-        return $url.http_build_query($data);
+        return $this->getServerUrl()."?".http_build_query($data);
     }
 
     /**

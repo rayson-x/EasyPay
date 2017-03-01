@@ -32,6 +32,45 @@ class Data extends BaseDataManager
     }
 
     /**
+     * 验证支付宝请求签名(此为通知时调用的签名验证方式)
+     */
+    public function verifyRequestSign()
+    {
+        $data = $this->toArray();
+        // 将待验签以外字段清除
+        Arr::forget($data, ['sign', 'sign_type']);
+        // 将Key以Ascii表进行排序
+        ksort($data);
+        // 生成查询参数
+        $dataStr = urldecode(http_build_query($data));
+        // 验证签名是否正确
+        $this->verifySign($dataStr, $this->sign);
+    }
+
+    /**
+     * 验证支付宝响应签名(当商户作为客户端主动请求支付宝服务器时调用的验证方式)
+     *
+     * Response body数据格式
+     * {
+     *     "*_response" : {"code": "10000", "msg": "Success", .....},
+     *     "sign" : "MT5kbWb+oFSbcTyPsUPgoq7qdhqTotz+gVe....."
+     * }
+     */
+    public function verifyResponseSign()
+    {
+        // 取出支付宝返回数据与签名
+        list($message, $sign) = array_values($this->toArray());
+        // 验证签名是否正确
+        $this->verifySign(json_encode($message), $sign);
+        // 验证请求是否成功
+        if ($message['code'] != '10000') {
+            throw new PayException($this, $message['sub_msg']);
+        }
+
+        $this->replace($message);
+    }
+
+    /**
      * 构造公共参数
      *
      * @return string
@@ -48,9 +87,10 @@ class Data extends BaseDataManager
         }
 
         $data = $this->toArray();
+        // 排除 sign 字段
         Arr::forget($data, ['sign']);
+        // 清空数组的空数据
         Arr::removalEmpty($data);
-
         // 将Key以Ascii表进行排序
         ksort($data);
 
@@ -58,30 +98,36 @@ class Data extends BaseDataManager
     }
 
     /**
-     * 验证签名是否一致
+     * 验证签名
+     *
+     * @param $message
+     * @param $sign
      */
-    public function verifySign()
+    protected function verifySign($message, $sign)
+    {
+        // 获取加密方式
+        $signType = $this->getSignType();
+        // 获取RSA加密解密对象
+        $rsa = (new \EasyPay\Utils\Rsa())->setPublicKey($this->getAliPublicKey());
+        // 验证签名是否正确
+        if (!$rsa->validate($message, base64_decode($sign), $signType)) {
+            throw new SignVerifyFailException($this, '支付宝签名校验失败');
+        }
+    }
+
+    /**
+     * 获取验证签名用的公钥
+     *
+     * @return mixed
+     */
+    protected function getAliPublicKey()
     {
         // ali 验证签名
         if (!$sslPath = Config::ali('ali_public_key')) {
             throw new \RuntimeException("验证签名需要公钥证书,请检查配置");
         }
 
-        $data = $this->toArray();
-        // 获取加密方式
-        $signType = $this->getSignType();
-        // 将待验签以外字段清除
-        Arr::forget($data, ['sign', 'sign_type']);
-        // 将Key以Ascii表进行排序
-        ksort($data);
-        // 生成查询参数
-        $dataStr = urldecode(http_build_query($data));
-        // 获取RSA加密解密对象
-        $rsa = (new \EasyPay\Utils\Rsa())->setPublicKey($sslPath);
-
-        if (!$rsa->validate($dataStr, base64_decode($this->sign), $signType)) {
-            throw new SignVerifyFailException($this, '支付宝签名校验失败');
-        }
+        return $sslPath;
     }
 
     /**
@@ -94,7 +140,7 @@ class Data extends BaseDataManager
         // 获取加密方式
         $type = $this->offsetExists('sign_type')
             ? strtoupper($this->sign_type)
-            : 'RSA';
+            : Config::ali('sign_type');
 
         switch ($type) {
             case "RSA" :

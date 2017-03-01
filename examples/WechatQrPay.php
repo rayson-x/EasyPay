@@ -16,7 +16,7 @@ try {
         // 支付金额(单位为元,最小为分 0.01)
         'total_fee'         => '1',
         // 客户端IP
-        'spbill_create_ip'  => $_SERVER['SERVER_ADDR'],
+        'spbill_create_ip'  => $_SERVER['REMOTE_ADDR'],
         // 产品号
         'product_id'        =>  '123'
     ]);

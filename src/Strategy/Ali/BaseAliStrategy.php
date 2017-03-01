@@ -2,13 +2,15 @@
 namespace EasyPay\Strategy\Ali;
 
 use EasyPay\Config;
-use FastHttp\Client;
+use EasyPay\Utils\HttpClient;
 use EasyPay\DataManager\Ali\Data;
 use EasyPay\Interfaces\StrategyInterface;
 
 abstract class BaseAliStrategy implements StrategyInterface
 {
     const WAP_PAY = 'alipay.trade.wap.pay';
+
+    const QR_PAY = 'alipay.trade.precreate';
 
     const QUERY_ORDER = 'alipay.trade.query';
 
@@ -40,12 +42,20 @@ abstract class BaseAliStrategy implements StrategyInterface
         return $data;
     }
 
-    protected function sendHttpRequest($method, $url, $body)
+    protected function sendHttpRequest($method, $url, $body = null)
     {
         // 初始化Http客户端
-        $client = new Client($method, $url);
+        $client = new HttpClient($method, $url);
 
         return $client->send((string)$body);
+    }
+
+    protected function getServerUrl()
+    {
+        // 支持沙箱测试
+        return Config::ali('is_sand_box')
+            ? "https://openapi.alipaydev.com/gateway.do"
+            : "https://openapi.alipay.com/gateway.do";
     }
 
     abstract protected function buildData();

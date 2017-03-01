@@ -5,5 +5,5 @@ vendor
 test.php
 index.php
 qrcode
-ssl
+/ssl
 notify.php
