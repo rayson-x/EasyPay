@@ -4,17 +4,17 @@ include "../vendor/autoload.php";
 \EasyPay\Config::loadConfig([
     'wechat'    =>  [
         // 应用id
-        'appid'         =>  'wx4ed56f6568a5b870',
+        'appid'         =>  'xxxxxxxxxxxxxxxxxx',
         // 应用密钥
-        'key'           =>  'h0l4j5tYu22MoPdt6N7A8v8C9eRTT48u',
+        'key'           =>  'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         // 商户ID
-        'mch_id'        =>  '1399107302',
+        'mch_id'        =>  'xxxxxxxxxx',
         // 回调地址
         'notify_url'    =>  'http://example.com',
         // ssl证书路径
-        'ssl_cert_path' => '../ssl/apiclient_cert.pem',
+        'ssl_cert_path' => '',
         // ssl密钥路径
-        'ssl_key_path'  => '../ssl/apiclient_key.pem',
+        'ssl_key_path'  => '',
     ],
     'ali'       =>  [
         // 支付宝应用id

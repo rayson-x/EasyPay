@@ -3,6 +3,7 @@ namespace EasyPay\DataManager;
 
 use ArrayAccess;
 use ArrayIterator;
+use EasyPay\Config;
 use JsonSerializable;
 use IteratorAggregate;
 use UnexpectedValueException;

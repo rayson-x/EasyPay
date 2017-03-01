@@ -12,7 +12,7 @@ class Notify
     ];
 
     /**
-     * »ñÈ¡Òì²½½á¹û´¦ÀíÆ÷
+     * è·å–å¼‚æ­¥ç»“æœå¤„ç†å™¨
      *
      * @param $mode
      * @return \EasyPay\Interfaces\AsyncNotifyProcessorInterface
@@ -22,7 +22,7 @@ class Notify
         $class = isset(static::$modes[$mode]) ? static::$modes[$mode] : $mode;
 
         if (!class_exists($class)) {
-            throw new \RuntimeException('Í¨Öª´¦ÀíÆ÷²»´æÔÚ');
+            throw new \RuntimeException('é€šçŸ¥å¤„ç†å™¨ä¸å­˜åœ¨');
         }
 
         return new $class;
