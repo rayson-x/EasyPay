@@ -21,7 +21,7 @@ class RefundQuery extends BaseAliStrategy
     protected function getRequireParamsList()
     {
         if (!$this->payData['out_trade_no'] && !$this->payData['trade_no']) {
-            throw new PayParamException("È±ÉÙ¶©µ¥ºÅ");
+            throw new PayParamException("ç¼ºå°‘è®¢å•å·");
         }
 
         return ['app_id','out_request_no'];
@@ -44,11 +44,11 @@ class RefundQuery extends BaseAliStrategy
     protected function buildBinContent()
     {
         $data = [
-            // ÉÌ»§Î¨Ò»¶©µ¥ºÅ
+            // å•†æˆ·å”¯ä¸€è®¢å•å·
             'out_trade_no'          =>  $this->payData['out_trade_no'],
-            // Ö§¸¶±¦Î¨Ò»¶©µ¥ºÅ
+            // æ”¯ä»˜å®å”¯ä¸€è®¢å•å·
             'trade_no'              =>  $this->payData['trade_no'],
-            // ±êÊ¶Ò»´ÎÍË¿îÇëÇó
+            // æ ‡è¯†ä¸€æ¬¡é€€æ¬¾è¯·æ±‚
             'out_request_no'        =>  $this->payData['out_request_no'],
         ];
 

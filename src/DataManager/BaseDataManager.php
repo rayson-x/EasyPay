@@ -133,7 +133,7 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
     {
         foreach ($params as $param) {
             if (empty($this->$param)) {
-                throw new PayParamException("[$param]不存在,请检查参数");
+                throw new PayParamException("参数[$param]不存在或者为空,请检查配置信息");
             }
         }
     }

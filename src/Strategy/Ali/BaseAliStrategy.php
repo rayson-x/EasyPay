@@ -35,6 +35,9 @@ abstract class BaseAliStrategy implements StrategyInterface
     // 下载订单
     const DOWN_LOAD_BILL = 'alipay.data.dataservice.bill.downloadurl.query';
 
+    // 企业转账
+    const TRANSFERS = 'alipay.fund.trans.toaccount.transfer';
+    
     /**
      * @var Data
      */
