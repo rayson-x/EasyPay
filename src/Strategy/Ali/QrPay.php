@@ -4,6 +4,8 @@ namespace EasyPay\Strategy\Ali;
 use Ant\Support\Arr;
 
 /**
+ * 支付宝扫码支付,此策略返回结果为待扫码url
+ *
  * Class QrPay
  * @package EasyPay\Strategy\Ali
  */
@@ -20,7 +22,7 @@ class QrPay extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function getRequireParamsList()
+    protected function getRequireParams()
     {
         return ['app_id','subject','out_trade_no','total_amount'];
     }
@@ -28,7 +30,7 @@ class QrPay extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function getApiParamsList()
+    protected function getFillParams()
     {
         return [
             'app_id','method','format','charset','sign_type','sign',

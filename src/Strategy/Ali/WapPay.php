@@ -1,10 +1,14 @@
 <?php
 namespace EasyPay\Strategy\Ali;
 
-
 use Ant\Support\Arr;
-use EasyPay\Config;
 
+/**
+ * 支付宝网页支付,改策略返回结果为支付宝支付url
+ *
+ * Class WapPay
+ * @package EasyPay\Strategy\Ali
+ */
 class WapPay extends BaseAliStrategy
 {
     /**
@@ -18,7 +22,7 @@ class WapPay extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function getRequireParamsList()
+    protected function getRequireParams()
     {
         return ['app_id','subject','out_trade_no','total_amount','product_code'];
     }
@@ -26,7 +30,7 @@ class WapPay extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function getApiParamsList()
+    protected function getFillParams()
     {
         return [
             'app_id','method','format','return_url','charset','sign_type',

@@ -13,7 +13,44 @@ use EasyPay\Strategy\Wechat\BaseWechatStrategy;
 class Transfers extends BaseWechatStrategy
 {
     /**
-     * @return string
+     * {@inheritDoc}
+     */
+    protected function buildData()
+    {
+        $this->payData['mchid'] = $this->payData['mch_id'];
+        $this->payData['mch_appid'] = $this->payData['appid'];
+
+        parent::buildData();
+        // 微信计费单位为分
+        $this->payData['amount'] *= 100;
+
+        return $this->payData;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getRequireParams()
+    {
+        return [
+            'mch_appid','mchid','partner_trade_no','openid',
+            'check_name','amount','desc','spbill_create_ip'
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getFillParams()
+    {
+        return [
+            'mch_appid','mchid','partner_trade_no','openid','check_name','amount',
+            'desc','spbill_create_ip','device_info','nonce_str','re_user_name'
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
      */
     protected function getRequestMethod()
     {
@@ -21,27 +58,10 @@ class Transfers extends BaseWechatStrategy
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     protected function getRequestTarget()
     {
         return BaseWechatStrategy::TRANSFERS_URL;
-    }
-
-    /**
-     * 生成Http请求Body内容
-     *
-     * @return \EasyPay\DataManager\Wechat\Data
-     */
-    protected function buildData()
-    {
-        $this->payData['mch_appid'] = $this->payData['appid'];
-        $this->payData['mchid'] = $this->payData['mch_id'];
-
-        $this->payData->checkParamsExits(
-            ['mch_appid','mchid','partner_trade_no','openid','check_name','amount','desc','spbill_create_ip']
-        );
-
-        return $this->payData;
     }
 }

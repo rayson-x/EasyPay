@@ -4,8 +4,10 @@
   "license": "MIT",
   "require": {
     "php": ">=5.6.0",
-    "ant-framework/http": "dev-master",
-    "ant-framework/support": "dev-master",
+    "ext-openssl": "*",
+    "ext-curl": "*",
+    "ant-framework/http": "dev-dev",
+    "ant-framework/support": "v0.2.0",
     "endroid/qrcode": "^1.9"
   },
   "autoload": {

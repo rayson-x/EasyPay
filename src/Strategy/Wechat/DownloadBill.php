@@ -12,7 +12,23 @@ class DownloadBill extends BaseWechatStrategy
     // Todo 以流的形式进去读取
 
     /**
-     * @return string
+     * {@inheritDoc}
+     */
+    protected function getRequireParams()
+    {
+        return ['appid','mch_id','bill_date','bill_type'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getFillParams()
+    {
+        return ['appid','mch_id','bill_date','bill_type'];
+    }
+
+    /**
+     * {@inheritDoc}
      */
     protected function getRequestMethod()
     {
@@ -20,7 +36,7 @@ class DownloadBill extends BaseWechatStrategy
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     protected function getRequestTarget()
     {
@@ -28,24 +44,7 @@ class DownloadBill extends BaseWechatStrategy
     }
 
     /**
-     * 生成Http请求Body内容
-     *
-     * @return \EasyPay\DataManager\Wechat\Data
-     */
-    protected function buildData()
-    {
-        // 检查必要参数是否存在
-        $this->payData->checkParamsExits(['appid','mch_id','bill_date','bill_type']);
-
-        // 将多余参数剔除
-        $this->payData->selectedParams(['appid','mch_id','bill_date','bill_type']);
-
-        return $this->payData;
-    }
-
-    /**
-     * @param $result
-     * @return mixed
+     * {@inheritDoc}
      */
     protected function handleData($result)
     {

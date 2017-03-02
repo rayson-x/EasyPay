@@ -11,7 +11,7 @@ try {
     // EasyPay生成公众号支付,JS-SDK所用的Json数据
     $json = $trade->execute([
         // 公众号支付所需openid
-        'openid'            =>  '',
+        'openid'            =>  'okUzQw52RfmBwO4H1d8M-bHPo8Vw',
         // 支付信息
         'attach'            => 'wechat pay test',
         // 支付订单信息
@@ -26,7 +26,7 @@ try {
 } catch (\Exception $e) {
     // 打印错误县信息
     echo "错误信息为 : {$e->getMessage()}","<br>";
-    echo "错误文件为 : {$e->getFile()}, 错误行为 : {$e->getLine()}";
+    echo "错误文件为 : {$e->getFile()}, 错误所在行 : {$e->getLine()}";
     die;
 }
 ?>

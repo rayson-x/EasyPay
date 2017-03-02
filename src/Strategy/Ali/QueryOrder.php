@@ -4,8 +4,26 @@ namespace EasyPay\Strategy\Ali;
 use Ant\Support\Arr;
 use EasyPay\Exception\PayParamException;
 
+/**
+ * 支付宝订单查询
+ *
+ * Class QueryOrder
+ * @package EasyPay\Strategy\Ali
+ */
 class QueryOrder extends BaseAliStrategy
 {
+    /**
+     * {@inheritDoc}
+     */
+    protected function buildData()
+    {
+        if (!$this->payData['out_trade_no'] && !$this->payData['trade_no']) {
+            throw new PayParamException("缺少订单号");
+        }
+
+        return parent::buildData();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -17,19 +35,15 @@ class QueryOrder extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function getRequireParamsList()
+    protected function getRequireParams()
     {
-        if (!$this->payData['out_trade_no'] && !$this->payData['trade_no']) {
-            throw new PayParamException("缺少订单号");
-        }
-
         return ['app_id'];
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function getApiParamsList()
+    protected function getFillParams()
     {
         return [
             'app_id', 'method', 'format', 'charset', 'sign_type', 'sign',
@@ -43,8 +57,9 @@ class QueryOrder extends BaseAliStrategy
     protected function buildBinContent()
     {
         $data = [
-            // 唯一订单号
+            // 商户唯一订单号
             'out_trade_no'          =>  $this->payData['out_trade_no'],
+            // 支付宝订单号
             'trade_no'              =>  $this->payData['trade_no'],
         ];
 

@@ -31,5 +31,5 @@ try {
 } catch (\Exception $e) {
     // 打印错误县信息
     echo "错误信息为 : {$e->getMessage()}","<br>";
-    echo "错误文件为 : {$e->getFile()}, 错误行为 : {$e->getLine()}";
+    echo "错误文件为 : {$e->getFile()}, 错误所在行 : {$e->getLine()}";
 }

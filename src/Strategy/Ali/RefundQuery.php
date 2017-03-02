@@ -5,8 +5,26 @@ namespace EasyPay\Strategy\Ali;
 use Ant\Support\Arr;
 use EasyPay\Exception\PayParamException;
 
+/**
+ * 支付宝退款查询功能
+ *
+ * Class RefundQuery
+ * @package EasyPay\Strategy\Ali
+ */
 class RefundQuery extends BaseAliStrategy
 {
+    /**
+     * {@inheritDoc}
+     */
+    protected function buildData()
+    {
+        if (!$this->payData['out_trade_no'] && !$this->payData['trade_no']) {
+            throw new PayParamException("缺少订单号");
+        }
+
+        return parent::buildData();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -18,19 +36,15 @@ class RefundQuery extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function getRequireParamsList()
+    protected function getRequireParams()
     {
-        if (!$this->payData['out_trade_no'] && !$this->payData['trade_no']) {
-            throw new PayParamException("缺少订单号");
-        }
-
         return ['app_id','out_request_no'];
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function getApiParamsList()
+    protected function getFillParams()
     {
         return [
             'app_id', 'method', 'format', 'charset', 'sign_type', 'sign',

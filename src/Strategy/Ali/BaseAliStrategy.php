@@ -67,13 +67,13 @@ abstract class BaseAliStrategy implements StrategyInterface
     protected function buildData()
     {
         // 检查必填参数是否存在
-        $this->payData->checkParamsExits($this->getRequireParamsList());
+        $this->payData->checkParamsExits($this->getRequireParams());
         // 设置请求的方法
         $this->payData['method'] = $this->getMethod();
         // 生成请求参数
         $this->payData['biz_content'] = $this->buildBinContent();
-        // 选中可用参数
-        $this->payData->selectedParams($this->getApiParamsList());
+        // 填入所有可用参数,并将不可用参数清除
+        $this->payData->selectedParams($this->getFillParams());
         // 生成签名
         $this->payData['sign'] = $this->payData->makeSign();
 
@@ -141,14 +141,14 @@ abstract class BaseAliStrategy implements StrategyInterface
      *
      * @return array
      */
-    abstract protected function getRequireParamsList();
+    abstract protected function getRequireParams();
 
     /**
      * 获取所有参数
      *
      * @return array
      */
-    abstract protected function getApiParamsList();
+    abstract protected function getFillParams();
 
     /**
      * 生成请求数据

@@ -13,25 +13,7 @@ use EasyPay\Strategy\Wechat\BaseWechatStrategy;
 class RefundQuery extends BaseWechatStrategy
 {
     /**
-     * @return string
-     */
-    protected function getRequestMethod()
-    {
-        return 'POST';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getRequestTarget()
-    {
-        return BaseWechatStrategy::REFUND_QUERY_URL;
-    }
-
-    /**
-     * 生成Http请求Body内容
-     *
-     * @return \EasyPay\DataManager\Wechat\Data
+     * {@inheritDoc}
      */
     protected function buildData()
     {
@@ -44,8 +26,41 @@ class RefundQuery extends BaseWechatStrategy
             throw new PayParamException('缺少订单号,订单号可为退款订单号');
         }
 
-        $this->payData->checkParamsExits(['appid','mch_id']);
+        return parent::buildData();
+    }
 
-        return $this->payData;
+    /**
+     * {@inheritDoc}
+     */
+    protected function getRequireParams()
+    {
+        return ['appid','mch_id'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getFillParams()
+    {
+        return [
+            'appid','mch_id','out_trade_no','sign_type','device_info',
+            'refund_id','out_refund_no','transaction_id'
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getRequestMethod()
+    {
+        return 'POST';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getRequestTarget()
+    {
+        return BaseWechatStrategy::REFUND_QUERY_URL;
     }
 }

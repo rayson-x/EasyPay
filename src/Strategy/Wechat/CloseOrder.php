@@ -10,7 +10,23 @@ namespace EasyPay\Strategy\Wechat;
 class CloseOrder extends BaseWechatStrategy
 {
     /**
-     * @return string
+     * {@inheritDoc}
+     */
+    protected function getRequireParams()
+    {
+        return ['appid','mch_id','out_trade_no'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getFillParams()
+    {
+        return ['appid','mch_id','out_trade_no','sign_type'];
+    }
+
+    /**
+     * {@inheritDoc}
      */
     protected function getRequestMethod()
     {
@@ -18,25 +34,10 @@ class CloseOrder extends BaseWechatStrategy
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     protected function getRequestTarget()
     {
         return BaseWechatStrategy::CLOSE_ORDER_URL;
-    }
-
-    /**
-     * 生成Http请求Body内容
-     *
-     * @return \EasyPay\DataManager\Wechat\Data
-     */
-    protected function buildData()
-    {
-        // 检查必要参数是否存在
-        $this->payData->checkParamsExits(['appid','mch_id','out_trade_no']);
-        // 将多余参数剔除
-        $this->payData->selectedParams(['appid','mch_id','out_trade_no','sign_type']);
-
-        return $this->payData;
     }
 }

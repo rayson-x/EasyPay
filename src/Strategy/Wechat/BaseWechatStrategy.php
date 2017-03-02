@@ -117,7 +117,29 @@ abstract class BaseWechatStrategy implements StrategyInterface
      *
      * @return mixed
      */
-    abstract protected function buildData();
+    protected function buildData()
+    {
+        // 检查必要参数是否存在
+        $this->payData->checkParamsExits($this->getRequireParams());
+        // 填入所有可用参数,并将不可用参数清除
+        $this->payData->selectedParams($this->getFillParams());
+
+        return $this->payData;
+    }
+
+    /**
+     * 获取必填参数
+     *
+     * @return array
+     */
+    abstract protected function getRequireParams();
+
+    /**
+     * 获取所有参数
+     *
+     * @return array
+     */
+    abstract protected function getFillParams();
 
     /**
      * 获取请求的Http动词

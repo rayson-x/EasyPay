@@ -1,9 +1,15 @@
 <?php
 namespace EasyPay\Strategy\Ali;
 
-
 use Ant\Support\Arr;
 
+/**
+ * 支付宝企业转账功能
+ * todo 沙箱模式下此功能会出现转账翻倍的情况,不知是否是支付宝服务器问题
+ *
+ * Class Transfers
+ * @package EasyPay\Strategy\Ali
+ */
 class Transfers extends BaseAliStrategy
 {
     /**
@@ -17,7 +23,7 @@ class Transfers extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function getRequireParamsList()
+    protected function getRequireParams()
     {
         return ['app_id','out_biz_no','payee_type','payee_account','amount'];
     }
@@ -25,7 +31,7 @@ class Transfers extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function getApiParamsList()
+    protected function getFillParams()
     {
         return [
             'app_id','method','format','charset','sign_type','sign',

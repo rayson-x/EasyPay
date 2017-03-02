@@ -3,29 +3,29 @@ include "../vendor/autoload.php";
 
 \EasyPay\Config::loadConfig([
     'wechat'    =>  [
-        // Ó¦ÓÃid
-        'appid'         =>  'xxxxxxxxxxxxxxxxxx',
-        // Ó¦ÓÃÃÜÔ¿
-        'key'           =>  'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-        // ÉÌ»§ID
-        'mch_id'        =>  'xxxxxxxxxx',
-        // »Øµ÷µØÖ·
-        'notify_url'    =>  'http://example.com',
-        // sslÖ¤ÊéÂ·¾¶
-        'ssl_cert_path' => '',
-        // sslÃÜÔ¿Â·¾¶
-        'ssl_key_path'  => '',
+        // åº”ç”¨id
+        'appid'             =>  'xxxxxxxxxxxxxxxxxx',
+        // åº”ç”¨å¯†é’¥
+        'key'               =>  'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        // å•†æˆ·ID
+        'mch_id'            =>  'xxxxxxxxxx',
+        // å›è°ƒåœ°å€
+        'notify_url'        =>  'http://example.com',
+        // sslè¯ä¹¦è·¯å¾„
+        'ssl_cert_path'     => '',
+        // sslå¯†é’¥è·¯å¾„
+        'ssl_key_path'      => '',
     ],
     'ali'       =>  [
-        // Ö§¸¶±¦Ó¦ÓÃid
+        // æ”¯ä»˜å®åº”ç”¨id
         'app_id'            =>  '2016072900120125',
-        // Ç©Ãû¼ÓÃÜ·½Ê½(Ä¿Ç°½öÖ§³ÖRSA,RSA2Á½ÖÖ)
+        // ç­¾ååŠ å¯†æ–¹å¼(ç›®å‰ä»…æ”¯æŒRSA,RSA2ä¸¤ç§)
         'sign_type'         =>  'RSA2',
-        // Éú³ÉµÄRSAÃÜÔ¿,ÓÃÓÚÉú³ÉÇ©Ãû(¿ÉÓÃopenssl»òÕßÖ§¸¶±¦×Ô´øµÄÃÜÔ¿Éú³ÉÆ÷À´Éú³É)
+        // ç”Ÿæˆçš„RSAå¯†é’¥,ç”¨äºç”Ÿæˆç­¾å(å¯ç”¨opensslæˆ–è€…æ”¯ä»˜å®è‡ªå¸¦çš„å¯†é’¥ç”Ÿæˆå™¨æ¥ç”Ÿæˆ)
         'ssl_private_key'   =>  'ssl/ali/rsa2/rsa_private_key.pem',
-        // Ö§¸¶±¦Ìá¹©µÄ¹«Ô¿,ÓÃÓÚÑéÖ¤Ç©Ãû
+        // æ”¯ä»˜å®æä¾›çš„å…¬é’¥,ç”¨äºéªŒè¯ç­¾å
         'ali_public_key'    =>  'ssl/ali/rsa2/ali_public_key.pem',
-        // ÊÇ·ñÊÇÉ³Ïä²âÊÔ(Ä¬ÈÏÎªÉ³Ïä²âÊÔ)
+        // æ˜¯å¦æ˜¯æ²™ç®±æµ‹è¯•(é»˜è®¤ä¸ºæ²™ç®±æµ‹è¯•)
         'is_sand_box'       =>  true,
     ]
 ]);
