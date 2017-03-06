@@ -17,12 +17,12 @@ class RefundQuery extends BaseWechatStrategy
      */
     protected function buildData()
     {
-        if(
-            !$this->payData->transaction_id &&
-            !$this->payData->out_trade_no &&
-            !$this->payData->out_refund_no &&
-            !$this->payData->refund_id)
-        {
+        if (
+            !$this->payData['transaction_id'] &&
+            !$this->payData['out_trade_no'] &&
+            !$this->payData['out_refund_no'] &&
+            !$this->payData['refund_id']
+        ) {
             throw new PayParamException('缺少订单号,订单号可为退款订单号');
         }
 

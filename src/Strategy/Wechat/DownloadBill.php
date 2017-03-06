@@ -1,6 +1,9 @@
 <?php
 namespace EasyPay\Strategy\Wechat;
+
 use Ant\Support\Arr;
+use EasyPay\DataManager\Wechat\Data;
+use EasyPay\Exception\PayFailException;
 
 /**
  * 下载账单
@@ -10,7 +13,19 @@ use Ant\Support\Arr;
  */
 class DownloadBill extends BaseWechatStrategy
 {
-    // Todo 以流的形式进去读取
+    protected $savePath;
+
+    /**
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        if (Arr::exists($options, 'save_path')) {
+            $this->savePath = $options['save_path'];
+        }
+
+        parent::__construct($options);
+    }
 
     /**
      * {@inheritDoc}
@@ -47,9 +62,118 @@ class DownloadBill extends BaseWechatStrategy
     /**
      * {@inheritDoc}
      */
-    protected function handleData($result)
+    protected function handleData($data)
     {
-        // todo 保存为文件
-        return $result;
+        if (!is_null($this->savePath)) {
+            $this->saveToFile($data);
+            return true;
+        }
+
+        return $data;
+    }
+
+    /**
+     * 保存到指定文件中
+     *
+     * @param $data
+     * @throws \PHPExcel_Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    protected function saveToFile($data)
+    {
+        if (!class_exists(\PHPExcel::class)) {
+            throw new \RuntimeException("保存为文件需要PHPExcel库支持");
+        }
+
+        $data = $this->parseData($data);
+
+        // Todo 储存统计信息
+        list($order, $statistics) = array_chunk($data, count($data) - 2);
+
+        $objPHPExcel = new \PHPExcel();
+
+        $excel = $objPHPExcel->setActiveSheetIndex(0);
+
+        $rowNum = 0;
+        while ($row = array_shift($order)) {
+            $row = array_values($row);
+            $rowNum++;
+
+            $column = 0;
+            $countRow = count($row);
+            $letter = numToLetter($countRow);
+            for ($columnNum = 'A' ; $columnNum <= $letter ; $columnNum++,$column++) {
+                $excel = $excel->setCellValue($columnNum.$rowNum, $row[$column]);
+            }
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0);
+        $extensionType = $this->createSaveType();
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, $extensionType);
+
+        $objWriter->save($this->savePath);
+    }
+
+    /**
+     * 解析数据
+     *
+     * @param $data
+     * @return array
+     */
+    protected function parseData($data)
+    {
+        $xmlParser = xml_parser_create();
+
+        if (xml_parse($xmlParser, $data)) {
+            $data = Data::createDataFromXML($data);
+
+            throw new PayFailException($data, $data['return_msg']);
+        }
+
+        $rows = explode("\n", $data);
+        // 最后一行为空
+        array_pop($rows);
+
+        return array_map(function ($row) {
+            return explode(',', str_replace('`','',$row));
+        }, $rows);
+    }
+
+    /**
+     * 获取文件存储格式
+     *
+     * @return string
+     */
+    protected function createSaveType()
+    {
+        $type = pathinfo($this->savePath, PATHINFO_EXTENSION);
+
+        switch ($type) {
+            case 'xlsx':			//	Excel (OfficeOpenXML) Spreadsheet
+            case 'xlsm':			//	Excel (OfficeOpenXML) Macro Spreadsheet (macros will be discarded)
+            case 'xltx':			//	Excel (OfficeOpenXML) Template
+            case 'xltm':			//	Excel (OfficeOpenXML) Macro Template (macros will be discarded)
+                $extensionType = 'Excel2007';
+                break;
+            case 'xls':				//	Excel (BIFF) Spreadsheet
+            case 'xlt':				//	Excel (BIFF) Template
+                $extensionType = 'Excel5';
+                break;
+            case 'htm':
+            case 'html':
+                $extensionType = 'HTML';
+                break;
+            case 'csv':
+                $extensionType = 'CSV';
+                break;
+            case '':
+                throw new \RuntimeException("文件格式不能为空");
+                break;
+            default:
+                throw new \RuntimeException("暂不支持[{$type}]格式");
+                break;
+        }
+
+        return $extensionType;
     }
 }

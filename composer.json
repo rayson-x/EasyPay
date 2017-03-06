@@ -8,7 +8,8 @@
     "ext-curl": "*",
     "ant-framework/http": "v0.2.0",
     "ant-framework/support": "v0.2.0",
-    "endroid/qrcode": "^1.9"
+    "endroid/qrcode": "^1.9",
+    "PHPOffice/PHPExcel": "*"
   },
   "autoload": {
     "psr-4": {

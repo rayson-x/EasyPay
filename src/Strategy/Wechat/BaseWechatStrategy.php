@@ -28,6 +28,8 @@ abstract class BaseWechatStrategy implements StrategyInterface
     const DOWN_LOAD_BILL_URL = 'https://api.mch.weixin.qq.com/pay/downloadbill';
     // 微信转账地址
     const TRANSFERS_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+    // 微信企业转账查询
+    const TRANSFERS_QUERY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/gettransferinfo";
 
     /**
      * @param array $options
@@ -41,7 +43,7 @@ abstract class BaseWechatStrategy implements StrategyInterface
     /**
      * 请求接口,并验证返回数据
      *
-     * @return mixed
+     * @return \Ant\Http\Body
      */
     public function execute()
     {
@@ -52,7 +54,7 @@ abstract class BaseWechatStrategy implements StrategyInterface
             $this->buildData()
         );
 
-        return $this->handleData($response->getBody()->getContents());
+        return $this->handleData((string)$response->getBody());
     }
 
     /**
@@ -68,7 +70,7 @@ abstract class BaseWechatStrategy implements StrategyInterface
 
         // 通信是否成功
         if (!$data->isSuccess($data['return_code'])) {
-            throw new PayException($this, $data['return_msg']);
+            throw new PayException($data, $data['return_msg']);
         }
 
         // 交易是否发起

@@ -34,7 +34,8 @@ class Transfers extends BaseWechatStrategy
     {
         return [
             'mch_appid','mchid','partner_trade_no','openid',
-            'check_name','amount','desc','spbill_create_ip'
+            'check_name','amount','desc','spbill_create_ip',
+            'ssl_cert_path','ssl_key_path'
         ];
     }
 

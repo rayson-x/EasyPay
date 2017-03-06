@@ -37,6 +37,9 @@ abstract class BaseAliStrategy implements StrategyInterface
 
     // 企业转账
     const TRANSFERS = 'alipay.fund.trans.toaccount.transfer';
+
+    // 转账查询
+    const TRANSFERS_QUERY = 'alipay.fund.trans.order.query ';
     
     /**
      * @var Data

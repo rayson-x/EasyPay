@@ -17,7 +17,7 @@ class Refund extends BaseWechatStrategy
      */
     protected function buildData()
     {
-        if (!($this->payData->out_trade_no || $this->payData->transaction_id)) {
+        if (!($this->payData['out_trade_no'] || $this->payData['transaction_id'])) {
             throw new PayParamException("缺少订单号,请检查参数");
         }
 
