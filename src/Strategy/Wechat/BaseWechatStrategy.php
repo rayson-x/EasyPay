@@ -30,11 +30,11 @@ abstract class BaseWechatStrategy implements StrategyInterface
     const TRANSFERS_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
 
     /**
-     * @param array $option
+     * @param array $options
      */
-    public function __construct(array $option)
+    public function __construct(array $options = [])
     {
-        $option = array_merge(Config::wechat(), $option);
+        $option = array_merge(Config::wechat(), $options);
         $this->payData = new Data($option);
     }
 

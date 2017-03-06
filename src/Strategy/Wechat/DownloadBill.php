@@ -1,5 +1,6 @@
 <?php
 namespace EasyPay\Strategy\Wechat;
+use Ant\Support\Arr;
 
 /**
  * 下载账单

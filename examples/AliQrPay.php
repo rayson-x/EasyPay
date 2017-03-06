@@ -42,7 +42,7 @@ try {
     ]);
 
     // 生成二维码
-    $qrCode = (new Endroid\QrCode\QrCode($url))->setSize(300);
+    $qrCode = (new Endroid\QrCode\QrCode($url))->setSize(150);
     header('Content-Type: image/png');
     echo $qrCode->get('png');
 } catch (\Exception $e) {

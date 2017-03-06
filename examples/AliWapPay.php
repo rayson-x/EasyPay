@@ -29,8 +29,8 @@ try {
         'seller_id'             =>  '',
         // 用户授权码
         'auth_token'            =>  '',
-        // 销售产品码
-        'product_code'          =>  '',
+        // 销售产品码,默认为 QUICK_WAP_PAY
+        'product_code'          =>  'QUICK_WAP_PAY',
         // 公用回传参数
         'passback_params'       =>  '',
         // 优惠参数

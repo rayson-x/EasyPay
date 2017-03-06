@@ -43,7 +43,10 @@ abstract class BaseAliStrategy implements StrategyInterface
      */
     protected $payData;
 
-    public function __construct($options)
+    /**
+     * @param array $options
+     */
+    public function __construct(array $options = [])
     {
         $options = array_merge(Config::ali(), $options);
         $this->payData = new Data($options);
