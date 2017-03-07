@@ -90,9 +90,9 @@ class DownloadBill extends BaseWechatStrategy
         // Todo 储存统计信息
         list($order, $statistics) = array_chunk($data, count($data) - 2);
 
-        $objPHPExcel = new \PHPExcel();
+        $phpExcel = new \PHPExcel();
 
-        $excel = $objPHPExcel->setActiveSheetIndex(0);
+        $excel = $phpExcel->setActiveSheetIndex(0);
 
         $rowNum = 0;
         while ($row = array_shift($order)) {
@@ -107,11 +107,11 @@ class DownloadBill extends BaseWechatStrategy
             }
         }
 
-        $objPHPExcel->setActiveSheetIndex(0);
+        $phpExcel->setActiveSheetIndex(0);
         $extensionType = $this->createSaveType();
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, $extensionType);
+        $writer = \PHPExcel_IOFactory::createWriter($phpExcel, $extensionType);
 
-        $objWriter->save($this->savePath);
+        $writer->save($this->savePath);
     }
 
     /**

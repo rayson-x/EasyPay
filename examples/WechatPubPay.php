@@ -18,7 +18,7 @@ try {
         'body'              =>  '微信扫码支付,测试订单',
         // 支付订单号
         'out_trade_no'      => substr(md5(uniqid()),0,18).date("YmdHis"),
-        // 支付金额(单位为元,最小为分 0.01)
+        // 支付金额(单位为元,最小为分 0.01,此处是为了与支付宝统一单位)
         'total_fee'         => '1',
         // 客户端IP
         'spbill_create_ip'  => $_SERVER['SERVER_ADDR'],
@@ -40,14 +40,14 @@ try {
         );
     }
 
-    if (typeof WeixinJSBridge == "undefined"){
-        if( document.addEventListener ){
+    if (typeof WeixinJSBridge == "undefined") {
+        if ( document.addEventListener ) {
             document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-        }else if (document.attachEvent){
+        } else if (document.attachEvent) {
             document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
             document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
         }
-    }else{
+    } else {
         onBridgeReady();
     }
 </script>

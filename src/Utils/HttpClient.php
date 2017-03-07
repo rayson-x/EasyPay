@@ -7,7 +7,7 @@ use Ant\Http\Response;
 use Psr\Http\Message\RequestInterface;
 
 /**
- * ¼òÒ×µÄHttp¿Í»§¶Ë
+ * ç®€æ˜“çš„Httpå®¢æˆ·ç«¯
  *
  * Class HttpClient
  * @package EasyPay\Utils
@@ -74,7 +74,7 @@ class HttpClient
     }
 
     /**
-     * ÉèÖÃÒ»¸öRequest¶ÔÏó
+     * è®¾ç½®ä¸€ä¸ªRequestå¯¹è±¡
      *
      * @param RequestInterface $request
      */
@@ -84,7 +84,7 @@ class HttpClient
     }
 
     /**
-     * ·¢ËÍÖ¸¶¨ÄÚÈÝµ½·þÎñ¶Ë
+     * å‘é€æŒ‡å®šå†…å®¹åˆ°æœåŠ¡ç«¯
      *
      * @param null|Body|string $body
      * @return Response
@@ -101,7 +101,7 @@ class HttpClient
     }
 
     /**
-     * ·¢ÆðÒ»´ÎhttpÇëÇó
+     * å‘èµ·ä¸€æ¬¡httpè¯·æ±‚
      *
      * @return Response
      */
@@ -117,7 +117,7 @@ class HttpClient
     }
 
     /**
-     * ³õÊ¼»¯curl¾ä±ú
+     * åˆå§‹åŒ–curlå¥æŸ„
      *
      * @return resource
      */
@@ -125,15 +125,16 @@ class HttpClient
     {
         $ch = curl_init((string)$this->request->getUri());
 
-        // ÉèÖÃCurlÑ¡Ïî
+        // è®¾ç½®Curlé€‰é¡¹
         foreach ($this->options as $key => $val) {
             if (is_string($key)) {
+                // å–å¾—å¸¸é‡çš„å€¼
                 $key = constant(strtoupper($key));
             }
             curl_setopt($ch, $key, $val);
         }
 
-        // ÉèÖÃHttp¶¯´Ê
+        // è®¾ç½®HttpåŠ¨è¯
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->request->getMethod());
         $header = [];
         foreach ($this->request->getHeaders() as $headerName => $headerValue) {
@@ -145,9 +146,9 @@ class HttpClient
             $header[] = sprintf('%s: %s', $headerName, $headerValue);
         }
 
-        // ÉèÖÃHttp headerÄÚÈÝ
+        // è®¾ç½®Http headerå†…å®¹
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        // ÉèÖÃHttp bodyÄÚÈÝ
+        // è®¾ç½®Http bodyå†…å®¹
         curl_setopt($ch, CURLOPT_POSTFIELDS, (string)$this->request->getBody());
 
         return $ch;

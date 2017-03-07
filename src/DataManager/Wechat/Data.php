@@ -110,7 +110,7 @@ class Data extends BaseDataManager
      */
     public function isSuccess($code)
     {
-        return $code == 'SUCCESS';
+        return $code === 'SUCCESS';
     }
 
     /**

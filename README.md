@@ -65,3 +65,4 @@ header("Location: {$url}");
 * 支持多种编码(目前仅支持utf-8)
 * 文档待补充
 * App支付
+* Log功能

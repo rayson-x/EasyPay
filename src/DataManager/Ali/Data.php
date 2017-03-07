@@ -5,6 +5,7 @@ use EasyPay\Config;
 use Ant\Support\Arr;
 use EasyPay\Exception\PayException;
 use EasyPay\DataManager\BaseDataManager;
+use EasyPay\Exception\PayParamException;
 use EasyPay\Exception\SignVerifyFailException;
 
 class Data extends BaseDataManager
@@ -17,7 +18,7 @@ class Data extends BaseDataManager
     public function makeSign()
     {
         // ali 加密必须要证书
-        if (!$sslPath = Config::ali('ssl_private_key')) {
+        if (!$sslPrivate = Config::ali('ssl_private_key')) {
             throw new \RuntimeException("加密签名需要私钥证书,请检查配置");
         }
 
@@ -25,14 +26,15 @@ class Data extends BaseDataManager
         $signType = $this->getSignType();
 
         $sign = (new \EasyPay\Utils\Rsa())
-            ->setPrivateKey($sslPath)
+            ->setPrivateKey($sslPrivate)
             ->sign($this->buildData(), $signType);
 
         return base64_encode($sign);
     }
 
     /**
-     * 验证支付宝请求签名(此为通知时调用的签名验证方式)
+     * 支付宝签名验证模式一
+     * 用于异步通知的签名验证
      */
     public function verifyRequestSign()
     {
@@ -48,7 +50,8 @@ class Data extends BaseDataManager
     }
 
     /**
-     * 验证支付宝响应签名(当商户作为客户端主动请求支付宝服务器时调用的验证方式)
+     * 支付宝签名验证模式二
+     * 用于验证是否为支付宝服务端响应
      *
      * Response body数据格式
      * {
@@ -67,7 +70,8 @@ class Data extends BaseDataManager
         // 验证签名是否正确
         $this->verifySign(json_encode($message), $sign);
 
-        $this->data = Arr::collapse($this->data);
+        // 将 *_response 中的内容合并,同时保留 *_response
+        $this->data += $message;
     }
 
     /**
@@ -105,29 +109,18 @@ class Data extends BaseDataManager
      */
     protected function verifySign($message, $sign)
     {
+        // ali 验证签名
+        if (!$sslPublicKey = Config::ali('ali_public_key')) {
+            throw new PayParamException("验证签名需要公钥证书,请检查配置");
+        }
         // 获取加密方式
         $signType = $this->getSignType();
         // 获取RSA加密解密对象
-        $rsa = (new \EasyPay\Utils\Rsa())->setPublicKey($this->getAliPublicKey());
+        $rsa = (new \EasyPay\Utils\Rsa())->setPublicKey($sslPublicKey);
         // 验证签名是否正确
         if (!$rsa->validate($message, base64_decode($sign), $signType)) {
             throw new SignVerifyFailException($this, '支付宝签名校验失败');
         }
-    }
-
-    /**
-     * 获取验证签名用的公钥
-     *
-     * @return mixed
-     */
-    protected function getAliPublicKey()
-    {
-        // ali 验证签名
-        if (!$sslPath = Config::ali('ali_public_key')) {
-            throw new \RuntimeException("验证签名需要公钥证书,请检查配置");
-        }
-
-        return $sslPath;
     }
 
     /**
@@ -150,7 +143,7 @@ class Data extends BaseDataManager
                 return OPENSSL_ALGO_SHA256;
                 break;
             default :
-                throw new PayException("签名类型错误");
+                throw new PayParamException("签名类型错误");
         }
     }
 }
