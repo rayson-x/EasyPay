@@ -32,6 +32,11 @@ abstract class BaseWechatStrategy implements StrategyInterface
     const TRANSFERS_QUERY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/gettransferinfo";
 
     /**
+     * @var Data
+     */
+    protected $payData;
+
+    /**
      * @param array $options
      */
     public function __construct(array $options = [])
@@ -43,7 +48,7 @@ abstract class BaseWechatStrategy implements StrategyInterface
     /**
      * 请求接口,并验证返回数据
      *
-     * @return \Ant\Http\Body
+     * @return Data
      */
     public function execute()
     {
@@ -54,14 +59,14 @@ abstract class BaseWechatStrategy implements StrategyInterface
             $this->buildData()
         );
 
-        return $this->handleData((string)$response->getBody());
+        return $this->handleData((string) $response->getBody());
     }
 
     /**
      * 处理返回数据
      *
      * @param $result
-     * @return static
+     * @return Data
      */
     protected function handleData($result)
     {
