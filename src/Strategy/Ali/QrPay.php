@@ -1,8 +1,6 @@
 <?php
 namespace EasyPay\Strategy\Ali;
 
-use Ant\Support\Arr;
-
 /**
  * 支付宝扫码支付,此策略返回结果为待扫码url
  *
@@ -72,7 +70,7 @@ class QrPay extends BaseAliStrategy
             'alipay_store_id'       =>  $this->payData['alipay_store_id'],
         ];
 
-        Arr::removalEmpty($data);
+        array_removal_empty($data);
 
         return $data;
     }

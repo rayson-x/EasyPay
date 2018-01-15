@@ -4,7 +4,7 @@ namespace EasyPay\Strategy\Wechat;
 use EasyPay\Config;
 use EasyPay\Utils\HttpClient;
 use EasyPay\Exception\PayException;
-use EasyPay\DataManager\Wechat\Data;
+use EasyPay\TradeData\Wechat\TradeData;
 use EasyPay\Exception\PayFailException;
 use EasyPay\Interfaces\StrategyInterface;
 
@@ -32,23 +32,23 @@ abstract class BaseWechatStrategy implements StrategyInterface
     const TRANSFERS_QUERY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/gettransferinfo";
 
     /**
-     * @var Data
+     * @var TradeData
      */
     protected $payData;
 
     /**
+     * BaseWechatStrategy constructor.
      * @param array $options
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options)
     {
-        $option = array_merge(Config::wechat(), $options);
-        $this->payData = new Data($option);
+        $this->payData = new TradeData(array_merge(Config::wechat(), $options));
     }
 
     /**
      * 请求接口,并验证返回数据
      *
-     * @return Data
+     * @return TradeData
      */
     public function execute()
     {
@@ -66,12 +66,12 @@ abstract class BaseWechatStrategy implements StrategyInterface
      * 处理返回数据
      *
      * @param $result
-     * @return Data
+     * @return TradeData
      */
     protected function handleData($result)
     {
         // 解析响应Xml内容
-        $data = Data::createDataFromXML($result);
+        $data = TradeData::createDataFromXML($result);
 
         // 通信是否成功
         if (!$data->isSuccess($data['return_code'])) {
@@ -127,9 +127,9 @@ abstract class BaseWechatStrategy implements StrategyInterface
     protected function buildData()
     {
         // 检查必要参数是否存在
-        $this->payData->checkParamsExits($this->getRequireParams());
+        $this->payData->checkParamsEmpty($this->getRequireParams());
         // 填入所有可用参数,并将不可用参数清除
-        $this->payData->selectedParams($this->getFillParams());
+        $this->payData->selected($this->getFillParams());
 
         return $this->payData;
     }

@@ -1,8 +1,7 @@
 <?php
 namespace EasyPay\Strategy\Wechat;
 
-use Ant\Support\Arr;
-use EasyPay\DataManager\Wechat\Data;
+use EasyPay\TradeData\Ali\TradeData;
 use EasyPay\Exception\PayFailException;
 
 /**
@@ -20,7 +19,7 @@ class DownloadBill extends BaseWechatStrategy
      */
     public function __construct(array $options = [])
     {
-        if (Arr::exists($options, 'save_path')) {
+        if (array_key_exists('save_path', $options)) {
             $this->savePath = $options['save_path'];
         }
 
@@ -125,7 +124,7 @@ class DownloadBill extends BaseWechatStrategy
         $xmlParser = xml_parser_create();
 
         if (xml_parse($xmlParser, $data)) {
-            $data = Data::createDataFromXML($data);
+            $data = TradeData::createDataFromXML($data);
 
             throw new PayFailException($data, $data['return_msg']);
         }

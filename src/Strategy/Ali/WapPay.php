@@ -1,8 +1,6 @@
 <?php
 namespace EasyPay\Strategy\Ali;
 
-use Ant\Support\Arr;
-
 /**
  * 支付宝网页支付,改策略返回结果为支付宝支付url
  *
@@ -43,7 +41,7 @@ class WapPay extends BaseAliStrategy
      */
     protected function handleData($data)
     {
-        return $this->getServerUrl()."?".http_build_query($data);
+        return $this->getServerUrl() . "?" . http_build_query($data);
     }
 
     /**
@@ -85,7 +83,7 @@ class WapPay extends BaseAliStrategy
         ];
 
         // 清除空参数
-        Arr::removalEmpty($data);
+        array_removal_empty($data);
 
         return $data;
     }

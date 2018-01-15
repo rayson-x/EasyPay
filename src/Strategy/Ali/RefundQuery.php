@@ -1,8 +1,6 @@
 <?php
 namespace EasyPay\Strategy\Ali;
 
-
-use Ant\Support\Arr;
 use EasyPay\Exception\PayParamException;
 
 /**
@@ -66,7 +64,7 @@ class RefundQuery extends BaseAliStrategy
             'out_request_no'        =>  $this->payData['out_request_no'],
         ];
 
-        Arr::removalEmpty($data);
+        array_removal_empty($data);
 
         return $data;
     }

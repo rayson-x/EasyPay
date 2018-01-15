@@ -1,8 +1,6 @@
 <?php
 namespace EasyPay\Strategy\Ali;
 
-use Ant\Support\Arr;
-
 /**
  * 下载账单,返回账单下载地址
  *
@@ -50,7 +48,7 @@ class DownloadBill extends BaseAliStrategy
             'bill_date'             =>  $this->payData['bill_date'],
         ];
 
-        Arr::removalEmpty($data);
+        array_removal_empty($data);
 
         return $data;
     }

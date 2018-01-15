@@ -1,13 +1,16 @@
 <?php
 namespace EasyPay\Utils;
 
+use ArrayAccess;
+use SimpleXMLIterator;
+
 /**
  * 提供数组式的使用方法
  *
  * Class XmlElement
  * @package PayApi
  */
-class XmlElement extends \SimpleXMLIterator implements \ArrayAccess
+class XmlElement extends SimpleXMLIterator implements ArrayAccess
 {
     public function offsetSet($offset,$value)
     {

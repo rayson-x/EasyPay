@@ -1,7 +1,6 @@
 <?php
 namespace EasyPay;
 
-use Ant\Support\Arr;
 use EasyPay\Interfaces\StrategyInterface;
 
 /**
@@ -57,7 +56,7 @@ class Trade
      */
     public function setStrategy($strategy, array $options = [])
     {
-        if (!Arr::exists($this->strategyList, $strategy)) {
+        if (!array_key_exists($strategy, $this->strategyList)) {
             throw new \RuntimeException('操作不存在');
         }
 

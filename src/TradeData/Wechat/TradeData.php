@@ -1,19 +1,18 @@
 <?php
-namespace EasyPay\DataManager\Wechat;
+namespace EasyPay\TradeData\Wechat;
 
 use DOMDocument;
 use EasyPay\Config;
-use Ant\Support\Arr;
 use EasyPay\Exception\PayException;
+use EasyPay\TradeData\BaseTradeData;
 use EasyPay\Exception\PayParamException;
-use EasyPay\DataManager\BaseDataManager;
 use EasyPay\Exception\SignVerifyFailException;
 
 /**
- * Class Data
- * @package EasyPay\Strategy\Wechat
+ * Class TradeData
+ * @package EasyPay\TradeData\Wechat
  */
-class Data extends BaseDataManager
+class TradeData extends BaseTradeData
 {
     /**
      * 生成CDATA格式的XML
@@ -36,15 +35,15 @@ class Data extends BaseDataManager
     }
 
     /**
-     * 设置签名
+     * @param string|null $sign
      */
-    public function setSign()
+    public function setSign($sign = null)
     {
-        if (!$this->offsetExists('nonce_str')) {
+        if (is_null($sign) && !$this->offsetExists('nonce_str')) {
             $this['nonce_str'] = $this->createNonceStr();
         }
 
-        $this['sign'] = $this->makeSign();
+        $this['sign'] = (string) $sign ?: $this->makeSign();
     }
 
     /**
@@ -60,7 +59,7 @@ class Data extends BaseDataManager
 
         switch ($signType) {
             case 'MD5':
-                $result = md5($this->buildQuery());
+                $result = md5($this->buildData());
                 break;
             default:
                 throw new PayException("签名类型错误");
@@ -74,18 +73,18 @@ class Data extends BaseDataManager
      *
      * @return string
      */
-    protected function buildQuery()
+    protected function buildData()
     {
         $data = $this->toArray();
         // 删除签名与key
-        Arr::forget($data, ['sign','key']);
+        array_forget($data, ['sign','key']);
         // 删除空数据
-        Arr::removalEmpty($data);
+        array_removal_empty($data);
         // 将Key以Ascii表进行排序
         ksort($data);
 
         if (!$data['key'] = Config::wechat('key')) {
-            throw new PayParamException('商户支付密钥不存在,请检查参数');
+            throw new PayParamException('商户支付密钥不存在');
         }
 
         // 构造完成后,使用urldecode进行解码

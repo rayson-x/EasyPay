@@ -1,26 +1,33 @@
 <?php
-namespace EasyPay\DataManager;
+namespace EasyPay\TradeData;
 
 use ArrayAccess;
 use ArrayIterator;
-use EasyPay\Config;
 use JsonSerializable;
 use IteratorAggregate;
+use EasyPay\Utils\XmlElement;
 use UnexpectedValueException;
 use EasyPay\Exception\PayParamException;
 
 /**
- * Class DataManager
- * @package EasyPay\Utils
+ * Class BaseTradeData
+ * @package EasyPay\TradeData
  */
-class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
+abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorAggregate
 {
     /**
      * 生成的数据
      *
      * @var array
      */
-    protected $data = [];
+    protected $attributes = [];
+
+    /**
+     * 原始数据
+     *
+     * @var array
+     */
+    protected $original = [];
 
     /**
      * 通过XML获取数据集
@@ -35,7 +42,7 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
         libxml_disable_entity_loader($backup);
 
         if ($result === false) {
-            throw new \UnexpectedValueException('XML Error');
+            throw new UnexpectedValueException('XML Error');
         }
 
         return new static($result->toArray());
@@ -54,7 +61,7 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
         $result = json_decode($input, true, $depth, $options);
 
         if ($result === null && json_last_error() !== JSON_ERROR_NONE) {
-            throw new \UnexpectedValueException(json_last_error_msg(), json_last_error());
+            throw new UnexpectedValueException(json_last_error_msg(), json_last_error());
         }
 
         return new static($result);
@@ -63,23 +70,37 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
     /**
      * PayDataBuilder Construct
      *
-     * @param \Iterator|array $data
+     * @param \Iterator|array $original
      */
-    public function __construct($data)
+    public function __construct($original)
     {
-        $this->replace($data);
+        $this->original = $original;
+
+        $this->replace($original);
     }
 
     /**
      * 替换原有数据
      *
-     * @param \Iterator|array $data
+     * @param \Iterator|array $attributes
      */
-    public function replace($data)
+    public function replace($attributes)
     {
-        foreach ($data as $key => $value) {
-            $this[$key] = $value;
+        $this->attributes = [];
+
+        foreach ($attributes as $key => $value) {
+            $this->attributes[$key] = $value;
         }
+    }
+
+    /**
+     * 获取源数据
+     *
+     * @return array|\Iterator
+     */
+    public function getOriginal()
+    {
+        return $this->original;
     }
 
     /**
@@ -89,7 +110,7 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
      */
     public function toArray()
     {
-        return $this->data;
+        return $this->attributes;
     }
 
     /**
@@ -115,7 +136,7 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
      */
     public function toXml()
     {
-        $dom = new \EasyPay\Utils\XmlElement('<xml/>');
+        $dom = new XmlElement('<xml/>');
 
         foreach ($this as $key => $value) {
             $dom->addChild($key,$value);
@@ -129,30 +150,31 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
      *
      * @param array $params
      */
-    public function checkParamsExits(array $params)
+    public function checkParamsEmpty(array $params)
     {
         foreach ($params as $param) {
             if (empty($this->$param)) {
-                throw new PayParamException("参数[$param]不存在或者为空,请检查配置信息");
+                throw new PayParamException("{$param}不存在或者为空,请检查配置信息");
             }
         }
     }
 
     /**
-     * 选中指定参数,没选中参数将被剔除
+     * 选中指定参数
      *
      * @param array $params
+     * @return BaseTradeData
      */
-    public function selectedParams(array $params)
+    public function selected(array $params)
     {
-        $data = [];
+        $attributes = [];
         foreach ($params as $name) {
             if ($this->offsetExists($name)) {
-                $data[$name] = $this[$name];
+                $attributes[$name] = $this[$name];
             }
         }
 
-        $this->data = $data;
+        $this->replace($attributes);
     }
 
     /**
@@ -163,15 +185,30 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
      */
     public function createNonceStr($length = 32)
     {
-        static $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        static $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
-        $str = "";
+        $str = '';
         for ( $i = 0; $i < $length; $i++ ) {
             $str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
         }
 
         return $str;
     }
+
+    /**
+     * 生成签名
+     *
+     * @return string
+     */
+    abstract public function makeSign();
+
+    /**
+     * 设置签名
+     *
+     * @param null $sign
+     * @return void
+     */
+    abstract public function setSign($sign = null);
 
     /**
      * @return array
@@ -195,7 +232,7 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
      */
     public function offsetGet($offset)
     {
-        return $this->offsetExists($offset) ? $this->data[$offset] : null;
+        return $this->offsetExists($offset) ? $this->attributes[$offset] : null;
     }
 
     /**
@@ -204,7 +241,7 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
      */
     public function offsetSet($offset,$value)
     {
-        $this->data[$offset] = $value;
+        $this->attributes[$offset] = $value;
     }
 
     /**
@@ -212,7 +249,7 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
      */
     public function offsetUnset($offset)
     {
-        unset($this->data[$offset]);
+        unset($this->attributes[$offset]);
     }
 
     /**
@@ -221,7 +258,7 @@ class BaseDataManager implements ArrayAccess,JsonSerializable,IteratorAggregate
      */
     public function offsetExists($offset)
     {
-        return array_key_exists($offset,$this->data);
+        return array_key_exists($offset,$this->attributes);
     }
 
     /**

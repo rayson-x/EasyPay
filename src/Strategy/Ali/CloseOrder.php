@@ -1,7 +1,6 @@
 <?php
 namespace EasyPay\Strategy\Ali;
 
-use Ant\Support\Arr;
 use EasyPay\Exception\PayParamException;
 
 /**
@@ -65,7 +64,7 @@ class CloseOrder extends BaseAliStrategy
             'operator_id'           =>  $this->payData['trade_no'],
         ];
 
-        Arr::removalEmpty($data);
+        array_removal_empty($data);
 
         return $data;
     }

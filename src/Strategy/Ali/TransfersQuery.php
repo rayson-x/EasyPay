@@ -1,7 +1,6 @@
 <?php
 namespace EasyPay\Strategy\Ali;
 
-use Ant\Support\Arr;
 use EasyPay\Exception\PayParamException;
 
 class TransfersQuery extends BaseAliStrategy
@@ -57,7 +56,7 @@ class TransfersQuery extends BaseAliStrategy
             'order_id'              =>  $this->payData['order_id'],
         ];
 
-        Arr::removalEmpty($data);
+        array_removal_empty($data);
 
         return $data;
     }

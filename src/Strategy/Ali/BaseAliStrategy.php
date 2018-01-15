@@ -3,7 +3,7 @@ namespace EasyPay\Strategy\Ali;
 
 use EasyPay\Config;
 use EasyPay\Utils\HttpClient;
-use EasyPay\DataManager\Ali\Data;
+use EasyPay\TradeData\Ali\TradeData;
 use EasyPay\Interfaces\StrategyInterface;
 
 /**
@@ -42,17 +42,16 @@ abstract class BaseAliStrategy implements StrategyInterface
     const TRANSFERS_QUERY = 'alipay.fund.trans.order.query ';
     
     /**
-     * @var Data
+     * @var TradeData
      */
     protected $payData;
 
     /**
      * @param array $options
      */
-    public function __construct(array $options = [])
+    public function __construct(array $options)
     {
-        $options = array_merge(Config::ali(), $options);
-        $this->payData = new Data($options);
+        $this->payData = new TradeData(array_merge(Config::ali(), $options));
     }
 
     /**
@@ -73,15 +72,15 @@ abstract class BaseAliStrategy implements StrategyInterface
     protected function buildData()
     {
         // 检查必填参数是否存在
-        $this->payData->checkParamsExits($this->getRequireParams());
+        $this->payData->checkParamsEmpty($this->getRequireParams());
         // 设置请求的方法
         $this->payData['method'] = $this->getMethod();
         // 生成请求参数
         $this->payData['biz_content'] = $this->buildBinContent();
-        // 填入所有可用参数,并将不可用参数清除
-        $this->payData->selectedParams($this->getFillParams());
+        // 选中接口全部可用参数
+        $this->payData->selected($this->getFillParams());
         // 生成签名
-        $this->payData['sign'] = $this->payData->makeSign();
+        $this->payData->setSign();
 
         return $this->payData->toArray();
     }
@@ -99,7 +98,7 @@ abstract class BaseAliStrategy implements StrategyInterface
         // 请求支付宝服务器
         $response = $this->sendHttpRequest('POST', $url);
         // 解析响应内容
-        $data = Data::createDataFromJson((string)$response->getBody());
+        $data = TradeData::createDataFromJson((string) $response->getBody());
         // 验证签名
         $data->verifyResponseSign();
 

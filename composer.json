@@ -6,14 +6,18 @@
     "php": ">=5.6.0",
     "ext-openssl": "*",
     "ext-curl": "*",
-    "ant-framework/http": "v0.2.0",
-    "ant-framework/support": "v0.2.0",
+    "ant-framework/http": "v0.2.0"
+  },
+  "require-dev": {
     "endroid/qrcode": "^1.9",
-    "PHPOffice/PHPExcel": "*"
+    "box/spout": "*"
   },
   "autoload": {
     "psr-4": {
       "EasyPay\\": "src"
-    }
+    },
+    "files": [
+      "src/helpers.php"
+    ]
   }
 }

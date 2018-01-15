@@ -1,14 +1,17 @@
 <?php
-namespace EasyPay\DataManager\Ali;
+namespace EasyPay\TradeData\Ali;
 
 use EasyPay\Config;
-use Ant\Support\Arr;
 use EasyPay\Exception\PayException;
-use EasyPay\DataManager\BaseDataManager;
+use EasyPay\TradeData\BaseTradeData;
 use EasyPay\Exception\PayParamException;
 use EasyPay\Exception\SignVerifyFailException;
 
-class Data extends BaseDataManager
+/**
+ * Class TradeData
+ * @package EasyPay\TradeData\Ali
+ */
+class TradeData extends BaseTradeData
 {
     /**
      * 构造签名
@@ -33,14 +36,22 @@ class Data extends BaseDataManager
     }
 
     /**
+     * @param string|null $sign
+     */
+    public function setSign($sign = null)
+    {
+        $this['sign'] = (string) $sign ?: $this->makeSign();
+    }
+
+    /**
      * 支付宝签名验证模式一
      * 用于异步通知的签名验证
      */
     public function verifyRequestSign()
     {
-        $data = $this->toArray();
+        $data = $this->original;
         // 将待验签以外字段清除
-        Arr::forget($data, ['sign', 'sign_type']);
+        array_forget($data, ['sign', 'sign_type']);
         // 将Key以Ascii表进行排序
         ksort($data);
         // 生成查询参数
@@ -62,7 +73,7 @@ class Data extends BaseDataManager
     public function verifyResponseSign()
     {
         // 取出支付宝返回数据与签名
-        list($message, $sign) = array_values($this->toArray());
+        list($message, $sign) = array_values($this->original);
         // 验证请求是否成功
         if ($message['code'] != '10000') {
             throw new PayException($this, $message['sub_msg']);
@@ -71,7 +82,7 @@ class Data extends BaseDataManager
         $this->verifySign(json_encode($message), $sign);
 
         // 将 *_response 中的内容合并,同时保留 *_response
-        $this->data += $message;
+        $this->replace($message);
     }
 
     /**
@@ -92,9 +103,9 @@ class Data extends BaseDataManager
 
         $data = $this->toArray();
         // 排除 sign 字段
-        Arr::forget($data, ['sign']);
+        array_forget($data, ['sign']);
         // 清空数组的空数据
-        Arr::removalEmpty($data);
+        array_removal_empty($data);
         // 将Key以Ascii表进行排序
         ksort($data);
 
@@ -138,10 +149,8 @@ class Data extends BaseDataManager
         switch ($type) {
             case "RSA" :
                 return OPENSSL_ALGO_SHA1;
-                break;
             case "RSA2" :
                 return OPENSSL_ALGO_SHA256;
-                break;
             default :
                 throw new PayParamException("签名类型错误");
         }
