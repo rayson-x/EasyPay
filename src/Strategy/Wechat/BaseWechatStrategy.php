@@ -116,7 +116,7 @@ abstract class BaseWechatStrategy implements StrategyInterface
             ]);
         }
 
-        return $client->send((string)$body);
+        return $client->send((string) $body);
     }
 
     /**
