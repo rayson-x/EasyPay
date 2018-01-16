@@ -204,19 +204,22 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
     }
 
     /**
-     * 生成签名
-     *
-     * @return string
-     */
-    abstract public function makeSign();
-
-    /**
      * 设置签名
      *
      * @param null $sign
      * @return void
      */
-    abstract public function setSign($sign = null);
+    public function setSign($sign = null)
+    {
+        $this['sign'] = (string) $sign ?: $this->makeSign();
+    }
+
+    /**
+     * 生成签名
+     *
+     * @return string
+     */
+    abstract public function makeSign();
 
     /**
      * @return array

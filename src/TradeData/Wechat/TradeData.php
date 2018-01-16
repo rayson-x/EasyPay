@@ -43,7 +43,7 @@ class TradeData extends BaseTradeData
             $this['nonce_str'] = $this->createNonceStr();
         }
 
-        $this['sign'] = (string) $sign ?: $this->makeSign();
+        parent::setSign($sign);
     }
 
     /**
@@ -60,6 +60,10 @@ class TradeData extends BaseTradeData
         switch ($signType) {
             case 'MD5':
                 $result = md5($this->buildData());
+                break;
+            case 'HMAC-SHA256':
+                // todo HMAC-SHA256加密
+                $result = '';
                 break;
             default:
                 throw new PayException("签名类型错误");

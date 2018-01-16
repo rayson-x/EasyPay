@@ -36,14 +36,6 @@ class TradeData extends BaseTradeData
     }
 
     /**
-     * @param string|null $sign
-     */
-    public function setSign($sign = null)
-    {
-        $this['sign'] = (string) $sign ?: $this->makeSign();
-    }
-
-    /**
      * 支付宝签名验证模式一
      * 用于异步通知的签名验证
      */

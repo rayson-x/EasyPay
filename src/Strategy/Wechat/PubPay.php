@@ -1,13 +1,13 @@
 <?php
 namespace EasyPay\Strategy\Wechat;
 
-use EasyPay\DataManager\Wechat\Data;
+use EasyPay\TradeData\Wechat\TradeData;
 
 /**
  * 请求微信公众号支付接口,返回Js api使用的Json数据
  *
  * Class PubPay
- * @package EasyPay\Stratgy\Wechat\Transaction
+ * @package EasyPay\Strategy\Wechat
  */
 class PubPay extends BaseWechatStrategy
 {
@@ -76,7 +76,7 @@ class PubPay extends BaseWechatStrategy
         $result = parent::handleData($result);
 
         // 生成Js api使用的Json数据
-        $data = new Data([
+        $data = new TradeData([
             'appId'     =>  $result['appid'],
             'timeStamp' =>  (string)time(),
             'nonceStr'  =>  substr(md5(uniqid()),0,18).date("YmdHis"),
