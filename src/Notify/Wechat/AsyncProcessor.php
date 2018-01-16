@@ -28,7 +28,7 @@ class AsyncProcessor implements  AsyncNotifyProcessorInterface
 
         // 从输入流中读取数据
         $input = file_get_contents("php://input");
-        $data = TradeData::createDataFromXML($input);
+        $data = TradeData::createFromXML($input);
         $data->verifySign();
 
         return $data;

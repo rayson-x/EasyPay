@@ -60,7 +60,7 @@ class Trade
             throw new \RuntimeException('操作不存在');
         }
 
-        list($payment) = explode('.', $strategy);
+        list($payment) = explode('.', $strategy, 2);
 
         Config::loadConfig([$payment => $options]);
 

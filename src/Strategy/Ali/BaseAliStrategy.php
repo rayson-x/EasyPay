@@ -98,7 +98,7 @@ abstract class BaseAliStrategy implements StrategyInterface
         // 请求支付宝服务器
         $response = $this->sendHttpRequest('POST', $url);
         // 解析响应内容
-        $data = TradeData::createDataFromJson((string) $response->getBody());
+        $data = TradeData::createFromJson((string) $response->getBody());
         // 验证签名
         $data->verifyResponseSign();
 
@@ -118,7 +118,7 @@ abstract class BaseAliStrategy implements StrategyInterface
         // 初始化Http客户端
         $client = new HttpClient($method, $url);
 
-        return $client->send((string)$body);
+        return $client->send((string) $body);
     }
 
     /**

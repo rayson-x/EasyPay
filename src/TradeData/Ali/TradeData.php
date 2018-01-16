@@ -80,7 +80,6 @@ class TradeData extends BaseTradeData
         }
         // 验证签名是否正确
         $this->verifySign(json_encode($message), $sign);
-
         // 将 *_response 中的内容合并,同时保留 *_response
         $this->replace($message);
     }

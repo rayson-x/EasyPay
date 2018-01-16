@@ -71,7 +71,7 @@ abstract class BaseWechatStrategy implements StrategyInterface
     protected function handleData($result)
     {
         // 解析响应Xml内容
-        $data = TradeData::createDataFromXML($result);
+        $data = TradeData::createFromXML($result);
 
         // 通信是否成功
         if (!$data->isSuccess($data['return_code'])) {
@@ -105,12 +105,15 @@ abstract class BaseWechatStrategy implements StrategyInterface
         // 初始化Http客户端
         $client = new HttpClient($method, $url);
 
+        $sslKey = Config::wechat('ssl_key_path');
+        $sslCert = Config::wechat('ssl_cert_path');
+
         // 如果设置了SSL证书与秘钥,自动启用SSL
-        if (Config::wechat('ssl_key_path') && Config::wechat('ssl_cert_path')) {
+        if ($sslKey && $sslCert) {
             // 添加SSL证书
             $client->setCurlOption([
-                'CURLOPT_SSLKEY'        =>  Config::wechat('ssl_key_path'),
-                'CURLOPT_SSLCERT'       =>  Config::wechat('ssl_cert_path'),
+                'CURLOPT_SSLKEY'        =>  $sslKey,
+                'CURLOPT_SSLCERT'       =>  $sslCert,
                 'CURLOPT_SSLKEYTYPE'    =>  'PEM',
                 'CURLOPT_SSLCERTTYPE'   =>  'PEM',
             ]);

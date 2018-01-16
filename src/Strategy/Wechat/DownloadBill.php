@@ -124,7 +124,7 @@ class DownloadBill extends BaseWechatStrategy
         $xmlParser = xml_parser_create();
 
         if (xml_parse($xmlParser, $data)) {
-            $data = TradeData::createDataFromXML($data);
+            $data = TradeData::createFromXML($data);
 
             throw new PayFailException($data, $data['return_msg']);
         }
