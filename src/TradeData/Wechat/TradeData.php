@@ -55,15 +55,19 @@ class TradeData extends BaseTradeData
     public function makeSign()
     {
         // 默认使用MD5加密
-        $signType = $this->offsetExists('sign_type') ? $this->sign_type : "MD5";
+        $signType = Config::wechat('sign_type') ?: 'MD5';
+
+        if (!$key = Config::wechat('key')) {
+            throw new PayParamException('商户支付密钥不存在');
+        }
 
         switch ($signType) {
             case 'MD5':
-                $result = md5($this->buildData());
+                $signStr = $this->buildSignData() . "&key={$key}";
+                $result = md5($signStr);
                 break;
             case 'HMAC-SHA256':
-                // todo HMAC-SHA256加密
-                $result = '';
+                $result = base64_encode(hash_hmac('sha256', $this->buildSignData(), $key));
                 break;
             default:
                 throw new PayException("签名类型错误");
@@ -77,7 +81,7 @@ class TradeData extends BaseTradeData
      *
      * @return string
      */
-    protected function buildData()
+    protected function buildSignData()
     {
         $data = $this->toArray();
         // 删除签名与key
@@ -86,11 +90,6 @@ class TradeData extends BaseTradeData
         array_removal_empty($data);
         // 将Key以Ascii表进行排序
         ksort($data);
-
-        if (!$data['key'] = Config::wechat('key')) {
-            throw new PayParamException('商户支付密钥不存在');
-        }
-
         // 构造完成后,使用urldecode进行解码
         return urldecode(http_build_query($data));
     }

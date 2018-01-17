@@ -7,7 +7,7 @@ namespace EasyPay\Strategy\Wechat;
  *
  * Class WapPay
  * @package EasyPay\Strategy\Wechat
- * @see https://pay.weixin.qq.com/wiki/doc/api/H5_sl.php?chapter=15_4
+ * @see https://pay.weixin.qq.com/wiki/doc/api/H5_sl.php?chapter=9_20&index=1
  */
 class WapPay extends BaseWechatStrategy
 {
@@ -58,10 +58,6 @@ class WapPay extends BaseWechatStrategy
     {
         // 检查必要参数是否存在
         $this->payData->checkParamsEmpty($this->getRequireParams());
-        // 设定交易模式为公众号支付
-        $this->payData->trade_type = 'MWEB';
-        // 微信计费单位为分
-        $this->payData->total_fee *= 100;
         // 构造scene_info
         $this->payData->scene_info = json_encode([
             'h5_info' => [
@@ -72,12 +68,16 @@ class WapPay extends BaseWechatStrategy
         ]);
         // 填入所有可用参数,并将不可用参数清除
         $this->payData->selected($this->getFillParams());
+        // 设定交易模式为手机h5支付
+        $this->payData->trade_type = 'MWEB';
+        // 微信计费单位为分
+        $this->payData->total_fee *= 100;
 
         return $this->payData;
     }
 
     /**
-     * 生成公众号支付使用的json数据
+     * 生成调起微信app的url
      *
      * @param $result
      * @return string

@@ -27,6 +27,7 @@ class Trade
         // 微信可用操作
         'wechat.qr.pay'         =>  \EasyPay\Strategy\Wechat\QrPay::class,
         'wechat.pub.pay'        =>  \EasyPay\Strategy\Wechat\PubPay::class,
+        'wechat.app.pay'        =>  \EasyPay\Strategy\Wechat\AppPay::class,
         'wechat.refund'         =>  \EasyPay\Strategy\Wechat\Refund::class,
         'wechat.transfers'      =>  \EasyPay\Strategy\Wechat\Transfers::class,
         'wechat.query.order'    =>  \EasyPay\Strategy\Wechat\QueryOrder::class,
