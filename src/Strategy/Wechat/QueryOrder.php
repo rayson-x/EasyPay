@@ -29,7 +29,7 @@ class QueryOrder extends BaseWechatStrategy
      */
     protected function getRequireParams()
     {
-        return ['appid','mch_id'];
+        return ['appid', 'mch_id'];
     }
 
     /**
@@ -37,7 +37,10 @@ class QueryOrder extends BaseWechatStrategy
      */
     protected function getFillParams()
     {
-        return ['appid','mch_id','out_trade_no','transaction_id','sign_type'];
+        return [
+            'appid', 'mch_id', 'sub_appid', 'out_trade_no',
+            'transaction_id', 'sign_type', 'sub_mch_id'
+        ];
     }
 
     /**

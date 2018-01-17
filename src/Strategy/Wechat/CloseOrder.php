@@ -6,6 +6,7 @@ namespace EasyPay\Strategy\Wechat;
  *
  * Class CloseOrder
  * @package EasyPay\Strategy\Wechat\Transaction
+ * @see https://pay.weixin.qq.com/wiki/doc/api/native_sl.php?chapter=9_3
  */
 class CloseOrder extends BaseWechatStrategy
 {
@@ -14,7 +15,7 @@ class CloseOrder extends BaseWechatStrategy
      */
     protected function getRequireParams()
     {
-        return ['appid','mch_id','out_trade_no'];
+        return ['appid', 'mch_id', 'out_trade_no'];
     }
 
     /**
@@ -22,7 +23,7 @@ class CloseOrder extends BaseWechatStrategy
      */
     protected function getFillParams()
     {
-        return ['appid','mch_id','out_trade_no','sign_type'];
+        return ['appid', 'mch_id', 'sub_appid', 'sub_mch_id', 'out_trade_no', 'sign_type'];
     }
 
     /**
