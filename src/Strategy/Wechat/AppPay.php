@@ -19,8 +19,8 @@ class AppPay extends BaseWechatStrategy
     protected function getRequireParams()
     {
         return [
-            'appid', 'mch_id', 'sub_appid', 'sub_mch_id', 'body',
-            'out_trade_no', 'total_fee', 'spbill_create_ip', 'notify_url'
+            'appid', 'mch_id', 'body', 'out_trade_no',
+            'total_fee', 'spbill_create_ip', 'notify_url'
         ];
     }
 
@@ -71,7 +71,7 @@ class AppPay extends BaseWechatStrategy
      * 生成app预支付标识
      *
      * @param $result
-     * @return string
+     * @return TradeData
      */
     protected function handleData($result)
     {
@@ -88,6 +88,6 @@ class AppPay extends BaseWechatStrategy
 
         $data->setSign();
 
-        return $data->toArray();
+        return $data;
     }
 }

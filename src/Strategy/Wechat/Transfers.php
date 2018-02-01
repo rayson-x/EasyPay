@@ -17,12 +17,12 @@ class Transfers extends BaseWechatStrategy
      */
     protected function buildData()
     {
-        $this->payData['mchid'] = $this->payData['mch_id'];
-        $this->payData['mch_appid'] = $this->payData['appid'];
+        $this->payData->mchid = $this->payData->mch_id;
+        $this->payData->mch_appid = $this->payData->appid;
 
         parent::buildData();
         // 微信计费单位为分
-        $this->payData['amount'] *= 100;
+        $this->payData->amount *= 100;
 
         return $this->payData;
     }

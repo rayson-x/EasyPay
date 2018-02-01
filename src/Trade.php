@@ -28,10 +28,11 @@ class Trade
         'wechat.qr.pay'         =>  \EasyPay\Strategy\Wechat\QrPay::class,
         'wechat.pub.pay'        =>  \EasyPay\Strategy\Wechat\PubPay::class,
         'wechat.app.pay'        =>  \EasyPay\Strategy\Wechat\AppPay::class,
+        'wechat.wap.pay'        =>  \EasyPay\Strategy\Wechat\WapPay::class,
         'wechat.refund'         =>  \EasyPay\Strategy\Wechat\Refund::class,
         'wechat.transfers'      =>  \EasyPay\Strategy\Wechat\Transfers::class,
-        'wechat.query.order'    =>  \EasyPay\Strategy\Wechat\QueryOrder::class,
-        'wechat.close.order'    =>  \EasyPay\Strategy\Wechat\CloseOrder::class,
+        'wechat.order.query'    =>  \EasyPay\Strategy\Wechat\QueryOrder::class,
+        'wechat.order.close'    =>  \EasyPay\Strategy\Wechat\CloseOrder::class,
         'wechat.refund.query'   =>  \EasyPay\Strategy\Wechat\RefundQuery::class,
     ];
 

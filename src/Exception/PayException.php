@@ -1,6 +1,7 @@
 <?php
 namespace EasyPay\Exception;
 
+use EasyPay\TradeData\BaseTradeData;
 use RuntimeException;
 
 /**
@@ -34,7 +35,7 @@ class PayException extends RuntimeException
     /**
      * 返回结果集
      *
-     * @return object|array
+     * @return object|array|BaseTradeData
      */
     public function getResult()
     {

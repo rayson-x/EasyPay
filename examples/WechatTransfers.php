@@ -5,7 +5,7 @@ use EasyPay\Trade;
 use EasyPay\Payment;
 
 try {
-    // 使用阿里企业转账
+    // 使用微信企业转账
     $trade = new Trade(Payment::WX_TRANSFERS);
     // 进行企业转账
     $data = $trade->execute([
@@ -18,7 +18,6 @@ try {
     ]);
 
     // 微信服务器响应结果
-    debug($data);
 } catch (\Exception $e) {
     // 打印错误县信息
     echo "错误信息为 : {$e->getMessage()}","<br>";
