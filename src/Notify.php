@@ -1,6 +1,7 @@
 <?php
 namespace EasyPay;
 
+use RuntimeException;
 
 class Notify
 {
@@ -22,7 +23,7 @@ class Notify
         $class = isset(static::$modes[$mode]) ? static::$modes[$mode] : $mode;
 
         if (!class_exists($class)) {
-            throw new \RuntimeException('通知处理器不存在');
+            throw new RuntimeException('通知处理器不存在');
         }
 
         return new $class;

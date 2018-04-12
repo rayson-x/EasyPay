@@ -1,7 +1,7 @@
 <?php
 namespace EasyPay\Notify\Ali;
 
-use EasyPay\DataManager\Ali\Data;
+use EasyPay\TradeData\Ali\TradeData;
 use EasyPay\Interfaces\NotifyProcessorInterface;
 
 class Processor implements NotifyProcessorInterface
@@ -12,7 +12,7 @@ class Processor implements NotifyProcessorInterface
             throw new \Exception('无法处理的请求');
         }
 
-        $data = new Data($_GET);
+        $data = new TradeData($_GET);
         $data->verifyRequestSign();
 
         return $data;

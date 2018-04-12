@@ -8,14 +8,14 @@ namespace EasyPay\Interfaces;
 interface AsyncNotifyProcessorInterface extends NotifyProcessorInterface
 {
     /**
-     * 异步信息处理成功
+     * 鎴愬姛鍥炶皟
      *
      * @param $result
      */
     public function success($result = null);
 
     /**
-     * 异步信息处理时出现异常
+     * 澶勭悊澶辫触淇℃伅
      *
      * @param \Exception $exception
      */

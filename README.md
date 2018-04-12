@@ -1,4 +1,4 @@
-## ��ʹ��
+## 简单使用
 
 ```php
 require "vendor/autoload.php";
@@ -6,63 +6,63 @@ require "vendor/autoload.php";
 use EasyPay\Trade;
 use EasyPay\Payment;
 
-// ʹ��֧������ҳ֧��
+// 使用支付宝网页支付
 $trade = new Trade(Payment::ALI_WAP_PAY, [
-    // Ӧ��ID
+    // 应用ID
     'app_id'            =>  '2016073100130857',
-    // �û����ɵ�˽Կ֤��
+    // 用户生成的私钥证书
     'ssl_private_key'   =>  'ssl/ali/rsa1/rsa_private_key.pem',
-    // �����ṩ�Ĺ�Կ֤��
+    // 阿里提供的公钥证书
     'ali_public_key'    =>  'ssl/ali/rsa1/ali_public_key.pem',
-    // ɳ�����
+    // 沙箱测试
     'is_sand_box'       =>  true,
 ]);
 
-// EasyPay���ɵ�֧����תurl
+// EasyPay生成的支付跳转url
 $url = $trade->execute([
-    // ��������
+    // 订单标题
     'subject'               =>  "ali pay test",
-    // ������ϸ��Ϣ
-    'body'                  =>  "����֧����֧���Ĳ��Զ���",
-    // ������(������ɵĶ�����,�Ϊ64λ)
+    // 订单详细信息
+    'body'                  =>  "这是支付宝支付的测试订单",
+    // 订单号(随机生成的订单号,最长为64位)
     'out_trade_no'          =>  substr(md5(uniqid()),0,18).date("YmdHis"),
-    // ֧�����,��λΪԪ,��С�ɾ�ȷ����(0.01)
+    // 支付金额,单位为元,最小可精确到分(0.01)
     'total_amount'          =>  '1',
-    // ��Ʒ���� 0����������Ʒ��1��ʵ������Ʒ
+    // 商品类型 0—虚拟类商品，1—实物类商品
     'goods_type'            =>  '1',
-    // ������ʱʱ��(m-���ӣ�h-Сʱ��d-�죬1c-����)
+    // 订单超时时间(m-分钟，h-小时，d-天，1c-当天)
     'timeout_express'       =>  '15m',
-    // ֧����ɺ�,�첽֪ͨ��ַ
+    // 支付完成后,异步通知地址
     'notify_url'            =>  'http://examples.com/',
-    // ֧�����,�û����ص�ҳ��
+    // 支付完后,用户返回的页面
     'return_url'            =>  'http://examples.com/',
-    // �տ�֧�����û�ID
+    // 收款支付宝用户ID
     'seller_id'             =>  '',
-    // �û���Ȩ��
+    // 用户授权码
     'auth_token'            =>  '',
-    // ���۲�Ʒ��
+    // 销售产品码
     'product_code'          =>  '',
-    // ���ûش�����
+    // 公用回传参数
     'passback_params'       =>  '',
-    // �Żݲ���
+    // 优惠参数
     'promo_params'          =>  '',
-    // ҵ����չ����(��ϸ��鿴�ӿ��ĵ�)
+    // 业务扩展参数(详细请查看接口文档)
     'extend_params'         =>  '',
-    // ָ���û�֧������,ͨ��","���зָ�
+    // 指定用户支付渠道,通过","进行分隔
     'enable_pay_channels'   =>  '',
-    // ָ���û������õ�����,ͨ��","���зָ�
+    // 指定用户不可用的渠道,通过","进行分隔
     'disable_pay_channels'  =>  '',
-    // �̻��ŵ���
+    // 商户门店编号
     'store_id'              =>  '',
 ]);
 
-// ֧����֧����ʽΪ��������̨url,Ȼ����ת,���û�����֧��
+// 支付宝支付方式为生成收银台url,然后跳转,由用户进行支付
 header("Location: {$url}");
 ```
 
 ## Todo
-* ��RSA���ܷ���Ϊ�����Ŀ�,ͬʱ������Կ����
-* ֧�ֶ��ֱ���(Ŀǰ��֧��utf-8)
-* �ĵ�������
-* App֧��
-* Log����
+* 将RSA加密分离为单独的库,同时添加密钥解析
+* 支持多种编码(目前仅支持utf-8)
+* 文档待补充
+* App支付
+* Log功能

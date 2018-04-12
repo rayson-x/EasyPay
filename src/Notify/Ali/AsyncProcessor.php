@@ -1,7 +1,9 @@
 <?php
 namespace EasyPay\Notify\Ali;
 
-use EasyPay\DataManager\Ali\Data;
+use Exception;
+use RuntimeException;
+use EasyPay\TradeData\Ali\TradeData;
 use EasyPay\Interfaces\AsyncNotifyProcessorInterface;
 
 class AsyncProcessor implements AsyncNotifyProcessorInterface
@@ -9,16 +11,16 @@ class AsyncProcessor implements AsyncNotifyProcessorInterface
     /**
      * 获取通知内容
      *
-     * @return Data
+     * @return TradeData
      * @throws \Exception
      */
     public function getNotify()
     {
         if (empty($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
-            throw new \Exception('无法处理的请求');
+            throw new RuntimeException('无法处理的请求');
         }
 
-        $data = new Data($_POST);
+        $data = new TradeData($_POST);
         $data->verifyRequestSign();
 
         return $data;
@@ -41,7 +43,7 @@ class AsyncProcessor implements AsyncNotifyProcessorInterface
      * @param \Exception $exception
      * @return string
      */
-    public function fail(\Exception $exception)
+    public function fail(Exception $exception)
     {
         return 'fail';
     }

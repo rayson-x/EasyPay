@@ -14,6 +14,7 @@ class AsyncNotify extends Notify
     /**
      * 注册处理异步回调函数
      *
+     * @param string $mode
      * @param callable $callback
      * @return string
      */

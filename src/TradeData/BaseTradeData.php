@@ -35,10 +35,10 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      * @param string[XML] $input
      * @return static
      */
-    public static function createDataFromXML($input)
+    public static function createFromXML($input)
     {
         $backup = libxml_disable_entity_loader(true);
-        $result = simplexml_load_string($input, \EasyPay\Utils\XmlElement::class, LIBXML_NOCDATA);
+        $result = simplexml_load_string($input, XmlElement::class, LIBXML_NOCDATA);
         libxml_disable_entity_loader($backup);
 
         if ($result === false) {
@@ -56,7 +56,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      * @param $options
      * @return static
      */
-    public static function createDataFromJson($input, $depth = 512, $options = 0)
+    public static function createFromJson($input, $depth = 512, $options = 0)
     {
         $result = json_decode($input, true, $depth, $options);
 
@@ -74,9 +74,9 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      */
     public function __construct($original)
     {
-        $this->original = $original;
-
         $this->replace($original);
+
+        $this->original = $this->attributes;
     }
 
     /**
@@ -96,11 +96,20 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
     /**
      * 获取源数据
      *
-     * @return array|\Iterator
+     * @param $key
+     * @return mixed
      */
-    public function getOriginal()
+    public function getOriginal($key = null)
     {
-        return $this->original;
+        if (is_null($key)) {
+            return $this->original;
+        }
+
+        if (!array_key_exists($key, $this->original)) {
+            return null;
+        }
+
+        return $this->original[$key];
     }
 
     /**
@@ -163,7 +172,6 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      * 选中指定参数
      *
      * @param array $params
-     * @return BaseTradeData
      */
     public function selected(array $params)
     {
@@ -196,19 +204,22 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
     }
 
     /**
-     * 生成签名
-     *
-     * @return string
-     */
-    abstract public function makeSign();
-
-    /**
      * 设置签名
      *
      * @param null $sign
      * @return void
      */
-    abstract public function setSign($sign = null);
+    public function setSign($sign = null)
+    {
+        $this['sign'] = (string) $sign ?: $this->makeSign();
+    }
+
+    /**
+     * 生成签名
+     *
+     * @return string
+     */
+    abstract public function makeSign();
 
     /**
      * @return array
@@ -239,7 +250,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      * @param mixed $offset
      * @param mixed $value
      */
-    public function offsetSet($offset,$value)
+    public function offsetSet($offset, $value)
     {
         $this->attributes[$offset] = $value;
     }
@@ -258,7 +269,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      */
     public function offsetExists($offset)
     {
-        return array_key_exists($offset,$this->attributes);
+        return array_key_exists($offset, $this->attributes);
     }
 
     /**
