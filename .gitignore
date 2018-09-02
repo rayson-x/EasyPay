@@ -5,6 +5,7 @@ vendor
 test.php
 index.php
 qrcode
+.vscode
 /ssl
 notify.php
 .env

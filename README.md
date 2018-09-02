@@ -7,7 +7,7 @@ use EasyPay\Payment;
 use EasyPay\PayFactory;
 
 // 使用支付宝网页支付
-$trade = new Trade(Payment::ALI_WAP_PAY, [
+$trade = PayFactory::create(Payment::ALI_WAP_PAY, [
     // 应用ID
     'app_id'            =>  '2016073100130857',
     // 用户生成的私钥证书
@@ -25,7 +25,7 @@ $url = $trade->execute([
     // 订单详细信息
     'body'                  =>  "这是支付宝支付的测试订单",
     // 订单号(随机生成的订单号,最长为64位)
-    'out_trade_no'          =>  substr(md5(uniqid()),0,18).date("YmdHis"),
+    'out_trade_no'          =>  substr(md5(uniqid()), 0, 18) . date("YmdHis"),
     // 支付金额,单位为元,最小可精确到分(0.01)
     'total_amount'          =>  '1',
     // 商品类型 0—虚拟类商品，1—实物类商品
