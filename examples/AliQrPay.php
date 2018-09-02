@@ -1,12 +1,12 @@
 <?php
 include "bootstrap.php";
 
-use EasyPay\Trade;
 use EasyPay\Payment;
+use EasyPay\PayFactory;
 
 try {
     // 支付宝扫码支付
-    $trade = new Trade(Payment::ALI_QR_PAY);
+    $trade = PayFactory::create(Payment::ALI_QR_PAY);
 
     $url = $trade->execute([
         // 订单标题

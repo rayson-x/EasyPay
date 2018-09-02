@@ -1,15 +1,15 @@
 <?php
 include "bootstrap.php";
 
-use EasyPay\Trade;
 use EasyPay\Payment;
+use EasyPay\PayFactory;
 
 try {
     // 使用微信企业转账
-    $trade = new Trade(Payment::WX_TRANSFERS);
+    $trade = PayFactory::create(Payment::WX_TRANSFERS);
     // 进行企业转账
     $data = $trade->execute([
-        'partner_trade_no'  =>  substr(md5(uniqid()),0,18).date("YmdHis"),
+        'partner_trade_no'  =>  substr(md5(uniqid()), 0, 18) . date("YmdHis"),
         'openid'            =>  'okUzQw52RfmBwO4H1d8M-bHPo8Vw',
         'check_name'        =>  'NO_CHECK',
         'amount'            =>  '1',

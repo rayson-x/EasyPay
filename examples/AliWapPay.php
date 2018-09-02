@@ -1,12 +1,12 @@
 <?php
 include "bootstrap.php";
 
-use EasyPay\Trade;
 use EasyPay\Payment;
+use EasyPay\PayFactory;
 
 try {
     // 使用支付宝网页支付
-    $trade = new Trade(Payment::ALI_WAP_PAY);
+    $trade = PayFactory::create(Payment::ALI_WAP_PAY);
     // EasyPay生成的支付跳转url
     $url = $trade->execute([
         // 订单标题

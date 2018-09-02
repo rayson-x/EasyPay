@@ -4,16 +4,12 @@ namespace EasyPay;
 
 use EasyPay\Interfaces\StrategyInterface;
 
-/**
- * Class Trade
- * @package EasyPay
- */
-class Trade
+class PayFactory
 {
     /**
      * @var array
      */
-    protected $strategyList = [
+    protected static $strategyList = [
         // 支付宝可用操作
         'ali.qr.pay'            =>  \EasyPay\Strategy\Ali\QrPay::class,
         'ali.wap.pay'           =>  \EasyPay\Strategy\Ali\WapPay::class,
@@ -36,52 +32,23 @@ class Trade
     ];
 
     /**
-     * @var StrategyInterface
-     */
-    protected $strategy;
-
-    /**
      * @param $strategy
      * @param array $options
      */
-    public function __construct($strategy, array $options = [])
+    public static function create($strategy, array $options = [])
     {
-        $this->setStrategy($strategy, $options);
-    }
-
-    /**
-     * 设置应用
-     *
-     * @param $strategy
-     * @param array $options
-     */
-    public function setStrategy($strategy, array $options = [])
-    {
-        if (!array_key_exists($strategy, $this->strategyList)) {
+        if (!array_key_exists($strategy, self::$strategyList)) {
             throw new \RuntimeException('操作不存在');
         }
 
-        list($payment) = explode('.', $strategy, 2);
+        $strategy = self::$strategyList[$strategy];
 
-        Config::loadConfig([$payment => $options]);
+        $strategy = new $strategy($options);
 
-        $this->strategy = $this->strategyList[$strategy];
-    }
-
-    /**
-     * @param array $payData
-     * @return mixed
-     */
-    public function execute(array $payData = [])
-    {
-        if (is_string($this->strategy)) {
-            $this->strategy = new $this->strategy($payData);
-        }
-
-        if (!$this->strategy instanceof StrategyInterface) {
+        if (!$strategy instanceof StrategyInterface) {
             throw new \RuntimeException("错误的操作方式");
         }
 
-        return $this->strategy->execute();
+        return $strategy;
     }
 }

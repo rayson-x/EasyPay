@@ -2,7 +2,7 @@
 namespace EasyPay\Interfaces;
 
 /**
- * 交易相关策略接口
+ * 交易相关接口
  *
  * Interface StrategyInterface
  * @package EasyPay\Interfaces
@@ -14,5 +14,5 @@ interface StrategyInterface
      *
      * @return mixed
      */
-    public function execute();
+    public function execute($payData = []);
 }

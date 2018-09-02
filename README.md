@@ -3,8 +3,8 @@
 ```php
 require "vendor/autoload.php";
 
-use EasyPay\Trade;
 use EasyPay\Payment;
+use EasyPay\PayFactory;
 
 // 使用支付宝网页支付
 $trade = new Trade(Payment::ALI_WAP_PAY, [

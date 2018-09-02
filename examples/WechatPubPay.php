@@ -1,14 +1,14 @@
 <?php
 include "bootstrap.php";
 
-use EasyPay\Trade;
 use EasyPay\Payment;
+use EasyPay\PayFactory;
 
 try {
     // 使用微信公众号支付
-    $trade = new Trade(Payment::WX_PUB_PAY);
+    $trade = PayFactory::create(Payment::WX_PUB_PAY);
 
-    // EasyPay生成公众号支付,JS-SDK所用的Json数据
+    // 生成公众号支付,JS-SDK所用的Json数据
     $json = $trade->execute([
         // 公众号支付所需openid
         'openid'            =>  'okUzQw52RfmBwO4H1d8M-bHPo8Vw',
@@ -17,7 +17,7 @@ try {
         // 支付订单信息
         'body'              =>  '微信扫码支付,测试订单',
         // 支付订单号
-        'out_trade_no'      => substr(md5(uniqid()),0,18).date("YmdHis"),
+        'out_trade_no'      => substr(md5(uniqid()), 0, 18) . date("YmdHis"),
         // 支付金额(单位为元,最小为分 0.01,此处是为了与支付宝统一单位)
         'total_fee'         => '1',
         // 客户端IP

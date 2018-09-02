@@ -2,7 +2,7 @@
 namespace EasyPay\Strategy\Ali;
 
 /**
- * 支付宝扫码支付,此策略返回结果为待扫码url
+ * 支付宝扫码支付,返回结果为待扫码url
  *
  * Class QrPay
  * @package EasyPay\Strategy\Ali

@@ -40,7 +40,7 @@ abstract class BaseWechatStrategy implements StrategyInterface
      * BaseWechatStrategy constructor.
      * @param array $options
      */
-    public function __construct(array $options)
+    public function __construct(array $options = [])
     {
         $this->payData = new TradeData(array_merge(Config::wechat(), $options));
     }
@@ -50,8 +50,10 @@ abstract class BaseWechatStrategy implements StrategyInterface
      *
      * @return TradeData
      */
-    public function execute()
+    public function execute($payData = [])
     {
+        $this->payData->setAttributes($payData);
+
         // 发起Http请求
         $response = $this->sendHttpRequest(
             $this->getRequestMethod(),
@@ -135,6 +137,22 @@ abstract class BaseWechatStrategy implements StrategyInterface
         $this->payData->selected($this->getFillParams());
 
         return $this->payData;
+    }
+    
+    /**
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->payData->offsetGet($name);
+    }
+
+    /**
+     * @return void
+     */
+    public function __set($name, $value)
+    {
+        $this->payData->offsetSet($name, $value);
     }
 
     /**

@@ -7,8 +7,6 @@ use EasyPay\TradeData\Ali\TradeData;
 use EasyPay\Interfaces\StrategyInterface;
 
 /**
- * 支付宝基础策略
- *
  * Class BaseAliStrategy
  * @package EasyPay\Strategy\Ali
  */
@@ -49,7 +47,7 @@ abstract class BaseAliStrategy implements StrategyInterface
     /**
      * @param array $options
      */
-    public function __construct(array $options)
+    public function __construct(array $options = [])
     {
         $this->payData = new TradeData(array_merge(Config::ali(), $options));
     }
@@ -57,8 +55,10 @@ abstract class BaseAliStrategy implements StrategyInterface
     /**
      * @return array|object
      */
-    public function execute()
+    public function execute($payData = [])
     {
+        $this->payData->setAttributes($payData);
+
         $data = $this->buildData();
 
         return $this->handleData($data);
@@ -132,6 +132,22 @@ abstract class BaseAliStrategy implements StrategyInterface
         return Config::ali('is_sand_box')
             ? "https://openapi.alipaydev.com/gateway.do"
             : "https://openapi.alipay.com/gateway.do";
+    }
+
+    /**
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->payData->offsetGet($name);
+    }
+
+    /**
+     * @return void
+     */
+    public function __set($name, $value)
+    {
+        $this->payData->offsetSet($name, $value);
     }
 
     /**

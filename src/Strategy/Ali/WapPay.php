@@ -2,7 +2,7 @@
 namespace EasyPay\Strategy\Ali;
 
 /**
- * 支付宝网页支付,改策略返回结果为支付宝支付url
+ * 支付宝网页支付,返回结果为支付宝支付url
  *
  * Class WapPay
  * @package EasyPay\Strategy\Ali

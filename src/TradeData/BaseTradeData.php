@@ -88,6 +88,16 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
     {
         $this->attributes = [];
 
+        $this->setAttributes($attributes);
+    }
+
+    /**
+     * 设置数据
+     *
+     * @param \Iterator|array $attributes
+     */
+    public function setAttributes($attributes)
+    {
         foreach ($attributes as $key => $value) {
             $this->attributes[$key] = $value;
         }
@@ -278,7 +288,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      */
     public function __set($name,$value)
     {
-        $this[$name] = $value;
+        $this->offsetSet($name, $value);
     }
 
     /**
@@ -287,7 +297,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      */
     public function __get($name)
     {
-        return $this[$name];
+        return $this->offsetGet($name);
     }
 
     /**

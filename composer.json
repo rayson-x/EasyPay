@@ -9,8 +9,7 @@
     "ant-framework/http": "v0.2.0"
   },
   "require-dev": {
-    "endroid/qrcode": "^1.9",
-    "box/spout": "*"
+    "endroid/qrcode": "^1.9"
   },
   "autoload": {
     "psr-4": {

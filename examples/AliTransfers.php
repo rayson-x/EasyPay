@@ -1,12 +1,12 @@
 <?php
 include "bootstrap.php";
 
-use EasyPay\Trade;
 use EasyPay\Payment;
+use EasyPay\PayFactory;
 
 try {
     // 使用阿里企业转账
-    $trade = new Trade(Payment::ALI_TRANSFERS);
+    $trade = PayFactory::create(Payment::ALI_TRANSFERS);
 
     // 进行企业转账
     $data = $trade->execute([
