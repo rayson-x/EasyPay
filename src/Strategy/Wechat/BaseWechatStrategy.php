@@ -115,10 +115,10 @@ abstract class BaseWechatStrategy implements StrategyInterface
         if ($sslKey && $sslCert) {
             // 添加SSL证书
             $client->setCurlOption([
-                'CURLOPT_SSLKEY'        =>  $sslKey,
-                'CURLOPT_SSLCERT'       =>  $sslCert,
-                'CURLOPT_SSLKEYTYPE'    =>  'PEM',
-                'CURLOPT_SSLCERTTYPE'   =>  'PEM',
+                CURLOPT_SSLKEY      =>  $sslKey,
+                CURLOPT_SSLCERT     =>  $sslCert,
+                CURLOPT_SSLKEYTYPE  =>  'PEM',
+                CURLOPT_SSLCERTTYPE =>  'PEM',
             ]);
         }
 
