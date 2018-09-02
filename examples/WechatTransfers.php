@@ -18,6 +18,9 @@ try {
     ]);
 
     // 微信服务器响应结果
+    echo "<pre>";
+    var_dump($data);
+    echo "</pre>";
 } catch (\Exception $e) {
     // 打印错误县信息
     echo "错误信息为 : {$e->getMessage()}","<br>";

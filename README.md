@@ -60,6 +60,48 @@ $url = $trade->execute([
 header("Location: {$url}");
 ```
 
+```php
+use EasyPay\Payment;
+use EasyPay\PayFactory;
+
+// 使用微信扫码支付
+$trade = PayFactory::create(Payment::WX_QR_PAY, [
+    // 应用id
+    'appid'             =>  '',
+    // 应用密钥
+    'key'               =>  '',
+    // 商户ID
+    'mch_id'            =>  '',
+    // 回调地址
+    'notify_url'        =>  '',
+    // ssl证书路径
+    'ssl_cert_path'     =>  '',
+    // ssl密钥路径
+    'ssl_key_path'      =>  '',
+]);
+
+// 支付信息
+$trade->attach           = 'wechat pay test';
+// 支付订单信息
+$trade->body             = '微信扫码支付,测试订单';
+// 支付订单号
+$trade->out_trade_no     = substr(md5(uniqid()), 0, 18) . date("YmdHis");
+// 支付金额(单位为元,最小为分 0.01,此处是为了与支付宝统一单位)
+$trade->total_fee        = '1';
+// 客户端IP
+$trade->spbill_create_ip = $_SERVER['REMOTE_ADDR'];
+// 商品id
+$trade->product_id       = '123';
+
+// EasyPay生成的支付跳转url
+$url = $trade->execute();
+
+// 生成二维码
+$qrCode = (new Endroid\QrCode\QrCode($url))->setSize(300);
+header('Content-Type: image/png');
+echo $qrCode->get('png');
+```
+
 ## Todo
 * 将RSA加密分离为单独的库,同时添加密钥解析
 * 支持多种编码(目前仅支持utf-8)
