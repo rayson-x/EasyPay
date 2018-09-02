@@ -34,6 +34,7 @@ class PayFactory
     /**
      * @param $strategy
      * @param array $options
+     * @return StrategyInterface
      */
     public static function create($strategy, array $options = [])
     {

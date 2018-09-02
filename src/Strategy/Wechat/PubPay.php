@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyPay\Strategy\Wechat;
 
 use EasyPay\TradeData\Wechat\TradeData;
@@ -78,8 +79,8 @@ class PubPay extends BaseWechatStrategy
         // 生成Js api使用的Json数据
         $data = new TradeData([
             'appId'     =>  $result['appid'],
-            'timeStamp' =>  (string)time(),
-            'nonceStr'  =>  substr(md5(uniqid()),0,18).date("YmdHis"),
+            'timeStamp' =>  (string) time(),
+            'nonceStr'  =>  substr(md5(uniqid()), 0, 18) . date("YmdHis"),
             'package'   =>  "prepay_id={$result['prepay_id']}",
             'signType'  =>  'MD5',
         ]);

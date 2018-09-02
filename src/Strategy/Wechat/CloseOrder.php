@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyPay\Strategy\Wechat;
 
 /**
