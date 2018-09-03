@@ -12,22 +12,39 @@ use EasyPay\Interfaces\AsyncNotifyProcessorInterface;
  * Class AsyncProcessor
  * @package EasyPay\Strategy\Notify
  */
-class AsyncProcessor implements  AsyncNotifyProcessorInterface
+class AsyncProcessor implements AsyncNotifyProcessorInterface
 {
     /**
      * 获取通知内容
      *
+     * @param null $request
      * @return TradeData
      * @throws Exception
      */
-    public function getNotify()
+    public function getNotify($request = null)
     {
-        if (empty($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+        if (!is_null($request)) {
+            if (method_exists($request, 'getMethod')) {
+                $method = $request->getMethod();
+            }
+
+            if (method_exists($request, 'getBody')) {
+                // psr-7
+                $input = (string) $request->getBody();
+            } elseif (method_exists($request, 'getContent')) {
+                // laravel or symfony
+                $input = (string) $request->getContent();
+            }
+        } elseif (substr(PHP_SAPI, 0, 3) == 'cgi') {
+            $method = $_SERVER['REQUEST_METHOD'];
+            // 从输入流中读取数据
+            $input = file_get_contents("php://input");            
+        }
+        
+        if (empty($method) || $method !== 'POST') {
             throw new RuntimeException('无法处理的请求');
         }
 
-        // 从输入流中读取数据
-        $input = file_get_contents("php://input");
         $data = TradeData::createFromXML($input);
         $data->verifySign();
 
