@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class Notify extends BaseNoitfy
 {
+    /**
+     * {@inheritDoc}
+     */
     public static function fromGlobal()
     {
         if (in_array(PHP_SAPI, self::$badModes)) {
@@ -28,7 +31,10 @@ class Notify extends BaseNoitfy
                 return new self(new TradeData($_REQUEST));
         }
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     public static function fromSymfonyRequest(SymfonyRequest $request)
     {
         $method = $request->getMethod();
@@ -42,12 +48,18 @@ class Notify extends BaseNoitfy
                 throw new RuntimeException('无法处理的请求');
         }
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     public static function fromLaravelRequest(LaravelRequest $request)
     {
         return new self(new TradeData($request->input()));
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     public static function fromPsr7Request(RequestInterface $request)
     {
         $method = $request->getMethod();
@@ -68,7 +80,10 @@ class Notify extends BaseNoitfy
 
         $this->verifySign();
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     protected function verifySign()
     {
         $this->tradeData->verifySign();

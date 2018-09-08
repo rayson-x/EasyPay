@@ -41,10 +41,13 @@ try {
         'alipay_store_id'       =>  '',
     ]);
 
-    // 生成二维码
-    $qrCode = (new Endroid\QrCode\QrCode($url))->setSize(300);
-    header('Content-Type: image/png');
-    echo $qrCode->get('png');
+    // 生成二维码    
+    $qrCode = new \Endroid\QrCode\QrCode($url);
+    $qrCode->setSize(300);
+    $qrCode->setWriterByName('png');
+
+    header('Content-Type: ' . $qrCode->getContentType());
+    echo $qrCode->writeString();
 } catch (\Exception $e) {
     // 打印错误县信息
     echo "错误信息为 : {$e->getMessage()}","<br>";

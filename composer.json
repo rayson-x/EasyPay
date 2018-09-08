@@ -8,7 +8,7 @@
     "guzzlehttp/guzzle": "^6.3"
   },
   "require-dev": {
-    "endroid/qrcode": "^1.9"
+    "endroid/qrcode": "^3.4"
   },
   "autoload": {
     "psr-4": {
