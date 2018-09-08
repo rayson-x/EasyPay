@@ -99,8 +99,26 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
     public function setAttributes($attributes)
     {
         foreach ($attributes as $key => $value) {
-            $this->attributes[$key] = $value;
+            $this->setAttribute($key, $value);
         }
+    }
+
+    /**
+     * @param $attribute
+     * @param $value
+     */
+    public function setAttribute($attribute, $value)
+    {
+        $this->attributes[$attribute] = $value;
+    }
+
+    /**
+     * @param $attribute
+     * @return mixed
+     */
+    public function getAttribute($attribute)
+    {
+        return $this->offsetExists($attribute) ? $this->attributes[$attribute] : null;
     }
 
     /**
@@ -253,7 +271,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      */
     public function offsetGet($offset)
     {
-        return $this->offsetExists($offset) ? $this->attributes[$offset] : null;
+        return $this->getAttribute($offset);
     }
 
     /**
@@ -262,7 +280,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      */
     public function offsetSet($offset, $value)
     {
-        $this->attributes[$offset] = $value;
+        $this->setAttribute($offset, $value);
     }
 
     /**

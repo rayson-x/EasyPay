@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyPay\Strategy\Wechat;
+namespace EasyPay\Strategies\Wechat;
 
 use EasyPay\TradeData\Wechat\TradeData;
 
@@ -8,7 +8,7 @@ use EasyPay\TradeData\Wechat\TradeData;
  * 请求微信公众号支付接口,返回Js api使用的Json数据
  *
  * Class PubPay
- * @package EasyPay\Strategy\Wechat
+ * @package EasyPay\Strategies\Wechat
  */
 class PubPay extends BaseWechatStrategy
 {

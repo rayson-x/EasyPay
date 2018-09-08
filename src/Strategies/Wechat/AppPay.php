@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyPay\Strategy\Wechat;
+namespace EasyPay\Strategies\Wechat;
 
 use EasyPay\TradeData\Wechat\TradeData;
 
@@ -9,7 +9,7 @@ use EasyPay\TradeData\Wechat\TradeData;
  * 微信app支付
  *
  * Class AppPay
- * @package EasyPay\Strategy\Wechat
+ * @package EasyPay\Strategies\Wechat
  * @see https://pay.weixin.qq.com/wiki/doc/api/app/app_sl.php?chapter=9_1
  */
 class AppPay extends BaseWechatStrategy

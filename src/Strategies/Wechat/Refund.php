@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyPay\Strategy\Wechat;
+namespace EasyPay\Strategies\Wechat;
 
 use EasyPay\Exception\PayParamException;
 
@@ -8,7 +8,7 @@ use EasyPay\Exception\PayParamException;
  * 退款
  *
  * Class Refund
- * @package EasyPay\Strategy\Wechat\Transaction
+ * @package EasyPay\Strategies\Wechat\Transaction
  */
 class Refund extends BaseWechatStrategy
 {

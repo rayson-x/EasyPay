@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyPay\Strategy\Wechat;
+namespace EasyPay\Strategies\Wechat;
 
 use EasyPay\TradeData\Ali\TradeData;
 use EasyPay\Exception\PayFailException;
@@ -9,7 +9,7 @@ use EasyPay\Exception\PayFailException;
  * 下载账单
  *
  * Class DownloadBill
- * @package EasyPay\Strategy\Wechat\Transaction
+ * @package EasyPay\Strategies\Wechat\Transaction
  */
 class DownloadBill extends BaseWechatStrategy
 {

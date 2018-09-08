@@ -10,7 +10,7 @@ use EasyPay\Interfaces\AsyncNotifyProcessorInterface;
  * 异步通知处理器
  *
  * Class AsyncProcessor
- * @package EasyPay\Strategy\Notify
+ * @package EasyPay\Notify\Wechat
  */
 class AsyncProcessor implements AsyncNotifyProcessorInterface
 {

@@ -1,11 +1,11 @@
 <?php
-namespace EasyPay\Strategy\Ali;
+namespace EasyPay\Strategies\Ali;
 
 /**
  * 支付宝扫码支付,返回结果为待扫码url
  *
  * Class QrPay
- * @package EasyPay\Strategy\Ali
+ * @package EasyPay\Strategies\Ali
  */
 class QrPay extends BaseAliStrategy
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace EasyPay\Strategy\Wechat;
+namespace EasyPay\Strategies\Wechat;
 
 /**
  * todo 待申请h5支付后测试
  * 微信h5支付,在mobile wab中调起微信支付
  *
  * Class WapPay
- * @package EasyPay\Strategy\Wechat
+ * @package EasyPay\Strategies\Wechat
  * @see https://pay.weixin.qq.com/wiki/doc/api/H5_sl.php?chapter=9_20&index=1
  */
 class WapPay extends BaseWechatStrategy

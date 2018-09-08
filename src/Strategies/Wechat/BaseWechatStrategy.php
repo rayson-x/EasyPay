@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyPay\Strategy\Wechat;
+namespace EasyPay\Strategies\Wechat;
 
 use EasyPay\Config;
 use EasyPay\Utils\HttpClient;
@@ -11,7 +11,7 @@ use EasyPay\Interfaces\StrategyInterface;
 
 /**
  * Class BaseWechatStrategy
- * @package EasyPay\Strategy\Wechat
+ * @package EasyPay\Strategies\Wechat
  */
 abstract class BaseWechatStrategy implements StrategyInterface
 {

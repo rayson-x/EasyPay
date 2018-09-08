@@ -1,12 +1,12 @@
 <?php
 
-namespace EasyPay\Strategy\Wechat;
+namespace EasyPay\Strategies\Wechat;
 
 /**
  * 关闭支付订单
  *
  * Class CloseOrder
- * @package EasyPay\Strategy\Wechat\Transaction
+ * @package EasyPay\Strategies\Wechat\Transaction
  * @see https://pay.weixin.qq.com/wiki/doc/api/native_sl.php?chapter=9_3
  */
 class CloseOrder extends BaseWechatStrategy

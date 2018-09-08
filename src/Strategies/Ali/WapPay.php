@@ -1,11 +1,11 @@
 <?php
-namespace EasyPay\Strategy\Ali;
+namespace EasyPay\Strategies\Ali;
 
 /**
  * 支付宝网页支付,返回结果为支付宝支付url
  *
  * Class WapPay
- * @package EasyPay\Strategy\Ali
+ * @package EasyPay\Strategies\Ali
  */
 class WapPay extends BaseAliStrategy
 {

@@ -1,5 +1,5 @@
 <?php
-namespace EasyPay\Strategy\Ali;
+namespace EasyPay\Strategies\Ali;
 
 use EasyPay\Exception\PayParamException;
 

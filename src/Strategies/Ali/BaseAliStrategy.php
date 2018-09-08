@@ -1,5 +1,5 @@
 <?php
-namespace EasyPay\Strategy\Ali;
+namespace EasyPay\Strategies\Ali;
 
 use EasyPay\Config;
 use EasyPay\Utils\HttpClient;
@@ -8,7 +8,7 @@ use EasyPay\Interfaces\StrategyInterface;
 
 /**
  * Class BaseAliStrategy
- * @package EasyPay\Strategy\Ali
+ * @package EasyPay\Strategies\Ali
  */
 abstract class BaseAliStrategy implements StrategyInterface
 {

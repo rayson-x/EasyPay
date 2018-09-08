@@ -1,11 +1,11 @@
 <?php
-namespace EasyPay\Strategy\Ali;
+namespace EasyPay\Strategies\Ali;
 
 /**
  * 下载账单,返回账单下载地址
  *
  * Class DownloadBill
- * @package EasyPay\Strategy\Ali
+ * @package EasyPay\Strategies\Ali
  */
 class DownloadBill extends BaseAliStrategy
 {

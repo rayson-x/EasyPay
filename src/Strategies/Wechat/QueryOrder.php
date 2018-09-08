@@ -1,15 +1,15 @@
 <?php
 
-namespace EasyPay\Strategy\Wechat;
+namespace EasyPay\Strategies\Wechat;
 
 use EasyPay\Exception\PayParamException;
-use EasyPay\Strategy\Wechat\BaseWechatStrategy;
+use EasyPay\Strategies\Wechat\BaseWechatStrategy;
 
 /**
  * 查询支付订单
  *
  * Class QueryOrder
- * @package EasyPay\Strategy\Wechat\Transaction
+ * @package EasyPay\Strategies\Wechat\Transaction
  */
 class QueryOrder extends BaseWechatStrategy
 {

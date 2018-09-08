@@ -1,15 +1,15 @@
 <?php
-namespace EasyPay\Strategy\Ali;
+namespace EasyPay\Strategies\Ali;
 
 use EasyPay\Exception\PayParamException;
 
 /**
- * 支付宝订单查询
+ * 支付宝关闭订单功能
  *
- * Class QueryOrder
- * @package EasyPay\Strategy\Ali
+ * Class CloseOrder
+ * @package EasyPay\Strategies\Ali
  */
-class QueryOrder extends BaseAliStrategy
+class CloseOrder extends BaseAliStrategy
 {
     /**
      * {@inheritDoc}
@@ -28,7 +28,7 @@ class QueryOrder extends BaseAliStrategy
      */
     protected function getMethod()
     {
-        return BaseAliStrategy::QUERY_ORDER;
+        return BaseAliStrategy::CLOSE_ORDER;
     }
 
     /**
@@ -46,7 +46,7 @@ class QueryOrder extends BaseAliStrategy
     {
         return [
             'app_id', 'method', 'format', 'charset', 'sign_type', 'sign',
-            'timestamp', 'version', 'app_auth_token', 'biz_content'
+            'timestamp', 'version', 'notify_url', 'app_auth_token', 'biz_content'
         ];
     }
 
@@ -58,8 +58,10 @@ class QueryOrder extends BaseAliStrategy
         $data = [
             // 商户唯一订单号
             'out_trade_no'          =>  $this->payData['out_trade_no'],
-            // 支付宝订单号
+            // 支付宝唯一订单号
             'trade_no'              =>  $this->payData['trade_no'],
+            // 商户的操作员编号
+            'operator_id'           =>  $this->payData['trade_no'],
         ];
 
         array_removal_empty($data);

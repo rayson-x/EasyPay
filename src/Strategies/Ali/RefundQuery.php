@@ -1,15 +1,15 @@
 <?php
-namespace EasyPay\Strategy\Ali;
+namespace EasyPay\Strategies\Ali;
 
 use EasyPay\Exception\PayParamException;
 
 /**
- * 支付宝退款功能
+ * 支付宝退款查询功能
  *
- * Class Refund
- * @package EasyPay\Strategy\Ali
+ * Class RefundQuery
+ * @package EasyPay\Strategies\Ali
  */
-class Refund extends BaseAliStrategy
+class RefundQuery extends BaseAliStrategy
 {
     /**
      * {@inheritDoc}
@@ -28,7 +28,7 @@ class Refund extends BaseAliStrategy
      */
     protected function getMethod()
     {
-        return BaseAliStrategy::REFUND;
+        return BaseAliStrategy::REFUND_QUERY;
     }
 
     /**
@@ -36,7 +36,7 @@ class Refund extends BaseAliStrategy
      */
     protected function getRequireParams()
     {
-        return ['app_id','refund_amount'];
+        return ['app_id','out_request_no'];
     }
 
     /**
@@ -60,18 +60,8 @@ class Refund extends BaseAliStrategy
             'out_trade_no'          =>  $this->payData['out_trade_no'],
             // 支付宝唯一订单号
             'trade_no'              =>  $this->payData['trade_no'],
-            // 退款金额
-            'refund_amount'         =>  $this->payData['refund_amount'],
-            // 退款说明
-            'refund_reason'         =>  $this->payData['refund_reason'],
-            // 标识一次退款请求,如果退款全额并且此参数为空时,默认以商户订单号作为退款单号
-            'out_request_no'        =>  $this->payData['trade_no'],
-            // 商户的操作员编号
-            'operator_id'           =>  $this->payData['trade_no'],
-            // 商户的门店编号
-            'store_id'              =>  $this->payData['trade_no'],
-            // 商户的终端编号
-            'terminal_id'           =>  $this->payData['trade_no'],
+            // 标识一次退款请求
+            'out_request_no'        =>  $this->payData['out_request_no'],
         ];
 
         array_removal_empty($data);

@@ -1,15 +1,15 @@
 <?php
 
-namespace EasyPay\Strategy\Wechat;
+namespace EasyPay\Strategies\Wechat;
 
 use EasyPay\Config;
-use EasyPay\Strategy\Wechat\BaseWechatStrategy;
+use EasyPay\Strategies\Wechat\BaseWechatStrategy;
 
 /**
  * 微信企业付款
  *
  * Class Transfers
- * @package EasyPay\Strategy\Wechat
+ * @package EasyPay\Strategies\Wechat
  */
 class Transfers extends BaseWechatStrategy
 {
