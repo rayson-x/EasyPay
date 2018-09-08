@@ -66,6 +66,13 @@ class Notify extends BaseNoitfy
         return new self(new TradeData($result));
     }
 
+    public function __construct(TradeData $tradeData)
+    {
+        $this->tradeData = $tradeData;
+
+        $this->verifySign();
+    }
+
     protected function verifySign()
     {
         $this->tradeData->verifyRequestSign();

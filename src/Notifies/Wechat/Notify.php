@@ -62,6 +62,13 @@ class Notify extends BaseNoitfy
         return new self(TradeData::createFromXML($input));
     }
 
+    public function __construct(TradeData $tradeData)
+    {
+        $this->tradeData = $tradeData;
+
+        $this->verifySign();
+    }
+
     protected function verifySign()
     {
         $this->tradeData->verifySign();

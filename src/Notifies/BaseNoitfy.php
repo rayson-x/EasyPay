@@ -18,14 +18,10 @@ use EasyPay\Interfaces\NotifyInterface;
  */
 abstract class BaseNoitfy implements NotifyInterface
 {
+    /**
+     * @var BaseTradeData
+     */
     protected $tradeData;
-
-    public function __construct(BaseTradeData $tradeData)
-    {
-        $this->tradeData = $tradeData;
-
-        $this->verifySign();
-    }
 
     public function __get($key)
     {
