@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyPay\TradeData;
 
 use ArrayAccess;

@@ -8,7 +8,7 @@ use RuntimeException;
  * 支付过程出现异常
  *
  * Class PayException
- * @package PayApi\Exception
+ * @package EasyPay\Exception
  */
 class PayException extends RuntimeException
 {

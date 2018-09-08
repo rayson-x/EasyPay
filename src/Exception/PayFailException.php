@@ -3,7 +3,7 @@ namespace EasyPay\Exception;
 
 /**
  * Class PayFailException
- * @package PayApi\Exception
+ * @package EasyPay\Exception
  */
 class PayFailException extends PayException
 {

@@ -2,6 +2,7 @@
 namespace EasyPay\TradeData\Ali;
 
 use EasyPay\Config;
+use RuntimeException;
 use EasyPay\Exception\PayException;
 use EasyPay\TradeData\BaseTradeData;
 use EasyPay\Exception\PayParamException;
@@ -22,7 +23,7 @@ class TradeData extends BaseTradeData
     {
         // ali 加密必须要证书
         if (!$sslPrivate = Config::ali('ssl_private_key')) {
-            throw new \RuntimeException("加密签名需要私钥证书,请检查配置");
+            throw new RuntimeException("加密签名需要私钥证书,请检查配置");
         }
 
         // 获取加密方式
