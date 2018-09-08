@@ -34,10 +34,10 @@ abstract class BaseAliStrategy implements StrategyInterface
     const DOWN_LOAD_BILL = 'alipay.data.dataservice.bill.downloadurl.query';
 
     // 企业转账
-    const TRANSFERS = 'alipay.fund.trans.toaccount.transfer';
+    const TRANSFER = 'alipay.fund.trans.toaccount.transfer';
 
     // 转账查询
-    const TRANSFERS_QUERY = 'alipay.fund.trans.order.query ';
+    const TRANSFER_QUERY = 'alipay.fund.trans.order.query ';
     
     /**
      * @var TradeData

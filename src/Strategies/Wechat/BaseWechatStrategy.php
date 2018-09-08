@@ -28,9 +28,9 @@ abstract class BaseWechatStrategy implements StrategyInterface
     // 下载对账单地址
     const DOWN_LOAD_BILL_URL = 'https://api.mch.weixin.qq.com/pay/downloadbill';
     // 微信转账地址
-    const TRANSFERS_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+    const TRANSFER_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
     // 微信企业转账查询
-    const TRANSFERS_QUERY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/gettransferinfo";
+    const TRANSFER_QUERY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/gettransferinfo";
 
     /**
      * @var TradeData

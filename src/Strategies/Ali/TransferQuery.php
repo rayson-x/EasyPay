@@ -22,7 +22,7 @@ class TransfersQuery extends BaseAliStrategy
      */
     protected function getMethod()
     {
-        return BaseAliStrategy::CLOSE_ORDER;
+        return BaseAliStrategy::TRANSFER_QUERY;
     }
 
     /**

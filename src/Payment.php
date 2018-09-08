@@ -10,7 +10,7 @@ class Payment
     const WX_PUB_PAY = 'wechat.pub.pay';
 
     // 微信企业转账
-    const WX_TRANSFERS = 'wechat.transfers';
+    const WX_TRANSFER = 'wechat.transfer';
 
     // 支付宝扫码支付
     const ALI_QR_PAY = 'ali.qr.pay';
@@ -19,5 +19,5 @@ class Payment
     const ALI_WAP_PAY = 'ali.wap.pay';
 
     // 支付宝企业转账
-    const ALI_TRANSFERS = 'ali.transfers';
+    const ALI_TRANSFER = 'ali.transfer';
 }

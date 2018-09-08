@@ -6,7 +6,7 @@ use EasyPay\PayFactory;
 
 try {
     // 使用微信企业转账
-    $trade = PayFactory::create(Payment::WX_TRANSFERS);
+    $trade = PayFactory::create(Payment::WX_TRANSFER);
     // 进行企业转账
     $data = $trade->execute([
         'partner_trade_no'  =>  substr(md5(uniqid()), 0, 18) . date("YmdHis"),

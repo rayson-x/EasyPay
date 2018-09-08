@@ -2,8 +2,7 @@
 
 namespace EasyPay\Strategies\Wechat;
 
-
-class TransfersQuery extends BaseWechatStrategy
+class TransferQuery extends BaseWechatStrategy
 {
     /**
      * {@inheritDoc}
@@ -34,6 +33,6 @@ class TransfersQuery extends BaseWechatStrategy
      */
     protected function getRequestTarget()
     {
-        return BaseWechatStrategy::TRANSFERS_QUERY_URL;
+        return BaseWechatStrategy::TRANSFER_QUERY_URL;
     }
 }

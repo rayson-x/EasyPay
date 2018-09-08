@@ -6,7 +6,7 @@ use EasyPay\PayFactory;
 
 try {
     // 使用阿里企业转账
-    $trade = PayFactory::create(Payment::ALI_TRANSFERS);
+    $trade = PayFactory::create(Payment::ALI_TRANSFER);
 
     // 进行企业转账
     $data = $trade->execute([

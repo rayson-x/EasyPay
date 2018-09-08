@@ -8,10 +8,10 @@ use EasyPay\Strategies\Wechat\BaseWechatStrategy;
 /**
  * 微信企业付款
  *
- * Class Transfers
+ * Class Transfer
  * @package EasyPay\Strategies\Wechat
  */
-class Transfers extends BaseWechatStrategy
+class Transfer extends BaseWechatStrategy
 {
     /**
      * {@inheritDoc}
@@ -64,6 +64,6 @@ class Transfers extends BaseWechatStrategy
      */
     protected function getRequestTarget()
     {
-        return BaseWechatStrategy::TRANSFERS_URL;
+        return BaseWechatStrategy::TRANSFER_URL;
     }
 }
