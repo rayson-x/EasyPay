@@ -13,7 +13,7 @@ class Processor implements NotifyProcessorInterface
      * @return TradeData
      * @throws \Exception
      */
-    public function getNotify()
+    public function getNotify($request = null)
     {
         if (!is_null($request)) {
             if (method_exists($request, 'getMethod')) {
