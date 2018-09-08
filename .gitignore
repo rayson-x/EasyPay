@@ -1,11 +1,9 @@
 .idea
-composer.lock
 *.log
-vendor
-test.php
+composer.lock
 index.php
-qrcode
-.vscode
-/ssl
 notify.php
+vendor
+/ssl
 .env
+.vscode
