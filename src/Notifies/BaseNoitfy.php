@@ -23,6 +23,11 @@ abstract class BaseNoitfy implements NotifyInterface
      */
     protected $tradeData;
 
+    /**
+     * @var array
+     */
+    protected static $badModes = ['cli', 'continuity', 'milter', 'webjames'];
+
     public function __get($key)
     {
         return $this->tradeData[$key];

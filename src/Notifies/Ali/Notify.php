@@ -13,8 +13,8 @@ class Notify extends BaseNoitfy
 {
     public static function fromGlobal()
     {
-        if (substr(PHP_SAPI, 0, 3) !== 'cgi') {
-            throw new RuntimeException('必须运行在cgi模式下');
+        if (in_array(PHP_SAPI, self::$badModes)) {
+            throw new RuntimeException('运行模式错误,必须运行在指定的模式下');
         }
 
         $method = $_SERVER['REQUEST_METHOD'] ?? null;

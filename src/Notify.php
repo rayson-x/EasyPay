@@ -15,7 +15,7 @@ class Notify
 
     public static function get($service, $request = null)
     {
-        $service = $notifies[$service];
+        $service = self::$notifies[$service];
 
         if (is_null($request)) {
             return $service::fromGlobal();
