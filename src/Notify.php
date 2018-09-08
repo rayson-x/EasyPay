@@ -1,0 +1,35 @@
+<?php
+
+namespace EasyPay;
+
+use Illuminate\Http\Request as LaravelRequest;
+use Psr\Http\Message\RequestInterface as PsrRequest;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+
+class Notify
+{
+    public static $notifies = [
+        'ali'     => \EasyPay\Notifies\Ali\Notify::class,
+        'wetchat' => \EasyPay\Notifies\Wechat\Notify::class,    
+    ];
+
+    public static function get($service, $request = null)
+    {
+        $service = $notifies[$service];
+
+        if (is_null($request)) {
+            return $service::fromGlobal();
+        }
+
+        switch ($request) {
+            case $request instanceof PsrRequest:
+                return $service::fromPsr7Request($request);
+            case $request instanceof LaravelRequest:
+                return $service::fromLaravelRequest($request);
+            case $request instanceof SymfonyRequest:
+                return $service::fromSymfonyRequest($request);
+        }
+
+        throw new \RuntimeException('无法处理的请求');
+    }
+}
