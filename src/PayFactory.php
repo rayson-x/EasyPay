@@ -9,7 +9,7 @@ class PayFactory
     /**
      * @var array
      */
-    protected static $provides = [
+    public static $provides = [
         // 支付宝可用操作
         'ali.qr.pay'            =>  \EasyPay\Strategies\Ali\QrPay::class,
         'ali.wap.pay'           =>  \EasyPay\Strategies\Ali\WapPay::class,
