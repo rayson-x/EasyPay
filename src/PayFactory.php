@@ -39,7 +39,7 @@ class PayFactory
     public static function create($strategy, array $options = [])
     {
         if (!array_key_exists($strategy, self::$provides)) {
-            throw new \RuntimeException('操作不存在');
+            throw new \RuntimeException("[{$strategy}]服务不存在");
         }
 
         $strategy = self::$provides[$strategy];
@@ -47,9 +47,18 @@ class PayFactory
         $service = new $strategy($options);
 
         if (!$service instanceof StrategyInterface) {
-            throw new \RuntimeException("错误的操作方式");
+            throw new \RuntimeException("{$strategy}必须实现StrategyInterface");
         }
 
         return $service;
+    }
+
+    /**
+     * @param string $name
+     * @param StrategyInterface $strategy
+     */
+    public static function setProvide($name, StrategyInterface $strategy)
+    {
+        self::$provides[$name] = $strategy;
     }
 }
