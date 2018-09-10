@@ -26,7 +26,7 @@ $url = $trade->execute([
     'body'                  =>  "这是支付宝支付的测试订单",
     // 订单号(随机生成的订单号,最长为64位)
     'out_trade_no'          =>  substr(md5(uniqid()), 0, 18) . date("YmdHis"),
-    // 支付金额,单位为元,最小可精确到分(0.01)
+    // 支付金额,单位为分
     'total_amount'          =>  '1',
     // 商品类型 0—虚拟类商品，1—实物类商品
     'goods_type'            =>  '1',
@@ -86,7 +86,7 @@ $trade->attach           = 'wechat pay test';
 $trade->body             = '微信扫码支付,测试订单';
 // 支付订单号
 $trade->out_trade_no     = substr(md5(uniqid()), 0, 18) . date("YmdHis");
-// 支付金额(单位为元,最小为分 0.01,此处是为了与支付宝统一单位)
+// 支付金额,单位为分
 $trade->total_fee        = '1';
 // 客户端IP
 $trade->spbill_create_ip = $_SERVER['REMOTE_ADDR'];

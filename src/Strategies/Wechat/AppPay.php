@@ -62,8 +62,6 @@ class AppPay extends BaseWechatStrategy
         parent::buildData();
         // 设定交易模式为app支付
         $this->payData->trade_type = 'APP';
-        // 微信计费单位为分
-        $this->payData->total_fee *= 100;
 
         return $this->payData;
     }

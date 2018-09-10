@@ -61,13 +61,13 @@ abstract class BaseAliStrategy implements StrategyInterface
 
         $data = $this->buildData();
 
-        return $this->handleData($data);
+        return $this->handleData($data->toArray());
     }
 
     /**
      * 构造请求数据
      *
-     * @return array
+     * @return TradeData
      */
     protected function buildData()
     {
@@ -82,7 +82,7 @@ abstract class BaseAliStrategy implements StrategyInterface
         // 生成签名
         $this->payData->setSign();
 
-        return $this->payData->toArray();
+        return $this->payData;
     }
 
     /**

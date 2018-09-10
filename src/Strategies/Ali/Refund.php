@@ -17,8 +17,10 @@ class Refund extends BaseAliStrategy
     protected function buildData()
     {
         if (!$this->payData['out_trade_no'] && !$this->payData['trade_no']) {
-            throw new PayParamException("缺少订单号");
+            throw new PayParamException('订单退款必须填写[out_trade_no,trade_no]中任意一个订单号');
         }
+
+        $this->payData['refund_amount'] /= 100;
 
         return parent::buildData();
     }
@@ -36,7 +38,7 @@ class Refund extends BaseAliStrategy
      */
     protected function getRequireParams()
     {
-        return ['app_id','refund_amount'];
+        return ['app_id', 'refund_amount'];
     }
 
     /**

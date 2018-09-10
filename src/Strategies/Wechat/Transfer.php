@@ -22,8 +22,6 @@ class Transfer extends BaseWechatStrategy
         $this->payData->mch_appid = $this->payData->appid;
 
         parent::buildData();
-        // 微信计费单位为分
-        $this->payData->amount *= 100;
 
         return $this->payData;
     }

@@ -24,7 +24,9 @@ class RefundQuery extends BaseWechatStrategy
             !$this->payData['out_refund_no'] &&
             !$this->payData['refund_id']
         ) {
-            throw new PayParamException('缺少订单号,订单号可为退款订单号');
+            throw new PayParamException(
+                '查询订单必须填写[out_trade_no,transaction_id,out_refund_no,refund_id]中任意一个订单号或退款记录号'
+            );
         }
 
         return parent::buildData();

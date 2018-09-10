@@ -17,13 +17,9 @@ class Refund extends BaseWechatStrategy
      */
     protected function buildData()
     {
-        if (!($this->payData['out_trade_no'] || $this->payData['transaction_id'])) {
-            throw new PayParamException("缺少订单号,请检查参数");
+        if (!$this->payData['out_trade_no'] && !$this->payData['transaction_id']) {
+            throw new PayParamException('订单退款必须填写[out_trade_no,transaction_id]中任意一个订单号');
         }
-
-        // 微信计费单位为分
-        $this->payData->refund_fee *= 100;
-        $this->payData->total_fee *= 100;
 
         return parent::buildData();
     }
@@ -35,7 +31,7 @@ class Refund extends BaseWechatStrategy
     {
         return [
             'appid', 'mch_id', 'total_fee', 'refund_fee',
-            'out_refund_no', 'ssl_cert_path','ssl_key_path'
+            'ssl_cert_path','ssl_key_path'
         ];
     }
 

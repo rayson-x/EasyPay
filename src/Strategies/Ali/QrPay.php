@@ -35,6 +35,17 @@ class QrPay extends BaseAliStrategy
             'timestamp','version','notify_url','app_auth_token','biz_content'
         ];
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function buildData()
+    {
+        // 支付单位为分,支付宝支付金额单位为元
+        $this->payData->total_amount /= 100;
+
+        return parent::buildData();
+    }
 
     /**
      * {@inheritDoc}

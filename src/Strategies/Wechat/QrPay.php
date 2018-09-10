@@ -18,8 +18,6 @@ class QrPay extends BaseWechatStrategy
         parent::buildData();
         // 声明交易方式为扫码支付
         $this->payData->trade_type = 'NATIVE';
-        // 微信计费单位为分
-        $this->payData->total_fee *= 100;
 
         return $this->payData;
     }

@@ -39,6 +39,17 @@ class WapPay extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
+    protected function buildData()
+    {
+        // 支付单位为分,支付宝支付金额单位为元
+        $this->payData->total_amount /= 100;
+
+        return parent::buildData();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function handleData($data)
     {
         return $this->getServerUrl() . "?" . http_build_query($data);

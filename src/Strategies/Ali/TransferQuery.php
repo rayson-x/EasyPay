@@ -11,7 +11,7 @@ class TransfersQuery extends BaseAliStrategy
     protected function buildData()
     {
         if (!$this->payData['out_biz_no'] && !$this->payData['order_id']) {
-            throw new PayParamException("缺少订单号");
+            throw new PayParamException('查询转账记录必须填写[out_biz_no,order_id]中任意一个订单号');
         }
 
         return parent::buildData();

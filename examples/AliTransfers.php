@@ -16,7 +16,7 @@ try {
         'payee_type'            =>  'ALIPAY_LOGONID',
         // 与 payee_type 选项进行联动
         'payee_account'         =>  'vcsrag0954@sandbox.com',
-        // 转账金额,单位为元,精确到分
+        // 转账金额,单位为分
         'amount'                =>  '1',
         // 付款方真实姓名
         'payer_real_name'       =>  '',

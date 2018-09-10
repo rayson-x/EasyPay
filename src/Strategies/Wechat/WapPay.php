@@ -71,8 +71,6 @@ class WapPay extends BaseWechatStrategy
         $this->payData->selected($this->getFillParams());
         // 设定交易模式为手机h5支付
         $this->payData->trade_type = 'MWEB';
-        // 微信计费单位为分
-        $this->payData->total_fee *= 100;
 
         return $this->payData;
     }

@@ -10,7 +10,7 @@ class Notify
 {
     public static $notifies = [
         'ali'     => \EasyPay\Notifies\Ali\Notify::class,
-        'wetchat' => \EasyPay\Notifies\Wechat\Notify::class,    
+        'wechat'  => \EasyPay\Notifies\Wechat\Notify::class,    
     ];
 
     public static function get($service, $request = null)

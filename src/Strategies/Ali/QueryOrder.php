@@ -17,7 +17,7 @@ class QueryOrder extends BaseAliStrategy
     protected function buildData()
     {
         if (!$this->payData['out_trade_no'] && !$this->payData['trade_no']) {
-            throw new PayParamException("缺少订单号");
+            throw new PayParamException('查询订单必须填写[out_trade_no,trade_no]中任意一个订单号');
         }
 
         return parent::buildData();

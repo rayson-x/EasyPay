@@ -23,7 +23,7 @@ foreach (explode("\n", file_get_contents(__DIR__ . "/../.env")) as $env) {
         // 商户ID
         'mch_id'            =>  getenv('WEIXIN_MCH_ID'),
         // 回调地址
-        'notify_url'        =>  'http://example.com',
+        'notify_url'        =>  getenv('WEIXIN_NOTIFY_URL'),
         // ssl证书路径
         'ssl_cert_path'     =>  getenv('WEIXIN_CERT_FILE'),
         // ssl密钥路径

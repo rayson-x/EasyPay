@@ -20,8 +20,6 @@ class PubPay extends BaseWechatStrategy
         parent::buildData();
         // 设定交易模式为公众号支付
         $this->payData->trade_type = 'JSAPI';
-        // 微信计费单位为分
-        $this->payData->total_fee *= 100;
 
         return $this->payData;
     }
