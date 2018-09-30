@@ -2,6 +2,7 @@
 
 namespace EasyPay;
 
+use EasyPay\Interfaces\NotifyInterface;
 use Illuminate\Http\Request as LaravelRequest;
 use Psr\Http\Message\RequestInterface as PsrRequest;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
@@ -13,6 +14,11 @@ class Notify
         'wechat'  => \EasyPay\Notifies\Wechat\Notify::class,    
     ];
 
+    /**
+     * @param $service
+     * @param $request
+     * @return NotifyInterface
+     */
     public static function get($service, $request = null)
     {
         $service = self::$notifies[$service];

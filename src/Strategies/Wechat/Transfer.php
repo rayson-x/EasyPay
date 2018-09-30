@@ -21,9 +21,7 @@ class Transfer extends BaseWechatStrategy
         $this->payData->mchid = $this->payData->mch_id;
         $this->payData->mch_appid = $this->payData->appid;
 
-        parent::buildData();
-
-        return $this->payData;
+        return parent::buildData();
     }
 
     /**

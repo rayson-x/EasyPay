@@ -55,20 +55,22 @@ class TradeData extends BaseTradeData
     public function makeSign()
     {
         // 默认使用MD5加密
-        $signType = Config::wechat('sign_type') ?: 'MD5';
+        $signType = $this->getOption('sign_type') ?: 'MD5';
 
-        if (!$key = Config::wechat('key')) {
+        if (!$key = $this->getOption('key')) {
             throw new PayParamException('商户支付密钥不存在');
         }
 
+        $signStr = $this->buildSignData() . "&key={$key}";
+        
         switch ($signType) {
             case 'MD5':
-                $signStr = $this->buildSignData() . "&key={$key}";
                 $result = md5($signStr);
                 break;
-            case 'HMAC-SHA256':
-                $result = base64_encode(hash_hmac('sha256', $this->buildSignData(), $key));
-                break;
+            // TODO HMAC-SHA256 响应时签名校验失败
+            // case 'HMAC-SHA256':
+            //     $result = base64_encode(hash_hmac('sha256', $signStr, $key));
+            //     break;
             default:
                 throw new PayException("签名类型错误");
         }
@@ -99,7 +101,26 @@ class TradeData extends BaseTradeData
      */
     public function verifySign()
     {
-        if (!$this->offsetExists('sign') || $this->sign != $this->makeSign()) {
+        if (!$this->offsetExists('sign')) {
+            throw new SignVerifyFailException($this, '签名校验失败');
+        }
+
+        $signType = $this->getOption('sign_type') ?: 'MD5';
+        $key      = $this->getOption('key');
+
+        switch ($signType) {
+            case 'MD5':
+                $sign = $this->makeSign();
+                break;
+            // case 'HMAC-SHA256':
+            //     $signStr = $this->buildSignData() . "&key={$key}";
+            //     $sign = strtoupper(hash_hmac('sha256', $signStr, $key));
+            //     break;
+            default:
+                throw new PayException("签名类型错误");
+        }
+
+        if ($this->sign != $sign) {
             throw new SignVerifyFailException($this, '签名校验失败');
         }
     }

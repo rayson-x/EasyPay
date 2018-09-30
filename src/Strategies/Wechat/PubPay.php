@@ -17,11 +17,11 @@ class PubPay extends BaseWechatStrategy
      */
     protected function buildData()
     {
-        parent::buildData();
+        $payData = parent::buildData();
         // 设定交易模式为公众号支付
-        $this->payData->trade_type = 'JSAPI';
+        $payData->trade_type = 'JSAPI';
 
-        return $this->payData;
+        return $payData;
     }
 
     /**

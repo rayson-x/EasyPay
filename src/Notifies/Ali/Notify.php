@@ -78,6 +78,9 @@ class Notify extends BaseNoitfy
         return new self(new TradeData($result));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __construct(TradeData $tradeData)
     {
         $this->tradeData = $tradeData;

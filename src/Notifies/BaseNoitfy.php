@@ -28,16 +28,64 @@ abstract class BaseNoitfy implements NotifyInterface
      */
     protected static $badModes = ['cli', 'continuity', 'milter', 'webjames'];
 
-    public function __get($key)
+    /**
+     * @param mixed $offset
+     * @return null
+     */
+    public function offsetGet($offset)
     {
-        return $this->tradeData[$key];
+        return $this->tradeData->offsetGet($offset);
     }
 
-    public function __set($key, $value)
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value)
     {
-        $this->tradeData[$key] = $value;
+        $this->tradeData->offsetSet($offset, $value);
     }
 
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset($offset)
+    {
+        $this->tradeData->offsetUnset($offset);
+    }
+
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return $this->tradeData->offsetExists($offset);
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function __set($name,$value)
+    {
+        $this->offsetSet($name, $value);
+    }
+
+    /**
+     * @param $name
+     * @return null
+     */
+    public function __get($name)
+    {
+        return $this->offsetGet($name);
+    }
+
+    /**
+     * @param $method
+     * @param array $params
+     * @return mixed
+     */
     public function __call($method, $params)
     {
         return $this->tradeData->$method(...$params);

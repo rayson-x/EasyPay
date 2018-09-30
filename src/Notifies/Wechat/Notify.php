@@ -74,6 +74,9 @@ class Notify extends BaseNoitfy
         return new self(TradeData::createFromXML($input));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __construct(TradeData $tradeData)
     {
         $this->tradeData = $tradeData;

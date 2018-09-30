@@ -1,6 +1,7 @@
 <?php
 namespace EasyPay\Interfaces;
 
+use ArrayAccess;
 use Psr\Http\Message\RequestInterface;
 use Illuminate\Http\Request as LaravelRequest;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
  * Interface NotifyInterface
  * @package EasyPay\Interfaces
  */
-interface NotifyInterface
+interface NotifyInterface extends ArrayAccess
 {
     public static function fromGlobal();
     

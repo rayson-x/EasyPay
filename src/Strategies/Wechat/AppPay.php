@@ -59,11 +59,11 @@ class AppPay extends BaseWechatStrategy
      */
     protected function buildData()
     {
-        parent::buildData();
+        $payData = parent::buildData();
         // 设定交易模式为app支付
-        $this->payData->trade_type = 'APP';
+        $payData->trade_type = 'APP';
 
-        return $this->payData;
+        return $payData;
     }
 
     /**

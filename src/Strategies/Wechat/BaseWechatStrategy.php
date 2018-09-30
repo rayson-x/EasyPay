@@ -43,7 +43,15 @@ abstract class BaseWechatStrategy implements StrategyInterface
      */
     public function __construct(array $options = [])
     {
-        $this->payData = new TradeData(array_merge(Config::wechat(), $options));
+        $options = array_merge(Config::wechat(), $options);
+
+        $data = array_intersect_key($options, [
+            'appid' => true, 
+            'mch_id' => true, 
+            'notify_url' => true
+        ]);
+
+        $this->payData = new TradeData($data, $options);
     }
 
     /**
@@ -74,7 +82,7 @@ abstract class BaseWechatStrategy implements StrategyInterface
     protected function handleData($result)
     {
         // 解析响应Xml内容
-        $data = TradeData::createFromXML($result);
+        $data = TradeData::createFromXML($result, $this->payData->getOptions());
 
         // 通信是否成功
         if (!$data->isSuccess($data['return_code'])) {
@@ -108,8 +116,8 @@ abstract class BaseWechatStrategy implements StrategyInterface
         // 初始化Http客户端
         $client = new HttpClient($method, $url);
 
-        $sslKey = Config::wechat('ssl_key_path');
-        $sslCert = Config::wechat('ssl_cert_path');
+        $sslKey = $this->payData->getOption('ssl_key_path');
+        $sslCert = $this->payData->getOption('ssl_cert_path');
 
         // 如果设置了SSL证书与秘钥,自动启用SSL
         if ($sslKey && $sslCert) {
@@ -132,12 +140,13 @@ abstract class BaseWechatStrategy implements StrategyInterface
      */
     protected function buildData()
     {
+        $payData = clone $this->payData;
         // 检查必要参数是否存在
-        $this->payData->checkParamsEmpty($this->getRequireParams());
+        $payData->checkParamsEmpty($this->getRequireParams());
         // 填入所有可用参数,并将不可用参数清除
-        $this->payData->selected($this->getFillParams());
+        $payData->selected($this->getFillParams());
 
-        return $this->payData;
+        return $payData;
     }
     
     /**

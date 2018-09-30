@@ -4,6 +4,7 @@ namespace EasyPay\TradeData;
 
 use ArrayAccess;
 use ArrayIterator;
+use EasyPay\Config;
 use JsonSerializable;
 use IteratorAggregate;
 use EasyPay\Utils\XmlElement;
@@ -31,12 +32,19 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
     protected $original = [];
 
     /**
+     * 支付配置项
+     * 
+     * @var array
+     */
+    protected $options = [];
+
+    /**
      * 通过XML获取数据集
      *
      * @param string[XML] $input
      * @return static
      */
-    public static function createFromXML($input)
+    public static function createFromXML($input, $options = [])
     {
         $backup = libxml_disable_entity_loader(true);
         $result = simplexml_load_string($input, XmlElement::class, LIBXML_NOCDATA);
@@ -46,7 +54,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
             throw new UnexpectedValueException('XML Error');
         }
 
-        return new static($result->toArray());
+        return new static($result->toArray(), $options);
     }
 
     /**
@@ -57,27 +65,29 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      * @param $options
      * @return static
      */
-    public static function createFromJson($input, $depth = 512, $options = 0)
+    public static function createFromJson($input, $options = [])
     {
-        $result = json_decode($input, true, $depth, $options);
+        $result = json_decode($input, true);
 
         if ($result === null && json_last_error() !== JSON_ERROR_NONE) {
             throw new UnexpectedValueException(json_last_error_msg(), json_last_error());
         }
 
-        return new static($result);
+        return new static($result, $options);
     }
 
     /**
      * PayDataBuilder Construct
      *
-     * @param \Iterator|array $original
+     * @param \Iterator|array $attributes
+     * @param array $options
      */
-    public function __construct($original)
+    public function __construct($attributes, $options = [])
     {
-        $this->replace($original);
+        $this->replace($attributes);
 
         $this->original = $this->attributes;
+        $this->options  = $options;
     }
 
     /**
@@ -149,6 +159,33 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
     public function toArray()
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param string $key
+     * @return mixed
+     */
+    public function getOption($key)
+    {
+        return array_key_exists($key, $this->options) ? $this->options[$key] : null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    public function setOption($key, $value)
+    {
+        return $this->options[$key] = $value;;
     }
 
     /**
