@@ -15,8 +15,8 @@ class PayFactory
         'ali.wap.pay'           =>  \EasyPay\Strategies\Ali\WapPay::class,
         'ali.refund'            =>  \EasyPay\Strategies\Ali\Refund::class,
         'ali.transfer'          =>  \EasyPay\Strategies\Ali\Transfer::class,
-        'ali.query.order'       =>  \EasyPay\Strategies\Ali\QueryOrder::class,
-        'ali.close.order'       =>  \EasyPay\Strategies\Ali\CloseOrder::class,
+        'ali.order.query'       =>  \EasyPay\Strategies\Ali\QueryOrder::class,
+        'ali.order.close'       =>  \EasyPay\Strategies\Ali\CloseOrder::class,
         'ali.refund.query'      =>  \EasyPay\Strategies\Ali\RefundQuery::class,
 
         // 微信可用操作
