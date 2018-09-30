@@ -30,8 +30,8 @@ class Transfer extends BaseWechatStrategy
     protected function getRequireParams()
     {
         return [
-            'mch_appid','mchid','partner_trade_no','openid',
-            'check_name','amount','desc','spbill_create_ip',
+            'partner_trade_no','openid','check_name',
+            'amount','desc','spbill_create_ip',
             'ssl_cert_path','ssl_key_path'
         ];
     }
