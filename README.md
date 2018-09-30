@@ -112,7 +112,7 @@ $notify = Notify::get('wechat');
 $notify = Notify::get('ali');
 ```
 
-> 可以通过laravel,symfony,psr-7的request对象来构建通知消息对象
+可以通过laravel,symfony,psr-7的request对象来构建通知消息对象
 > $notify = Notify::get(string $service [, Symfony\Component\HttpFoundation\Request|Illuminate\Http\Request|Psr\Http\Message\RequestInterface $request = null]);
 
 ## Todo
