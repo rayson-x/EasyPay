@@ -3,7 +3,7 @@ namespace EasyPay\Strategies\Ali;
 
 use EasyPay\Exception\PayParamException;
 
-class TransfersQuery extends BaseAliStrategy
+class TransferQuery extends BaseAliStrategy
 {
     /**
      * {@inheritDoc}

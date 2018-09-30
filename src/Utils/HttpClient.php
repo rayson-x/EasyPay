@@ -2,7 +2,6 @@
 namespace EasyPay\Utils;
 
 use GuzzleHttp\Client;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**

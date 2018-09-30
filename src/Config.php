@@ -51,8 +51,6 @@ class Config
             'sign_type'         =>  'RSA',
             // 支付宝api版本
             'version'           =>  '1.0',
-            // 销售产品码
-            'product_code'      =>  'QUICK_WAP_PAY'
         ],
     ];
 

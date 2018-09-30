@@ -38,4 +38,23 @@ class Notify
 
         throw new \RuntimeException('无法处理的请求');
     }
+
+    /**
+     * @param $service
+     * @param $callback
+     * @param $request
+     * @return string
+     */
+    public static function handle($service, callable $callback, $request = null)
+    {
+        $notify = self::get($service, $request);
+
+        try {
+            return $notify->success($callback($notify));
+        } catch (\Exception $e) {
+            return $notify->fail($e->getMessage());
+        } catch (\Throwable $e) {
+            return $notify->fail($e->getMessage());
+        }
+    }
 }

@@ -95,4 +95,20 @@ class Notify extends BaseNoitfy
     {
         $this->tradeData->verifyRequestSign();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function success($message = "OK")
+    {
+        return 'success';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fail($message = "ERROR")
+    {
+        return 'fail';
+    }
 }

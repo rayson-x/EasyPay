@@ -21,4 +21,8 @@ interface NotifyInterface extends ArrayAccess
     public static function fromLaravelRequest(LaravelRequest $request);
 
     public static function fromPsr7Request(RequestInterface $request);
+
+    public function success($message = "OK");
+
+    public function fail($message = "ERROR");
 }

@@ -102,6 +102,19 @@ header('Content-Type: image/png');
 echo $qrCode->get('png');
 ```
 
+## 获取通知信息
+```php
+use EasyPay\Notify;
+
+// 获取微信通知信息
+$notify = Notify::get('wechat');
+// 获取支付宝通知信息
+$notify = Notify::get('ali');
+```
+
+> 可以通过laravel,symfony,psr-7的request对象来构建通知消息对象
+> $notify = Notify::get(string $service [, Symfony\Component\HttpFoundation\Request|Illuminate\Http\Request|Psr\Http\Message\RequestInterface $request = null]);
+
 ## Todo
 * 将RSA加密分离为单独的库,同时添加密钥解析
 * 支持多种编码(目前仅支持utf-8)

@@ -49,7 +49,17 @@ abstract class BaseAliStrategy implements StrategyInterface
      */
     public function __construct(array $options = [])
     {
-        $this->payData = new TradeData(array_merge(Config::ali(), $options));
+        $options = array_merge(Config::ali(), $options);
+
+        $data = array_intersect_key($options, [
+            'app_id' => true, 
+            'format' => true, 
+            'charset' => true,
+            'version' => true,
+            'sign_type' => true,
+        ]);
+
+        $this->payData = new TradeData($data, $options);
     }
 
     /**

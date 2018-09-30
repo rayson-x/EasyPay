@@ -91,4 +91,26 @@ class Notify extends BaseNoitfy
     {
         $this->tradeData->verifySign();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function success($message = "OK")
+    {
+        return (new TradeData([
+            'return_code' => 'SUCCESS',
+            'return_msg'  => $message
+        ]))->toXml();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fail($message = "ERROR")
+    {
+        return (new TradeData([
+            'return_code' => 'FAIL',
+            'return_msg'  => $message
+        ]))->toXml();
+    }
 }
