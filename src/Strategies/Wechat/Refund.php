@@ -21,6 +21,10 @@ class Refund extends BaseWechatStrategy
             throw new PayParamException('订单退款必须填写[out_trade_no,transaction_id]中任意一个订单号');
         }
 
+        if (!$this->payData->getOption('ssl_key_path') || !$this->payData->getOption('ssl_cert_path')) {
+            throw new PayParamException('订单退款必须设置ssl密钥与证书');
+        }
+
         return parent::buildData();
     }
 
@@ -30,8 +34,8 @@ class Refund extends BaseWechatStrategy
     protected function getRequireParams()
     {
         return [
-            'appid', 'mch_id', 'total_fee', 'refund_fee',
-            'ssl_cert_path','ssl_key_path'
+            'appid', 'mch_id', 'total_fee', 
+            'refund_fee', 'out_refund_no'
         ];
     }
 
