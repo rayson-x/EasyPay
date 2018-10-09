@@ -9,7 +9,7 @@ class PayFactory
     /**
      * @var array
      */
-    public static $provides = [
+    protected static $provides = [
         // 支付宝可用操作
         'ali.qr.pay'            =>  \EasyPay\Strategies\Ali\QrPay::class,
         'ali.wap.pay'           =>  \EasyPay\Strategies\Ali\WapPay::class,
@@ -18,6 +18,7 @@ class PayFactory
         'ali.order.query'       =>  \EasyPay\Strategies\Ali\QueryOrder::class,
         'ali.order.close'       =>  \EasyPay\Strategies\Ali\CloseOrder::class,
         'ali.refund.query'      =>  \EasyPay\Strategies\Ali\RefundQuery::class,
+        'ali.transfer.query'    =>  \EasyPay\Strategies\Ali\TransferQuery::class,
 
         // 微信可用操作
         'wechat.qr.pay'         =>  \EasyPay\Strategies\Wechat\QrPay::class,
@@ -29,6 +30,7 @@ class PayFactory
         'wechat.order.query'    =>  \EasyPay\Strategies\Wechat\QueryOrder::class,
         'wechat.order.close'    =>  \EasyPay\Strategies\Wechat\CloseOrder::class,
         'wechat.refund.query'   =>  \EasyPay\Strategies\Wechat\RefundQuery::class,
+        'wechat.transfer.query' =>  \EasyPay\Strategies\Wechat\TransferQuery::class,
     ];
 
     /**

@@ -33,7 +33,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
 
     /**
      * 支付配置项
-     * 
+     *
      * @var array
      */
     protected $options = [];
@@ -70,14 +70,17 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
         $result = json_decode($input, true);
 
         if ($result === null && json_last_error() !== JSON_ERROR_NONE) {
-            throw new UnexpectedValueException(json_last_error_msg(), json_last_error());
+            throw new UnexpectedValueException(
+                json_last_error_msg(),
+                json_last_error()
+            );
         }
 
         return new static($result, $options);
     }
 
     /**
-     * PayDataBuilder Construct
+     * BaseTradeData Construct
      *
      * @param \Iterator|array $attributes
      * @param array $options
@@ -185,7 +188,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      */
     public function setOption($key, $value)
     {
-        return $this->options[$key] = $value;;
+        return $this->options[$key] = $value;
     }
 
     /**
@@ -214,7 +217,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
         $dom = new XmlElement('<xml/>');
 
         foreach ($this as $key => $value) {
-            $dom->addChild($key,$value);
+            $dom->addChild($key, $value);
         }
 
         return $dom->asXML();
@@ -262,7 +265,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
         static $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
         $str = '';
-        for ( $i = 0; $i < $length; $i++ ) {
+        for ($i = 0; $i < $length; $i++) {
             $str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
         }
 
@@ -342,7 +345,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      * @param $name
      * @param $value
      */
-    public function __set($name,$value)
+    public function __set($name, $value)
     {
         $this->offsetSet($name, $value);
     }
