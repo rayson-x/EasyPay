@@ -14,13 +14,13 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
  */
 interface NotifyInterface extends ArrayAccess
 {
-    public static function fromGlobal();
-    
-    public static function fromSymfonyRequest(SymfonyRequest $request);
+    public static function fromGlobal($options = []);
 
-    public static function fromLaravelRequest(LaravelRequest $request);
+    public static function fromSymfonyRequest(SymfonyRequest $request, $options = []);
 
-    public static function fromPsr7Request(RequestInterface $request);
+    public static function fromLaravelRequest(LaravelRequest $request, $options = []);
+
+    public static function fromPsr7Request(RequestInterface $request, $options = []);
 
     public function success($message = "OK");
 

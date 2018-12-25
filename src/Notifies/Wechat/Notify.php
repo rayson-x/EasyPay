@@ -14,7 +14,7 @@ class Notify extends BaseNoitfy
     /**
      * {@inheritDoc}
      */
-    public static function fromGlobal()
+    public static function fromGlobal($options = [])
     {
         if (in_array(PHP_SAPI, self::$badModes)) {
             throw new RuntimeException('运行模式错误,必须运行在指定的模式下');
@@ -26,52 +26,46 @@ class Notify extends BaseNoitfy
             case "POST" :
                 $input = file_get_contents('php://input');
 
-                return new self(TradeData::createFromXML($input));
+                return new self(TradeData::createFromXML($input, $options));
             default :
-                return new self(new TradeData($_REQUEST));
+                return new self(new TradeData($_REQUEST, $options));
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public static function fromSymfonyRequest(SymfonyRequest $request)
+    public static function fromSymfonyRequest(SymfonyRequest $request, $options = [])
     {
         $method = $request->getMethod();
 
-        switch ($method) {
-            case "POST" :
-                $input = $request->getContent();
-
-                return new self(TradeData::createFromXML($input));
-            default :
-                throw new RuntimeException('无法处理的请求');
+        if ($method !== 'POST') {
+            throw new RuntimeException('无法处理的请求');
         }
+
+        return new self(TradeData::createFromXML($request->getContent(), $options));
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public static function fromLaravelRequest(LaravelRequest $request)
+    public static function fromLaravelRequest(LaravelRequest $request, $options = [])
     {
-        return new self(new TradeData($request->input()));
+        return new self(new TradeData($request->input(), $options));
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public static function fromPsr7Request(RequestInterface $request)
+    public static function fromPsr7Request(RequestInterface $request, $options = [])
     {
         $method = $request->getMethod();
 
-        switch ($method) {
-            case "POST" :
-                $input = (string) $request->getBody();
-            default :
-                throw new RuntimeException('无法处理的请求');
+        if ($method !== 'POST') {
+            throw new RuntimeException('无法处理的请求');
         }
 
-        return new self(TradeData::createFromXML($input));
+        return new self(TradeData::createFromXML((string) $request->getBody(), $options));
     }
 
     /**

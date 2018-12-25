@@ -4,7 +4,6 @@ namespace EasyPay\TradeData;
 
 use ArrayAccess;
 use ArrayIterator;
-use EasyPay\Config;
 use JsonSerializable;
 use IteratorAggregate;
 use EasyPay\Utils\XmlElement;

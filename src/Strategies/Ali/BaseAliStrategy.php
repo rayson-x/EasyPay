@@ -108,7 +108,10 @@ abstract class BaseAliStrategy implements StrategyInterface
         // 请求支付宝服务器
         $response = $this->sendHttpRequest('POST', $url);
         // 解析响应内容
-        $data = TradeData::createFromJson((string) $response->getBody());
+        $data = TradeData::createFromJson(
+            $response->getBody()->getContents(), 
+            $this->payData->getOptions()
+        );
         // 验证签名
         $data->verifyResponseSign();
 
@@ -139,7 +142,7 @@ abstract class BaseAliStrategy implements StrategyInterface
     protected function getServerUrl()
     {
         // 支持沙箱测试
-        return Config::ali('is_sand_box')
+        return $this->payData->getOption('is_sand_box')
             ? "https://openapi.alipaydev.com/gateway.do"
             : "https://openapi.alipay.com/gateway.do";
     }

@@ -14,7 +14,7 @@ class Notify extends BaseNoitfy
     /**
      * {@inheritDoc}
      */
-    public static function fromGlobal()
+    public static function fromGlobal($options = [])
     {
         if (in_array(PHP_SAPI, self::$badModes)) {
             throw new RuntimeException('运行模式错误,必须运行在指定的模式下');
@@ -24,58 +24,64 @@ class Notify extends BaseNoitfy
 
         switch ($method) {
             case "GET" :
-                return new self(new TradeData($_GET));
+                return new self(new TradeData($_GET, $options));
             case "POST" :
-                return new self(new TradeData($_POST));
+                return new self(new TradeData($_POST, $options));
             default :
-                return new self(new TradeData($_REQUEST));
+                return new self(new TradeData($_REQUEST, $options));
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public static function fromSymfonyRequest(SymfonyRequest $request)
+    public static function fromSymfonyRequest(SymfonyRequest $request, $options = [])
     {
         $method = $request->getMethod();
 
         switch ($method) {
             case "GET" :
-                return new self(new TradeData($request->query->all()));
+                $input = $request->query->all();
+                break;
             case "POST" :
-                return new self(new TradeData($request->request->all()));
+                $input = $request->request->all();
+                break;
             default :
                 throw new RuntimeException('无法处理的请求');
         }
+
+        return new self(new TradeData($input, $options));
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public static function fromLaravelRequest(LaravelRequest $request)
+    public static function fromLaravelRequest(LaravelRequest $request, $options = [])
     {
-        return new self(new TradeData($request->input()));
+        return new self(new TradeData($request->input(), $options));
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public static function fromPsr7Request(RequestInterface $request)
+    public static function fromPsr7Request(RequestInterface $request, $options = [])
     {
         $method = $request->getMethod();
 
         switch ($method) {
             case "GET" :
                 $input = $request->getUri()->getQuery();
+                break;
             case "POST" :
                 $input = (string) $request->getBody();
+                break;
             default :
                 throw new RuntimeException('无法处理的请求');
         }
 
         parse_str($input, $result);
 
-        return new self(new TradeData($result));
+        return new self(new TradeData($result, $options));
     }
 
     /**
@@ -87,7 +93,7 @@ class Notify extends BaseNoitfy
 
         $this->verifySign();
     }
-    
+
     /**
      * {@inheritDoc}
      */

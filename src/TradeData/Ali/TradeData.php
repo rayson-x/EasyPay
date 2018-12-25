@@ -1,7 +1,6 @@
 <?php
 namespace EasyPay\TradeData\Ali;
 
-use EasyPay\Config;
 use RuntimeException;
 use EasyPay\Exception\PayException;
 use EasyPay\TradeData\BaseTradeData;
@@ -22,7 +21,7 @@ class TradeData extends BaseTradeData
     public function makeSign()
     {
         // ali 加密必须要证书
-        if (!$sslPrivate = Config::ali('ssl_private_key')) {
+        if (!$sslPrivate = $this->getOption('ssl_private_key')) {
             throw new RuntimeException("加密签名需要私钥证书,请检查配置");
         }
 
@@ -113,7 +112,7 @@ class TradeData extends BaseTradeData
     protected function verifySign($message, $sign)
     {
         // ali 验证签名
-        if (!$sslPublicKey = Config::ali('ali_public_key')) {
+        if (!$sslPublicKey = $this->getOption('ali_public_key')) {
             throw new PayParamException("验证签名需要公钥证书,请检查配置");
         }
         // 获取加密方式
@@ -136,7 +135,7 @@ class TradeData extends BaseTradeData
         // 获取加密方式
         $type = $this->offsetExists('sign_type')
             ? strtoupper($this->sign_type)
-            : Config::ali('sign_type');
+            : $this->getOption('sign_type');
 
         switch ($type) {
             case "RSA" :

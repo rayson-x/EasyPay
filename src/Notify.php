@@ -19,21 +19,28 @@ class Notify
      * @param $request
      * @return NotifyInterface
      */
-    public static function get($service, $request = null)
+    public static function get($service, $options = [], $request = null)
+    {
+        if (!is_null($request)) {
+            return self::fromRequest($service, $request, $options);
+        }
+
+        $service = self::$notifies[$service];
+
+        return $service::fromGlobal($options);
+    }
+
+    public static function fromRequest($service, $request, $options = [])
     {
         $service = self::$notifies[$service];
 
-        if (is_null($request)) {
-            return $service::fromGlobal();
-        }
-
         switch ($request) {
             case $request instanceof PsrRequest:
-                return $service::fromPsr7Request($request);
+                return $service::fromPsr7Request($request, $options);
             case $request instanceof LaravelRequest:
-                return $service::fromLaravelRequest($request);
+                return $service::fromLaravelRequest($request, $options);
             case $request instanceof SymfonyRequest:
-                return $service::fromSymfonyRequest($request);
+                return $service::fromSymfonyRequest($request, $options);
         }
 
         throw new \RuntimeException('无法处理的请求');
@@ -45,9 +52,13 @@ class Notify
      * @param $request
      * @return string
      */
-    public static function handle($service, callable $callback, $request = null)
-    {
-        $notify = self::get($service, $request);
+    public static function handle(
+        $service,
+        callable $callback, 
+        $options = [],
+        $request = null
+    ) {
+        $notify = self::get($service, $options, $request);
 
         try {
             return $notify->success($callback($notify));

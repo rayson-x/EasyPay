@@ -2,7 +2,6 @@
 namespace EasyPay\TradeData\Wechat;
 
 use DOMDocument;
-use EasyPay\Config;
 use EasyPay\Exception\PayException;
 use EasyPay\TradeData\BaseTradeData;
 use EasyPay\Exception\PayParamException;
