@@ -25,6 +25,7 @@ class PayFactory
         'wechat.pub.pay'        =>  \EasyPay\Strategies\Wechat\PubPay::class,
         'wechat.app.pay'        =>  \EasyPay\Strategies\Wechat\AppPay::class,
         'wechat.wap.pay'        =>  \EasyPay\Strategies\Wechat\WapPay::class,
+        'wechat.program.pay'    =>  \EasyPay\Strategies\Wechat\ProgramPay::class,
         'wechat.refund'         =>  \EasyPay\Strategies\Wechat\Refund::class,
         'wechat.transfer'       =>  \EasyPay\Strategies\Wechat\Transfer::class,
         'wechat.order.query'    =>  \EasyPay\Strategies\Wechat\QueryOrder::class,

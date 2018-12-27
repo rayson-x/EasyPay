@@ -3,6 +3,7 @@
 namespace EasyPay\Strategies\Wechat;
 
 use EasyPay\TradeData\Wechat\TradeData;
+use EasyPay\Exception\PayParamException;
 
 /**
  * 请求微信公众号支付接口,返回Js api使用的Json数据
@@ -10,7 +11,7 @@ use EasyPay\TradeData\Wechat\TradeData;
  * Class PubPay
  * @package EasyPay\Strategies\Wechat
  */
-class PubPay extends BaseWechatStrategy
+class ProgramPay extends BaseWechatStrategy
 {
     /**
      * {@inheritDoc}
@@ -18,8 +19,13 @@ class PubPay extends BaseWechatStrategy
     protected function buildData()
     {
         $payData = parent::buildData();
-        // 设定交易模式为公众号支付
+        // 设定交易模式为小程序支付
         $payData->trade_type = 'JSAPI';
+        // 检查小程序id是否配置
+        if (!$appid = $payData->getOption('program_appid')) {
+            throw new PayParamException('小程序支付必须配置小程序id');
+        }
+        $payData->setAttribute('appid', $appid);
 
         return $payData;
     }
@@ -31,7 +37,7 @@ class PubPay extends BaseWechatStrategy
     {
         return [
             'appid', 'mch_id', 'body', 'out_trade_no','total_fee',
-            'spbill_create_ip', 'notify_url','openid',
+            'spbill_create_ip', 'notify_url', 'openid',
         ];
     }
 

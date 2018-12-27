@@ -83,7 +83,7 @@ class AppPay extends BaseWechatStrategy
             'prepayid'  => $result->prepay_id,
             'package'   => 'Sign=WXPay',
             'timestamp' => time(),
-        ]);
+        ], $this->payData->getOptions());
 
         $data->setSign();
 

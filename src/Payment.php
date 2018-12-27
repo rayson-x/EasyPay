@@ -9,6 +9,9 @@ class Payment
     // 微信公众号支付
     const WX_PUB_PAY = 'wechat.pub.pay';
 
+    // 微信公众号支付
+    const WX_PROGRAM_PAY = 'wechat.program.pay';
+
     // 微信企业转账
     const WX_TRANSFER = 'wechat.transfer';
 
