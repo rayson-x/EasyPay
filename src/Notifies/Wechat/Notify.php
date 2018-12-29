@@ -51,7 +51,7 @@ class Notify extends BaseNoitfy
      */
     public static function fromLaravelRequest(LaravelRequest $request, $options = [])
     {
-        return new self(new TradeData($request->input(), $options));
+        return new self(TradeData::createFromXML($request->getContent(), $options));
     }
 
     /**
