@@ -41,16 +41,12 @@ class DownloadBill extends BaseAliStrategy
      */
     protected function buildBizContent()
     {
-        $data = [
+        return [
             // 账单类型 (trade、signcustomer)
             'bill_type' => $this->payData['bill_type'],
             // 账单时间
             'bill_date' => $this->payData['bill_date'],
         ];
-
-        array_removal_empty($data);
-
-        return $data;
     }
 
     /**

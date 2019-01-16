@@ -60,7 +60,7 @@ class WapPay extends BaseAliStrategy
      */
     protected function buildBizContent()
     {
-        $data = [
+        return [
             // 交易的具体描述信息
             'body'                 => $this->payData['body'],
             // 商品的标题
@@ -92,10 +92,5 @@ class WapPay extends BaseAliStrategy
             // 商户门店编号
             'store_id'             => $this->payData['store_id'],
         ];
-
-        // 清除空参数
-        array_removal_empty($data);
-
-        return $data;
     }
 }

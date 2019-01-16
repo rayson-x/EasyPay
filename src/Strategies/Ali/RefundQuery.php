@@ -55,7 +55,7 @@ class RefundQuery extends BaseAliStrategy
      */
     protected function buildBizContent()
     {
-        $data = [
+        return [
             // 商户唯一订单号
             'out_trade_no'   => $this->payData['out_trade_no'],
             // 支付宝唯一订单号
@@ -63,9 +63,5 @@ class RefundQuery extends BaseAliStrategy
             // 标识一次退款请求
             'out_request_no' => $this->payData['out_request_no'],
         ];
-
-        array_removal_empty($data);
-
-        return $data;
     }
 }

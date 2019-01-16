@@ -53,7 +53,7 @@ class Transfer extends BaseAliStrategy
      */
     protected function buildBizContent()
     {
-        $data = [
+        return [
             // 商户转账唯一订单号
             'out_biz_no'      => $this->payData['out_biz_no'],
             // 收款方账户类型 ALIPAY_USERID 为用户在支付宝的唯一ID,ALIPAY_LOGONID 为支付宝用户登录账户
@@ -73,9 +73,5 @@ class Transfer extends BaseAliStrategy
             // 扩展参数(详细参数参考支付宝文档)
             'ext_param'       => $this->payData['ext_param'],
         ];
-
-        array_removal_empty($data);
-
-        return $data;
     }
 }
