@@ -46,7 +46,7 @@ class CloseOrder extends BaseAliStrategy
     {
         return [
             'app_id', 'method', 'format', 'charset', 'sign_type', 'sign',
-            'timestamp', 'version', 'notify_url', 'app_auth_token', 'biz_content'
+            'timestamp', 'version', 'notify_url', 'app_auth_token', 'biz_content',
         ];
     }
 
@@ -59,9 +59,9 @@ class CloseOrder extends BaseAliStrategy
             // 商户唯一订单号
             'out_trade_no' => $this->payData['out_trade_no'],
             // 支付宝唯一订单号
-            'trade_no'     => $this->payData['trade_no'],
+            'trade_no' => $this->payData['trade_no'],
             // 商户的操作员编号
-            'operator_id'  => $this->payData['trade_no'],
+            'operator_id' => $this->payData['trade_no'],
         ];
     }
 }

@@ -40,7 +40,7 @@ class TransferQuery extends BaseAliStrategy
     {
         return [
             'app_id', 'method', 'format', 'charset', 'sign_type', 'sign',
-            'timestamp', 'version', 'app_auth_token', 'biz_content'
+            'timestamp', 'version', 'app_auth_token', 'biz_content',
         ];
     }
 
@@ -53,7 +53,7 @@ class TransferQuery extends BaseAliStrategy
             // 商户转账唯一订单号
             'out_biz_no' => $this->payData['out_biz_no'],
             // 支付宝转账单据号
-            'order_id'   => $this->payData['order_id'],
+            'order_id' => $this->payData['order_id'],
         ];
     }
 }

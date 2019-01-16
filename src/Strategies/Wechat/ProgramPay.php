@@ -2,8 +2,8 @@
 
 namespace EasyPay\Strategies\Wechat;
 
-use EasyPay\TradeData\Wechat\TradeData;
 use EasyPay\Exception\PayParamException;
+use EasyPay\TradeData\Wechat\TradeData;
 
 /**
  * 请求微信公众号支付接口,返回Js api使用的Json数据
@@ -36,7 +36,7 @@ class ProgramPay extends BaseWechatStrategy
     protected function getRequireParams()
     {
         return [
-            'appid', 'mch_id', 'body', 'out_trade_no','total_fee',
+            'appid', 'mch_id', 'body', 'out_trade_no', 'total_fee',
             'spbill_create_ip', 'notify_url', 'openid',
         ];
     }
@@ -47,10 +47,10 @@ class ProgramPay extends BaseWechatStrategy
     protected function getFillParams()
     {
         return [
-            'appid', 'mch_id', 'body', 'out_trade_no','total_fee',
-            'spbill_create_ip', 'notify_url','trade_type','product_id',
-            'device_info','sign_type','detail','attach','fee_type',
-            'time_start','time_expire','goods_tag','limit_pay','openid'
+            'appid', 'mch_id', 'body', 'out_trade_no', 'total_fee',
+            'spbill_create_ip', 'notify_url', 'trade_type', 'product_id',
+            'device_info', 'sign_type', 'detail', 'attach', 'fee_type',
+            'time_start', 'time_expire', 'goods_tag', 'limit_pay', 'openid',
         ];
     }
 
@@ -82,11 +82,11 @@ class ProgramPay extends BaseWechatStrategy
 
         // 生成Js api使用的Json数据
         $data = new TradeData([
-            'appId'     =>  $data->appid,
-            'timeStamp' =>  (string) time(),
-            'nonceStr'  =>  $data->createNonceStr(),
-            'package'   =>  "prepay_id={$data->prepay_id}",
-            'signType'  =>  'MD5',
+            'appId' => $data->appid,
+            'timeStamp' => (string) time(),
+            'nonceStr' => $data->createNonceStr(),
+            'package' => "prepay_id={$data->prepay_id}",
+            'signType' => 'MD5',
         ], $data->getOptions());
 
         $data->paySign = $data->makeSign();

@@ -29,7 +29,7 @@ class TransferQuery extends BaseWechatStrategy
      */
     protected function getRequireParams()
     {
-        return ['appid','mch_id','partner_trade_no'];
+        return ['appid', 'mch_id', 'partner_trade_no'];
     }
 
     /**
@@ -37,7 +37,7 @@ class TransferQuery extends BaseWechatStrategy
      */
     protected function getFillParams()
     {
-        return ['appid','mch_id','partner_trade_no','nonce_str'];
+        return ['appid', 'mch_id', 'partner_trade_no', 'nonce_str'];
     }
 
     /**

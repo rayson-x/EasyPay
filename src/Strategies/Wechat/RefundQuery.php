@@ -37,7 +37,7 @@ class RefundQuery extends BaseWechatStrategy
      */
     protected function getRequireParams()
     {
-        return ['appid','mch_id'];
+        return ['appid', 'mch_id'];
     }
 
     /**
@@ -46,8 +46,8 @@ class RefundQuery extends BaseWechatStrategy
     protected function getFillParams()
     {
         return [
-            'appid','mch_id','out_trade_no','sign_type','device_info',
-            'refund_id','out_refund_no','transaction_id'
+            'appid', 'mch_id', 'out_trade_no', 'sign_type', 'device_info',
+            'refund_id', 'out_refund_no', 'transaction_id',
         ];
     }
 

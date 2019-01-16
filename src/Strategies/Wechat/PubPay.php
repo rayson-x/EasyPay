@@ -30,8 +30,8 @@ class PubPay extends BaseWechatStrategy
     protected function getRequireParams()
     {
         return [
-            'appid', 'mch_id', 'body', 'out_trade_no','total_fee',
-            'spbill_create_ip', 'notify_url','openid',
+            'appid', 'mch_id', 'body', 'out_trade_no', 'total_fee',
+            'spbill_create_ip', 'notify_url', 'openid',
         ];
     }
 
@@ -41,10 +41,10 @@ class PubPay extends BaseWechatStrategy
     protected function getFillParams()
     {
         return [
-            'appid', 'mch_id', 'body', 'out_trade_no','total_fee',
-            'spbill_create_ip', 'notify_url','trade_type','product_id',
-            'device_info','sign_type','detail','attach','fee_type',
-            'time_start','time_expire','goods_tag','limit_pay','openid'
+            'appid', 'mch_id', 'body', 'out_trade_no', 'total_fee',
+            'spbill_create_ip', 'notify_url', 'trade_type', 'product_id',
+            'device_info', 'sign_type', 'detail', 'attach', 'fee_type',
+            'time_start', 'time_expire', 'goods_tag', 'limit_pay', 'openid',
         ];
     }
 
@@ -76,11 +76,11 @@ class PubPay extends BaseWechatStrategy
 
         // 生成Js api使用的Json数据
         $data = new TradeData([
-            'appId'     =>  $data->appid,
-            'timeStamp' =>  (string) time(),
-            'nonceStr'  =>  substr(md5(uniqid()), 0, 18) . date("YmdHis"),
-            'package'   =>  "prepay_id={$data->prepay_id}",
-            'signType'  =>  'MD5',
+            'appId' => $data->appid,
+            'timeStamp' => (string) time(),
+            'nonceStr' => substr(md5(uniqid()), 0, 18) . date("YmdHis"),
+            'package' => "prepay_id={$data->prepay_id}",
+            'signType' => 'MD5',
         ], $data->getOptions());
 
         $data->paySign = $data->makeSign();

@@ -39,8 +39,8 @@ class Transfer extends BaseWechatStrategy
     protected function getRequireParams()
     {
         return [
-            'partner_trade_no','openid', 'amount',
-            'desc','spbill_create_ip',
+            'partner_trade_no', 'openid', 'amount',
+            'desc', 'spbill_create_ip',
         ];
     }
 
@@ -50,8 +50,8 @@ class Transfer extends BaseWechatStrategy
     protected function getFillParams()
     {
         return [
-            'mch_appid','mchid','partner_trade_no','openid','check_name','amount',
-            'desc','spbill_create_ip','device_info','nonce_str','re_user_name'
+            'mch_appid', 'mchid', 'partner_trade_no', 'openid', 'check_name', 'amount',
+            'desc', 'spbill_create_ip', 'device_info', 'nonce_str', 're_user_name',
         ];
     }
 

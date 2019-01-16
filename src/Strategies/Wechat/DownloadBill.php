@@ -2,9 +2,6 @@
 
 namespace EasyPay\Strategies\Wechat;
 
-use EasyPay\TradeData\Ali\TradeData;
-use EasyPay\Exception\PayFailException;
-
 /**
  * 下载账单
  *
@@ -32,7 +29,7 @@ class DownloadBill extends BaseWechatStrategy
      */
     protected function getRequireParams()
     {
-        return ['appid','mch_id','bill_date','bill_type'];
+        return ['appid', 'mch_id', 'bill_date', 'bill_type'];
     }
 
     /**
@@ -40,7 +37,7 @@ class DownloadBill extends BaseWechatStrategy
      */
     protected function getFillParams()
     {
-        return ['appid','mch_id','bill_date','bill_type'];
+        return ['appid', 'mch_id', 'bill_date', 'bill_type'];
     }
 
     /**

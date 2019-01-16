@@ -22,7 +22,7 @@ class DownloadBill extends BaseAliStrategy
      */
     protected function getRequireParams()
     {
-        return ['app_id','bill_type','bill_date'];
+        return ['app_id', 'bill_type', 'bill_date'];
     }
 
     /**
@@ -32,7 +32,7 @@ class DownloadBill extends BaseAliStrategy
     {
         return [
             'app_id', 'method', 'format', 'charset', 'sign_type', 'sign',
-            'timestamp', 'version', 'app_auth_token', 'biz_content'
+            'timestamp', 'version', 'app_auth_token', 'biz_content',
         ];
     }
 

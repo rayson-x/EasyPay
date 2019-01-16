@@ -46,7 +46,7 @@ class QueryOrder extends BaseAliStrategy
     {
         return [
             'app_id', 'method', 'format', 'charset', 'sign_type', 'sign',
-            'timestamp', 'version', 'app_auth_token', 'biz_content'
+            'timestamp', 'version', 'app_auth_token', 'biz_content',
         ];
     }
 
@@ -59,7 +59,7 @@ class QueryOrder extends BaseAliStrategy
             // 商户唯一订单号
             'out_trade_no' => $this->payData['out_trade_no'],
             // 支付宝订单号
-            'trade_no'     => $this->payData['trade_no'],
+            'trade_no' => $this->payData['trade_no'],
         ];
     }
 }

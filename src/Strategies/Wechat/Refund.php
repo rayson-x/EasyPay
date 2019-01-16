@@ -34,8 +34,8 @@ class Refund extends BaseWechatStrategy
     protected function getRequireParams()
     {
         return [
-            'appid', 'mch_id', 'total_fee', 
-            'refund_fee', 'out_refund_no'
+            'appid', 'mch_id', 'total_fee',
+            'refund_fee', 'out_refund_no',
         ];
     }
 
@@ -48,7 +48,7 @@ class Refund extends BaseWechatStrategy
             'appid', 'mch_id', 'out_refund_no', 'total_fee',
             'refund_fee', 'refund_desc', 'device_info', 'sign_type',
             'transaction_id', 'out_trade_no', 'refund_account',
-            'refund_fee_type', 'sub_appid', 'sub_mch_id'
+            'refund_fee_type', 'sub_appid', 'sub_mch_id',
         ];
     }
 

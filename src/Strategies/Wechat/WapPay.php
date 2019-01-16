@@ -19,7 +19,7 @@ class WapPay extends BaseWechatStrategy
     {
         return [
             'appid', 'mch_id', 'body', 'out_trade_no', 'total_fee',
-            'spbill_create_ip', 'notify_url', 'wap_url', 'wap_name'
+            'spbill_create_ip', 'notify_url', 'wap_url', 'wap_name',
         ];
     }
 
@@ -32,7 +32,7 @@ class WapPay extends BaseWechatStrategy
             'appid', 'mch_id', 'device_info', 'sign_type', 'body', 'detail',
             'attach', 'out_trade_no', 'fee_type', 'total_fee', 'spbill_create_ip',
             'time_start', 'time_expire', 'notify_url', 'product_id', 'limit_pay',
-            'openid', 'trade_type', 'scene_info'
+            'openid', 'trade_type', 'scene_info',
         ];
     }
 
@@ -63,10 +63,10 @@ class WapPay extends BaseWechatStrategy
         // 构造scene_info
         $payData->scene_info = json_encode([
             'h5_info' => [
-                'type'     => 'Wap',
-                'wap_url'  => $payData->wap_url,
-                'wap_name' => $payData->wap_name
-            ]
+                'type' => 'Wap',
+                'wap_url' => $payData->wap_url,
+                'wap_name' => $payData->wap_name,
+            ],
         ]);
         // 填入所有可用参数,并将不可用参数清除
         $payData->selected($this->getFillParams());

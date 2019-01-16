@@ -28,8 +28,8 @@ class QrPay extends BaseWechatStrategy
     protected function getRequireParams()
     {
         return [
-            'appid', 'mch_id', 'body', 'out_trade_no','total_fee',
-            'spbill_create_ip', 'notify_url','product_id'
+            'appid', 'mch_id', 'body', 'out_trade_no', 'total_fee',
+            'spbill_create_ip', 'notify_url', 'product_id',
         ];
     }
 
@@ -39,11 +39,11 @@ class QrPay extends BaseWechatStrategy
     protected function getFillParams()
     {
         return [
-            'appid', 'mch_id', 'body', 'out_trade_no','total_fee',
-            'spbill_create_ip', 'notify_url','trade_type','product_id',
-            'device_info','sign_type','detail','attach','fee_type',
-            'time_start','time_expire','goods_tag','limit_pay','openid',
-            'sub_mch_id', 'sub_appid'
+            'appid', 'mch_id', 'body', 'out_trade_no', 'total_fee',
+            'spbill_create_ip', 'notify_url', 'trade_type', 'product_id',
+            'device_info', 'sign_type', 'detail', 'attach', 'fee_type',
+            'time_start', 'time_expire', 'goods_tag', 'limit_pay', 'openid',
+            'sub_mch_id', 'sub_appid',
         ];
     }
 

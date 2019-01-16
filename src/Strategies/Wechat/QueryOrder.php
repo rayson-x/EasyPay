@@ -40,7 +40,7 @@ class QueryOrder extends BaseWechatStrategy
     {
         return [
             'appid', 'mch_id', 'sub_appid', 'out_trade_no',
-            'transaction_id', 'sign_type', 'sub_mch_id'
+            'transaction_id', 'sign_type', 'sub_mch_id',
         ];
     }
 

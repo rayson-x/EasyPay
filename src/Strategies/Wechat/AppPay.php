@@ -21,7 +21,7 @@ class AppPay extends BaseWechatStrategy
     {
         return [
             'appid', 'mch_id', 'body', 'out_trade_no',
-            'total_fee', 'spbill_create_ip', 'notify_url'
+            'total_fee', 'spbill_create_ip', 'notify_url',
         ];
     }
 
@@ -34,7 +34,7 @@ class AppPay extends BaseWechatStrategy
             'appid', 'mch_id', 'sub_appid', 'sub_mch_id', 'device_info',
             'body', 'detail', 'attach', 'out_trade_no', 'total_fee',
             'spbill_create_ip', 'time_start', 'time_expire', 'notify_url',
-            'goods_tag', 'limit_pay'
+            'goods_tag', 'limit_pay',
         ];
     }
 
@@ -78,10 +78,10 @@ class AppPay extends BaseWechatStrategy
 
         // 生成app预支付标识
         $data = new TradeData([
-            'appid'     => $data->appId,
+            'appid' => $data->appId,
             'partnerid' => $data->mchId,
-            'prepayid'  => $data->prepay_id,
-            'package'   => 'Sign=WXPay',
+            'prepayid' => $data->prepay_id,
+            'package' => 'Sign=WXPay',
             'timestamp' => time(),
         ], $data->getOptions());
 
