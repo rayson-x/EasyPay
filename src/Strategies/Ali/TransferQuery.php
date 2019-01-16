@@ -51,9 +51,9 @@ class TransferQuery extends BaseAliStrategy
     {
         $data = [
             // 商户转账唯一订单号
-            'out_biz_no'            =>  $this->payData['out_biz_no'],
+            'out_biz_no' => $this->payData['out_biz_no'],
             // 支付宝转账单据号
-            'order_id'              =>  $this->payData['order_id'],
+            'order_id'   => $this->payData['order_id'],
         ];
 
         array_removal_empty($data);

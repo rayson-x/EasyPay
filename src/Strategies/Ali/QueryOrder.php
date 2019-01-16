@@ -57,9 +57,9 @@ class QueryOrder extends BaseAliStrategy
     {
         $data = [
             // 商户唯一订单号
-            'out_trade_no'          =>  $this->payData['out_trade_no'],
+            'out_trade_no' => $this->payData['out_trade_no'],
             // 支付宝订单号
-            'trade_no'              =>  $this->payData['trade_no'],
+            'trade_no'     => $this->payData['trade_no'],
         ];
 
         array_removal_empty($data);

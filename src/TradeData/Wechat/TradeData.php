@@ -39,7 +39,7 @@ class TradeData extends BaseTradeData
     public function setSign($sign = null)
     {
         if (is_null($sign) && !$this->offsetExists('nonce_str')) {
-            $this['nonce_str'] = $this->createNonceStr();
+            $this->setAttribute('nonce_str', $this->createNonceStr());
         }
 
         parent::setSign($sign);
@@ -104,8 +104,8 @@ class TradeData extends BaseTradeData
             throw new SignVerifyFailException($this, '签名校验失败');
         }
 
+        $key = $this->getOption('key');
         $signType = $this->getOption('sign_type') ?: 'MD5';
-        $key      = $this->getOption('key');
 
         switch ($signType) {
             case 'MD5':

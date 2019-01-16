@@ -57,11 +57,11 @@ class CloseOrder extends BaseAliStrategy
     {
         $data = [
             // 商户唯一订单号
-            'out_trade_no'          =>  $this->payData['out_trade_no'],
+            'out_trade_no' => $this->payData['out_trade_no'],
             // 支付宝唯一订单号
-            'trade_no'              =>  $this->payData['trade_no'],
+            'trade_no'     => $this->payData['trade_no'],
             // 商户的操作员编号
-            'operator_id'           =>  $this->payData['trade_no'],
+            'operator_id'  => $this->payData['trade_no'],
         ];
 
         array_removal_empty($data);

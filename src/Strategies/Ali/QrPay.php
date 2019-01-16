@@ -91,6 +91,6 @@ class QrPay extends BaseAliStrategy
      */
     protected function handleData($data)
     {
-        return parent::handleData($data)['qr_code'];
+        return parent::handleData($data)->qr_code;
     }
 }

@@ -57,22 +57,23 @@ class WapPay extends BaseWechatStrategy
      */
     protected function buildData()
     {
+        $payData = clone $this->payData;
         // 检查必要参数是否存在
-        $this->payData->checkParamsEmpty($this->getRequireParams());
+        $payData->checkParamsEmpty($this->getRequireParams());
         // 构造scene_info
-        $this->payData->scene_info = json_encode([
+        $payData->scene_info = json_encode([
             'h5_info' => [
-                'type'      =>  'Wap',
-                'wap_url'   =>  $this->payData->wap_url,
-                'wap_name'  =>  $this->payData->wap_name
+                'type'     => 'Wap',
+                'wap_url'  => $payData->wap_url,
+                'wap_name' => $payData->wap_name
             ]
         ]);
         // 填入所有可用参数,并将不可用参数清除
-        $this->payData->selected($this->getFillParams());
+        $payData->selected($this->getFillParams());
         // 设定交易模式为手机h5支付
-        $this->payData->trade_type = 'MWEB';
+        $payData->trade_type = 'MWEB';
 
-        return $this->payData;
+        return $payData;
     }
 
     /**
@@ -85,8 +86,9 @@ class WapPay extends BaseWechatStrategy
     {
         $result = parent::handleData($result);
 
-        $wabUrl = $result['mweb_url'];
-        if ($returnUrl = $this->payData->getOriginal('return_url')) {
+        $wabUrl = $result->mweb_url;
+
+        if ($returnUrl = $result->getOriginal('return_url')) {
             $wabUrl .= '&redirect_url=' . urlencode($returnUrl);
         }
 

@@ -78,18 +78,18 @@ class ProgramPay extends BaseWechatStrategy
      */
     protected function handleData($result)
     {
-        $result = parent::handleData($result);
+        $data = parent::handleData($result);
 
         // 生成Js api使用的Json数据
         $data = new TradeData([
-            'appId'     =>  $result['appid'],
+            'appId'     =>  $data->appid,
             'timeStamp' =>  (string) time(),
-            'nonceStr'  =>  substr(md5(uniqid()), 0, 18) . date("YmdHis"),
-            'package'   =>  "prepay_id={$result['prepay_id']}",
+            'nonceStr'  =>  $data->createNonceStr(),
+            'package'   =>  "prepay_id={$data->prepay_id}",
             'signType'  =>  'MD5',
-        ], $this->payData->getOptions());
+        ], $data->getOptions());
 
-        $data['paySign'] = $data->makeSign();
+        $data->paySign = $data->makeSign();
 
         return $data->toJson();
     }

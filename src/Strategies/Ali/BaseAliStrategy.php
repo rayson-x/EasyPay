@@ -14,28 +14,20 @@ abstract class BaseAliStrategy implements StrategyInterface
 {
     // 移动端网页支付
     const WAP_PAY = 'alipay.trade.wap.pay';
-
     // 扫码支付
     const QR_PAY = 'alipay.trade.precreate';
-
     // 查询订单
     const QUERY_ORDER = 'alipay.trade.query';
-
     // 关闭订单
     const CLOSE_ORDER = 'alipay.trade.close';
-
     // 退款
     const REFUND = 'alipay.trade.refund';
-
     // 查询退款记录
     const REFUND_QUERY = 'alipay.trade.fastpay.refund.query';
-
     // 下载订单
     const DOWN_LOAD_BILL = 'alipay.data.dataservice.bill.downloadurl.query';
-
     // 企业转账
     const TRANSFER = 'alipay.fund.trans.toaccount.transfer';
-
     // 转账查询
     const TRANSFER_QUERY = 'alipay.fund.trans.order.query ';
     
@@ -81,18 +73,19 @@ abstract class BaseAliStrategy implements StrategyInterface
      */
     protected function buildData()
     {
+        $payData = clone $this->payData;
         // 检查必填参数是否存在
-        $this->payData->checkParamsEmpty($this->getRequireParams());
+        $payData->checkParamsEmpty($this->getRequireParams());
         // 设置请求的方法
-        $this->payData['method'] = $this->getMethod();
+        $payData->method = $this->getMethod();
         // 生成请求参数
-        $this->payData['biz_content'] = $this->buildBinContent();
+        $payData->biz_content = $this->buildBinContent();
         // 选中接口全部可用参数
-        $this->payData->selected($this->getFillParams());
+        $payData->selected($this->getFillParams());
         // 生成签名
-        $this->payData->setSign();
+        $payData->setSign();
 
-        return $this->payData;
+        return $payData;
     }
 
     /**

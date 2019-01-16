@@ -246,7 +246,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
         $attributes = [];
         foreach ($params as $name) {
             if ($this->offsetExists($name)) {
-                $attributes[$name] = $this[$name];
+                $attributes[$name] = $this->getAttribute($name);
             }
         }
 
@@ -265,7 +265,7 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
 
         $str = '';
         for ($i = 0; $i < $length; $i++) {
-            $str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
+            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
         }
 
         return $str;
@@ -279,7 +279,9 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
      */
     public function setSign($sign = null)
     {
-        $this['sign'] = (string) $sign ?: $this->makeSign();
+        $sign = $sign ?: $this->makeSign();
+
+        $this->setAttribute('sign', $sign);
     }
 
     /**

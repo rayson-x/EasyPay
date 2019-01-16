@@ -71,6 +71,6 @@ class QrPay extends BaseWechatStrategy
      */
     protected function handleData($result)
     {
-        return parent::handleData($result)['code_url'];
+        return parent::handleData($result)->code_url;
     }
 }

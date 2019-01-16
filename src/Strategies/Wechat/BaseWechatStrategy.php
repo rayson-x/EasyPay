@@ -46,9 +46,9 @@ abstract class BaseWechatStrategy implements StrategyInterface
         $options = array_merge(Config::wechat(), $options);
 
         $data = array_intersect_key($options, [
-            'appid' => true, 
-            'mch_id' => true, 
-            'notify_url' => true
+            'appid' => true,
+            'mch_id' => true,
+            'notify_url' => true,
         ]);
 
         $this->payData = new TradeData($data, $options);
@@ -83,7 +83,8 @@ abstract class BaseWechatStrategy implements StrategyInterface
     {
         // 解析响应Xml内容
         $data = TradeData::createFromXML($result, $this->payData->getOptions());
-
+        // 校验签名,检查数据是否可信
+        $data->verifySign();
         // 通信是否成功
         if (!$data->isSuccess($data['return_code'])) {
             throw new PayException($data, $data['return_msg']);
@@ -96,9 +97,6 @@ abstract class BaseWechatStrategy implements StrategyInterface
                 $data, $data['err_code_des'], $data['err_code']
             );
         }
-
-        // 校验签名
-        $data->verifySign();
 
         return $data;
     }
@@ -123,10 +121,10 @@ abstract class BaseWechatStrategy implements StrategyInterface
         if ($sslKey && $sslCert) {
             // 添加SSL证书
             $client->setCurlOption([
-                CURLOPT_SSLKEY      =>  $sslKey,
-                CURLOPT_SSLCERT     =>  $sslCert,
-                CURLOPT_SSLKEYTYPE  =>  'PEM',
-                CURLOPT_SSLCERTTYPE =>  'PEM',
+                CURLOPT_SSLKEY => $sslKey,
+                CURLOPT_SSLCERT => $sslCert,
+                CURLOPT_SSLKEYTYPE => 'PEM',
+                CURLOPT_SSLCERTTYPE => 'PEM',
             ]);
         }
 
@@ -148,7 +146,7 @@ abstract class BaseWechatStrategy implements StrategyInterface
 
         return $payData;
     }
-    
+
     /**
      * @return mixed
      */
