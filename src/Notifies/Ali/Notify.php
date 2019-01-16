@@ -3,13 +3,13 @@
 namespace EasyPay\Notifies\Ali;
 
 use RuntimeException;
-use EasyPay\Notifies\BaseNoitfy;
+use EasyPay\Notifies\BaseNotify;
 use EasyPay\TradeData\Ali\TradeData;
 use Psr\Http\Message\RequestInterface;
 use Illuminate\Http\Request as LaravelRequest;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
-class Notify extends BaseNoitfy
+class Notify extends BaseNotify
 {
     /**
      * {@inheritDoc}

@@ -16,6 +16,7 @@ class Notify
 
     /**
      * @param $service
+     * @param $options
      * @param $request
      * @return NotifyInterface
      */
@@ -30,6 +31,12 @@ class Notify
         return $service::fromGlobal($options);
     }
 
+    /**
+     * @param $service
+     * @param $request
+     * @param $options
+     * @return NotifyInterface
+     */
     public static function fromRequest($service, $request, $options = [])
     {
         $service = self::$notifies[$service];

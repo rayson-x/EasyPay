@@ -13,10 +13,10 @@ use EasyPay\Interfaces\NotifyInterface;
  * @method string toJson()
  * @method string toXml()
  * 
- * Class BaseNoitfy
+ * Class BaseNotify
  * @package EasyPay\Notifies
  */
-abstract class BaseNoitfy implements NotifyInterface
+abstract class BaseNotify implements NotifyInterface
 {
     /**
      * @var BaseTradeData

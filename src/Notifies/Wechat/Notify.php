@@ -3,13 +3,13 @@
 namespace EasyPay\Notifies\Wechat;
 
 use RuntimeException;
-use EasyPay\Notifies\BaseNoitfy;
+use EasyPay\Notifies\BaseNotify;
 use Psr\Http\Message\RequestInterface;
 use EasyPay\TradeData\Wechat\TradeData;
 use Illuminate\Http\Request as LaravelRequest;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
-class Notify extends BaseNoitfy
+class Notify extends BaseNotify
 {
     /**
      * {@inheritDoc}
@@ -37,9 +37,7 @@ class Notify extends BaseNoitfy
      */
     public static function fromSymfonyRequest(SymfonyRequest $request, $options = [])
     {
-        $method = $request->getMethod();
-
-        if ($method !== 'POST') {
+        if ($request->getMethod() !== 'POST') {
             throw new RuntimeException('无法处理的请求');
         }
 
@@ -51,6 +49,10 @@ class Notify extends BaseNoitfy
      */
     public static function fromLaravelRequest(LaravelRequest $request, $options = [])
     {
+        if ($request->getMethod() !== 'POST') {
+            throw new RuntimeException('无法处理的请求');
+        }
+
         return new self(TradeData::createFromXML($request->getContent(), $options));
     }
 
