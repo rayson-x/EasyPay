@@ -74,16 +74,16 @@ class AppPay extends BaseWechatStrategy
      */
     protected function handleData($result)
     {
-        $result = parent::handleData($result);
+        $data = parent::handleData($result);
 
         // 生成app预支付标识
         $data = new TradeData([
-            'appid'     => $result->appId,
-            'partnerid' => $result->mchId,
-            'prepayid'  => $result->prepay_id,
+            'appid'     => $data->appId,
+            'partnerid' => $data->mchId,
+            'prepayid'  => $data->prepay_id,
             'package'   => 'Sign=WXPay',
             'timestamp' => time(),
-        ], $this->payData->getOptions());
+        ], $data->getOptions());
 
         $data->setSign();
 
