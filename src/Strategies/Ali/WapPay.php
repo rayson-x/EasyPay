@@ -52,13 +52,13 @@ class WapPay extends BaseAliStrategy
      */
     protected function handleData($data)
     {
-        return $this->getServerUrl() . "?" . http_build_query($data);
+        return $this->getServerUrl() . "?" . $data->toUrlQuery();
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function buildBinContent()
+    protected function buildBizContent()
     {
         $data = [
             // 交易的具体描述信息

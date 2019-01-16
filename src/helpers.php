@@ -48,8 +48,9 @@ if (!function_exists('array_removal_empty')) {
      * 清除数组中的空值
      *
      * @param array $array
+     * @return array
      */
-    function array_removal_empty(array &$array)
+    function array_removal_empty(array $array)
     {
         foreach ($array as $key => $value) {
             // bool不为空值
@@ -57,5 +58,7 @@ if (!function_exists('array_removal_empty')) {
                 array_forget($array, $key);
             }
         }
+
+        return $array;
     }
 }

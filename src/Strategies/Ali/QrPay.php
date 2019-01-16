@@ -50,9 +50,9 @@ class QrPay extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function buildBinContent()
+    protected function buildBizContent()
     {
-        $data = [
+        return [
             // 唯一订单号
             'out_trade_no'          =>  $this->payData['out_trade_no'],
             // 收款支付宝用户ID
@@ -80,10 +80,6 @@ class QrPay extends BaseAliStrategy
             // 支付宝店铺的门店ID
             'alipay_store_id'       =>  $this->payData['alipay_store_id'],
         ];
-
-        array_removal_empty($data);
-
-        return $data;
     }
 
     /**

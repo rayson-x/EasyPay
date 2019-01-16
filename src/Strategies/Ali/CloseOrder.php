@@ -53,7 +53,7 @@ class CloseOrder extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function buildBinContent()
+    protected function buildBizContent()
     {
         $data = [
             // 商户唯一订单号

@@ -223,6 +223,16 @@ abstract class BaseTradeData implements ArrayAccess, JsonSerializable, IteratorA
     }
 
     /**
+     * 将数据以url的query格式组装
+     *
+     * @return string
+     */
+    public function toUrlQuery()
+    {
+        return http_build_query($this->toArray());
+    }
+
+    /**
      * 检查必要参数是否存在,且不为空
      *
      * @param array $params

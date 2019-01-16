@@ -51,7 +51,7 @@ class Transfer extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function buildBinContent()
+    protected function buildBizContent()
     {
         $data = [
             // 商户转账唯一订单号

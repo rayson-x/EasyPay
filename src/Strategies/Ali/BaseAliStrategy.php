@@ -63,7 +63,7 @@ abstract class BaseAliStrategy implements StrategyInterface
 
         $data = $this->buildData();
 
-        return $this->handleData($data->toArray());
+        return $this->handleData($data);
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class BaseAliStrategy implements StrategyInterface
         // 设置请求的方法
         $payData->method = $this->getMethod();
         // 生成请求参数
-        $payData->biz_content = $this->buildBinContent();
+        $payData->biz_content = array_removal_empty($this->buildBizContent());
         // 选中接口全部可用参数
         $payData->selected($this->getFillParams());
         // 生成签名
@@ -97,13 +97,13 @@ abstract class BaseAliStrategy implements StrategyInterface
     protected function handleData($data)
     {
         // 构造请求API
-        $url = $this->getServerUrl() . "?" . http_build_query($data);
+        $url = $this->getServerUrl() . "?" . $data->toUrlQuery();
         // 请求支付宝服务器
         $response = $this->sendHttpRequest('POST', $url);
         // 解析响应内容
         $data = TradeData::createFromJson(
             $response->getBody()->getContents(), 
-            $this->payData->getOptions()
+            $data->getOptions()
         );
         // 验证签名
         $data->verifyResponseSign();
@@ -182,5 +182,5 @@ abstract class BaseAliStrategy implements StrategyInterface
      *
      * @return array
      */
-    abstract protected function buildBinContent();
+    abstract protected function buildBizContent();
 }

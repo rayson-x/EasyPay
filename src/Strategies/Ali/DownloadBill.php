@@ -39,7 +39,7 @@ class DownloadBill extends BaseAliStrategy
     /**
      * {@inheritDoc}
      */
-    protected function buildBinContent()
+    protected function buildBizContent()
     {
         $data = [
             // 账单类型 (trade、signcustomer)
