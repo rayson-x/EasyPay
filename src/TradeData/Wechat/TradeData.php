@@ -101,6 +101,11 @@ class TradeData extends BaseTradeData
     public function verifySign()
     {
         if (!$this->offsetExists('sign')) {
+            // 如果使用了ssl加密,即使没有响应签名,也视为安全
+            if ($this->getOption('ssl_key_path') && $this->getOption('ssl_cert_path')) {
+                return true;
+            }
+    
             throw new SignVerifyFailException($this, '签名校验失败');
         }
 
